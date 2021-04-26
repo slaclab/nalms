@@ -61,9 +61,9 @@ fi
 
 
 if [[ -f "$ZOOKEEPER_PROPERTY_FILE" ]]; then
-    $KAFKA_TOP/current/bin/zookeeper-server-start.sh  -daemon $ZOOKEEPER_PROPERTY_FILE
+    $KAFKA_TOP/bin/zookeeper-server-start.sh  -daemon $ZOOKEEPER_PROPERTY_FILE
 else
-    $KAFKA_TOP/current/bin/zookeeper-server-start.sh  -daemon $NALMS_TOP/current/config/${NALMS_ENV}_zookeeper.properties
+    $KAFKA_TOP/bin/zookeeper-server-start.sh  -daemon $NALMS_TOP/config/${NALMS_ENV}_zookeeper.properties
 fi
 echo "Starting Zookeeper..."
 

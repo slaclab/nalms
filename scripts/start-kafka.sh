@@ -55,9 +55,9 @@ if [[ ! -z $( echo srvr | nc $ZOOKEEPER_HOST_BASE $ZOOKEEPER_PORT ) ]]; then
 
   echo "Starting Kafka cluster..."
   if [[ -f "$KAFKA_PROPERTY_FILE" ]]; then
-    ${KAFKA_TOP}/current/bin/kafka-server-start.sh  -daemon $KAFKA_PROPERTY_FILE
+    ${KAFKA_TOP}/bin/kafka-server-start.sh  -daemon $KAFKA_PROPERTY_FILE
   else
-    ${KAFKA_TOP}/current/bin/kafka-server-start.sh  -daemon ${NALMS_TOP}/current/config/${NALMS_ENV}_server.properties
+    ${KAFKA_TOP}/bin/kafka-server-start.sh  -daemon ${NALMS_TOP}/config/${NALMS_ENV}_server.properties
   fi
 
 else

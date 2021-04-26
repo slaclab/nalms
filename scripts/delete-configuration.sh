@@ -30,6 +30,6 @@ fi
 
 CONFIGURATION=$1
 
-$KAFKA_TOP/current/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}"
-$KAFKA_TOP/current/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Talk"
-$KAFKA_TOP/current/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Command"
+$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}"
+$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Talk"
+$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Command"

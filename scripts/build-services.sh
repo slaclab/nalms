@@ -96,7 +96,7 @@ echo "" >> $ZOOKEEPER_FILE
 echo "[Service]" >> $ZOOKEEPER_FILE
 echo "Type=simple" >> $ZOOKEEPER_FILE
 echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
-echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}zookeeper.properties" >> $ZOOKEEPER_FILE
+echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_zookeeper.properties" >> $ZOOKEEPER_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
 
 echo "" >> $ZOOKEEPER_FILE

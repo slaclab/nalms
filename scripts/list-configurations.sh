@@ -21,7 +21,7 @@ if [[ -z "$ZOOKEEPER_HOST" ]]; then
   exit 0
 fi
 
-list_var=$($KAFKA_PATH/current/bin/kafka-topics.sh --list --zookeeper $ZOOKEEPER_HOST)
+list_var=$($KAFKA_PATH/bin/kafka-topics.sh --list --zookeeper $ZOOKEEPER_HOST)
 
 IFS=$'\n'
 

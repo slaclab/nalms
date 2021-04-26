@@ -34,6 +34,6 @@ if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
 fi
 
 
-sudo systemctl start ${ELASTICSEARCH_TOP}/current/bin/elasticsearch.service
-sudo systemctl start ${NALMS_TOP}/current/services/zookeeper.service
-sudo systemctl start ${NALMS_TOP}/current/services/kafka.service
+sudo systemctl start ${ELASTICSEARCH_TOP}/bin/elasticsearch.service
+sudo systemctl start ${NALMS_TOP}/services/zookeeper.service
+sudo systemctl start ${NALMS_TOP}/services/kafka.service

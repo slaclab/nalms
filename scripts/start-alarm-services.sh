@@ -40,10 +40,10 @@ tmux new-window -a -t nalms -n $CONFIG_NAME -c $PWD
 tmux split-window -t nalms:$CONFIG_NAME
 tmux select-layout -t nalms:$CONFIG_NAME tiled > /dev/null
 
-SERVER_JAR=`echo "${NALMS_TOP}/current/alarm-server/service-alarm-server-*.jar"`
-LOGGER_JAR=`echo "${NALMS_TOP}/current/alarm-logger/service-alarm-logger-*.jar"`
-LOGGING_SETTINGS="${NALMS_TOP}/current/config/logging.properties"
-ALARM_SERVER_SETTINGS="${NALMS_TOP}/current/config/alarm_server_settings.ini"
+SERVER_JAR=`echo "${NALMS_TOP}/alarm-server/service-alarm-server-*.jar"`
+LOGGER_JAR=`echo "${NALMS_TOP}/alarm-logger/service-alarm-logger-*.jar"`
+LOGGING_SETTINGS="${NALMS_TOP}/config/logging.properties"
+ALARM_SERVER_SETTINGS="${NALMS_TOP}/config/alarm_server_settings.ini"
 
 if java -jar $SERVER_JAR -logging $LOGGING_SETTINGS -config $CONFIG_NAME -import $CONFIG_FILE; then
   # set up server window 
