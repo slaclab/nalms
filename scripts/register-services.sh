@@ -26,7 +26,6 @@ if [[ ! -d "$KAFKA_TOP" ]]; then
   exit 0
 fi
 
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable ${ELASTICSEARCH_PATH}/bin/elasticsearch.service
-sudo /bin/systemctl enable ${NALMS_TOP}/current/services/kafka.service
-sudo /bin/systemctl enable ${NALMS_TOP}/current/services/zookeeper.service
+sudo systemctl start ${ELASTICSEARCH_PATH}/bin/elasticsearch.service
+sudo systemctl start ${NALMS_TOP}/current/services/zookeeper.service
+sudo systemctl start ${NALMS_TOP}/current/services/kafka.service
