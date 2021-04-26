@@ -17,7 +17,7 @@ if [[ ! -d "$NALMS_TOP" ]]; then
   echo "NALMS_TOP is incorrectly configured."
   echo "\$NALMS_TOP = ${NALMS_TOP}"
   exit 0
-f
+fi
 
 # check KAFKA_TOP is set
 if [[ ! -d "$KAFKA_TOP" ]]; then
@@ -26,6 +26,14 @@ if [[ ! -d "$KAFKA_TOP" ]]; then
   exit 0
 fi
 
-sudo systemctl start ${ELASTICSEARCH_PATH}/bin/elasticsearch.service
+# check ELASTICSEARCH_TOP is set
+if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
+  echo "ELASTICSEARCH_TOP is incorrectly configured."
+  echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+  exit 0
+fi
+
+
+sudo systemctl start ${ELASTICSEARCH_TOP}/current/bin/elasticsearch.service
 sudo systemctl start ${NALMS_TOP}/current/services/zookeeper.service
 sudo systemctl start ${NALMS_TOP}/current/services/kafka.service
