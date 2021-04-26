@@ -1,7 +1,7 @@
 #!/bin/sh
 # Author: Jacqueline Garrahan
 #
-# Start systemd services for single machine installation
+# Stop elasticsearch, zookeeper, and kafka for single machine installation
 #
 # Copyright @2021 SLAC National Accelerator Laboratory
 
@@ -26,6 +26,7 @@ if [[ ! -d "$KAFKA_TOP" ]]; then
   exit 0
 fi
 
-sudo systemctl start ${ELASTICSEARCH_PATH}/bin/elasticsearch.service
-sudo systemctl start ${NALMS_TOP}/current/services/zookeeper.service
-sudo systemctl start ${NALMS_TOP}/current/services/kafka.service
+
+sudo systemctl start elasticsearch.service
+sudo systemctl start kafka.service
+sudo systemctl start zookeeper.service
