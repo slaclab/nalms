@@ -41,7 +41,7 @@ if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
   exit 0
 fi
 
-KAFKA_FILE=$NALMS_TOP/services/kafka.service
+KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
 touch $KAFKA_FILE
 
@@ -71,11 +71,11 @@ echo "" >> $KAFKA_FILE
 echo "[Install]" >> $KAFKA_FILE
 echo "WantedBy=multi-user.target" >> $KAFKA_FILE
 
-cp $NALMS_TOP/services/kafka.service /etc/systemd/system/kafka.service
+cp $NALMS_TOP/services/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
 
 
 # create zookeeper file
-ZOOKEEPER_FILE=$NALMS_TOP/services/zookeeper.service
+ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
 
 touch $ZOOKEEPER_FILE
 
@@ -105,7 +105,7 @@ echo "[Install]" >> $ZOOKEEPER_FILE
 echo "WantedBy=multi-user.target" >> $ZOOKEEPER_FILE
 
 # copy zookeeper file
-cp $NALMS_TOP/services/zookeeper.service /etc/systemd/system/zookeeper.service
+cp $NALMS_TOP/services/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
 
 # copy elasticsearch file
-cp $ELASTICSEARCH_TOP/bin/elasticsearch.service /etc/systemd/system/elasticsearch.service
+#cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
