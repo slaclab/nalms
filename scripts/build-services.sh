@@ -51,7 +51,7 @@ KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
 touch $KAFKA_FILE
 
-echo "# File /etc/systemd/system/kafka.service">> $KAFKA_FILE
+echo "# File /etc/systemd/system/nalms-kafka.service">> $KAFKA_FILE
 echo "# Generated from $NALMS_TOP/scripts/build-services.sh " >> $KAFKA_FILE
 echo "" >> $KAFKA_FILE
 echo "" >> $KAFKA_FILE
@@ -60,7 +60,7 @@ echo "[Unit]" >> $KAFKA_FILE
 echo "Description=Apache Kafka server (broker)" >> $KAFKA_FILE
 echo "Documentation=http://kafka.apache.org/documentation.html" >> $KAFKA_FILE
 echo "Requires=network.target remote-fs.target" >> $KAFKA_FILE
-echo "After=network.target remote-fs.target zookeeper.service" >> $KAFKA_FILE
+echo "After=network.target remote-fs.target nalms-zookeeper.service" >> $KAFKA_FILE
 
 echo "" >> $KAFKA_FILE
 
@@ -85,7 +85,7 @@ ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
 
 touch $ZOOKEEPER_FILE
 
-echo "# File /etc/systemd/system/zookeeper.service">> $ZOOKEEPER_FILE
+echo "# File /etc/systemd/system/znalms-ookeeper.service">> $ZOOKEEPER_FILE
 echo "# Generated from $NALMS_TOP/scripts/build-services.sh " >> $ZOOKEEPER_FILE
 echo "" >> $ZOOKEEPER_FILE
 echo "" >> $ZOOKEEPER_FILE
