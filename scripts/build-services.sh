@@ -37,7 +37,7 @@ fi
 #create logging dir
 
 # remove old artifacts
-if [ -d "/var/log/nalms" ]; then
+if [ ! -d "/var/log/nalms" ]; then
     mkdir /var/log/nalms
 fi
 
@@ -86,7 +86,8 @@ echo "[Service]"  >> $KAFKA_FILE
 echo "Type=simple" >> $KAFKA_FILE
 #User=DESIRED_USER
 #Group=DESIRED_GROUP
-echo "Environment=JAVA_HOME=$JAVA_HOME,LOG_DIR=$KAFKA_LOG_DIR" >> $KAFKA_FILE
+echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
+echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}" >> $ZOOKEEPER_FILE
 echo "ExecStart=${KAFKA_TOP}/bin/kafka-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_server.properties" >> $KAFKA_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/kafka-server-stop.sh" >> $KAFKA_FILE
 
@@ -119,7 +120,8 @@ echo "" >> $ZOOKEEPER_FILE
 
 echo "[Service]" >> $ZOOKEEPER_FILE
 echo "Type=simple" >> $ZOOKEEPER_FILE
-echo "Environment=JAVA_HOME=${JAVA_HOME},LOG_DIR=${KAFKA_LOG_DIR}" >> $ZOOKEEPER_FILE
+echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
+echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}"  >> $ZOOKEEPER_FILE
 echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_zookeeper.properties" >> $ZOOKEEPER_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
 
