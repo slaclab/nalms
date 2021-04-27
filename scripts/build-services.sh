@@ -34,6 +34,13 @@ if [[ -z "$JAVA_HOME" ]]; then
   exit 0
 fi
 
+#create logging dir
+
+# remove old artifacts
+if [ -d "/var/log/nalms" ]; then
+    mkdir /var/log/nalms
+fi
+
 # check ELASTICSEARCH_TOP is set
 if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
   echo "ELASTICSEARCH_TOP is incorrectly configured."
@@ -42,10 +49,21 @@ if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
 fi
 
 # remove old artifacts
-rm $NALMS_TOP/services/nalms-kafka.service
-rm $NALMS_TOP/services/nalms-zookeeper.service
-rm /etc/systemd/system/nalms-kafka.service
-rm /etc/systemd/system/nalms-zookeeper.service
+if [ -f "$NALMS_TOP/services/nalms-kafka.service" ]; then
+    rm $NALMS_TOP/services/nalms-kafka.service
+fi
+
+if [ -f "$NALMS_TOP/services/nalms-zookeeper.service" ]; then
+    rm $NALMS_TOP/services/nalms-zookeeper.service
+fi
+
+if [ -f "/etc/systemd/system/nalms-kafka.service" ]; then
+    rm /etc/systemd/system/nalms-kafka.service
+fi
+
+if [ -f "/etc/systemd/system/nalms-zookeeper.service" ]; then
+    rm /etc/systemd/system/nalms-zookeeper.service
+fi
 
 KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
@@ -68,7 +86,7 @@ echo "[Service]"  >> $KAFKA_FILE
 echo "Type=simple" >> $KAFKA_FILE
 #User=DESIRED_USER
 #Group=DESIRED_GROUP
-echo "Environment=JAVA_HOME=$JAVA_HOME" >> $KAFKA_FILE
+echo "Environment=JAVA_HOME=$JAVA_HOME,LOG_DIR=${KAFKA_LOG_DIR}" >> $KAFKA_FILE
 echo "ExecStart=${KAFKA_TOP}/bin/kafka-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_server.properties" >> $KAFKA_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/kafka-server-stop.sh" >> $KAFKA_FILE
 
@@ -85,7 +103,7 @@ ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
 
 touch $ZOOKEEPER_FILE
 
-echo "# File /etc/systemd/system/znalms-ookeeper.service">> $ZOOKEEPER_FILE
+echo "# File /etc/systemd/system/nalms-zookeeper.service">> $ZOOKEEPER_FILE
 echo "# Generated from $NALMS_TOP/scripts/build-services.sh " >> $ZOOKEEPER_FILE
 echo "" >> $ZOOKEEPER_FILE
 echo "" >> $ZOOKEEPER_FILE
@@ -101,7 +119,7 @@ echo "" >> $ZOOKEEPER_FILE
 
 echo "[Service]" >> $ZOOKEEPER_FILE
 echo "Type=simple" >> $ZOOKEEPER_FILE
-echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
+echo "Environment=JAVA_HOME=${JAVA_HOME},LOG_DIR=${KAFKA_LOG_DIR}" >> $ZOOKEEPER_FILE,
 echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_zookeeper.properties" >> $ZOOKEEPER_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
 
