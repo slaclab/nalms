@@ -41,6 +41,12 @@ if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
   exit 0
 fi
 
+# remove old artifacts
+rm $NALMS_TOP/services/nalms-kafka.service
+rm $NALMS_TOP/services/nalms-zookeeper.service
+rm /etc/systemd/system/nalms-kafka.service
+rm /etc/systemd/system/nalms-zookeeper.service
+
 KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
 touch $KAFKA_FILE
