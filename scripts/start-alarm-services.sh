@@ -47,11 +47,11 @@ ALARM_SERVER_SETTINGS="${NALMS_TOP}/config/alarm_server_settings.ini"
 
 if java -jar $SERVER_JAR -logging $LOGGING_SETTINGS -config $CONFIG_NAME -import $CONFIG_FILE; then
   # set up server window 
-  tmux send-keys -t nalms:$config_name.0 "export JAVA_HOME = $JAVA_HOME"
+  tmux send-keys -t nalms:$config_name.0 "export JAVA_HOME = $JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.0 "java -jar $SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_SETTINGS -settings $ALARM_SERVER_SETTINGS" C-m
 
   # set up logger window
-  tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME = $JAVA_HOME"
+  tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME = $JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_SETTINGS -settings $ALARM_SERVER_SETTINGS " C-m
 
   #kill the first window
