@@ -53,7 +53,7 @@ if java -jar $SERVER_JAR -logging $LOGGING_SETTINGS -config $CONFIG_NAME -import
 
   # set up logger window
   tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME=$JAVA_HOME" C-m
-  tmux send-keys -t nalms:$config_name.0 "export PATH=$JAVA_HOME/bin:$PATH" C-m
+  tmux send-keys -t nalms:$config_name.1 "export PATH=$JAVA_HOME/bin:$PATH" C-m
   tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_SETTINGS -settings $ALARM_SERVER_SETTINGS " C-m
 
   #kill the first window
