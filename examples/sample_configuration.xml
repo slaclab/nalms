@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf8'?>
+<xs:schema xmlns:xs="../phoebus_alarm_server.xsd">
+<config name="TEST">
+    <component name="Area2">
+        <guidance>
+            <title>Example guidance title</title>
+            <detail>Example guidance detail</detail>
+        </guidance>
+        <display>
+            <title>Display title</title>
+            <detail>Display detail</detail>
+        </display>
+        <display>
+            <title>Display 2 title</title>
+            <detail>Display 2 detail</detail>
+        </display>
+        <command>
+            <title>Command title</title>
+            <detail>Command detail</detail>
+        </command>
+        <automated_action>
+            <title>Action title</title>
+            <detail>Action detail</detail>
+            <delay>10</delay>
+        </automated_action>
+        <pv name="a2pv1">
+            <enabled>true</enabled>
+            <annunciating>true</annunciating>
+            <description>a2pv1 description</description>
+            <command>
+                <title>Command 1</title>
+                <detail>Command 1 detail</detail>
+            </command>
+            <count>10</count>
+            <filter>a3pv1 > 4</filter>
+            <guidance>
+                <title>Example guidance title</title>
+                <detail>Example guidance detail</detail>
+            </guidance>
+            <display>
+                <title>Display title</title>
+                <detail>Display detail</detail>
+            </display>
+            <display>
+                <title>Display 2 title</title>
+                <detail>Display 2 detail</detail>
+            </display>
+            <command>
+                <title>Command title</title>
+                <detail>Command detail</detail>
+            </command>
+            <automated_action>
+                <title>Action title</title>
+                <detail>Action detail</detail>
+                <delay>10</delay>
+            </automated_action>
+            <latching>true</latching>
+        </pv>
+        <component name="Area3">
+            <pv name="a3pv1">
+                <enabled>true</enabled>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <description>a3pv1 description</description>
+            </pv>
+        </component>
+    </component>
+    <component name="Area1">
+        <component name="a1pv2">
+            <pv name="pv1">
+                <enabled>true</enabled>
+                <latching>false</latching>
+                <annunciating>false</annunciating>
+            </pv>
+            <pv name="pv2">
+                <enabled>true</enabled>
+                <latching>false</latching>
+                <annunciating>false</annunciating>
+            </pv>
+
+        </component>
+        <pv name="a1pv1">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a1pv1 description</description>
+            <delay>4</delay>
+            <count>5</count>
+        </pv>
+    </component>
+</config>
+</xs:schema>

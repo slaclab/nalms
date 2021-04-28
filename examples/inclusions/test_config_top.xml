@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf8'?>
+<config name="TEST">
+    <component name="Area2">
+        <pv name="a2pv1">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a2pv1 description</description>
+        </pv>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="/Users/jgarra/sandbox/nalms-resources/examples/test_config_base.xml" xpointer="config"/>
+    </component>
+    <component name="Area1">
+        <component name="a1pv2">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a1pv2 description</description>
+            <component name="pv1">
+                <enabled>true</enabled>
+                <latching>false</latching>
+                <annunciating>false</annunciating>
+                <pv name="pv2">
+                    <enabled>true</enabled>
+                    <latching>false</latching>
+                    <annunciating>false</annunciating>
+                </pv>
+            </component>
+        </component>
+        <pv name="a1pv1">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a1pv1 description</description>
+            <delay>4</delay>
+            <count>5</count>
+        </pv>
+    </component>
+</config>

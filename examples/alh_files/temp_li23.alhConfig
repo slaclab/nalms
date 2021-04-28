@@ -1,0 +1,11 @@
+GROUP NULL TEMP:LI23:1
+$COMMAND edm -x -eolc -noedit temp_li23_main.edl
+$ALIAS LI23
+$GUIDANCE
+LI21 L2 region Temperature
+   Group Name: TEMP:LI23:1
+   Summary PV:  TEMP:LI23:1:STATSUMY
+$END
+
+
+   INCLUDE TEMP:LI23:1 ./temp_li23_klys.alhConfig

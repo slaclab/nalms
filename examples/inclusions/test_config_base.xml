@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf8'?>
+<config name="Area3" id="config">
+    <component name="Area3">
+        <pv name="a3pv1">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a3pv1 description</description>
+        </pv>
+    </component>
+</config>
