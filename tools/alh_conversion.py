@@ -12,69 +12,97 @@ import fileinput
 import sys
 from treelib import Node, Tree
 
-# TODO: Add message for items unable to converts
-# TODO: Better command line tooling
-# TODO: Check against schema document
 
 class ForcePV:
     """
     Representation of ForcePV entry
+
+    Attributes:
+        name (str): Name of the process variable
+        is_calc (bool): Boolean indicator as to whether is a calculation forcepv.
+        _calc_expressions (list): List of calculation lines.
+        main_calc (str): Top level calculation.
+
     """
-    def __init__(self, force_mask, force_value, reset_value):
-        self.force_mask = force_mask
-        self.force_value = force_value
-        self.reset_value = reset_value
+    def __init__(self) -> None:
         self.name = None
         self.is_calc = False
-        self.calc_expressions = []
-        self.base_calc = ""
+        self._calc_expressions = []
+        self.main_calc = ""
 
-    def add_calc(self, expression):
-        self.calc_expressions.append(expression)
+    def add_calc(self, expression: str):
+        """ Add a calculation to the forcepv.
 
-    def get_text(self):
+        Args:
+            expression (str): Expression to add to the calculation.
+
+        """
+        self._calc_expressions.append(expression)
+
+    def get_text(self) -> str:
+        """ Format calculation and return text.
+
+        """
         text = ""
-
         if self.is_calc:
-            formatting = self.main_calc
+            text = self.main_calc
 
-            for key, value in self.calc_expressions.items():
-                formatting.replace(key, value)
+            for key, value in self._calc_expressions.items():
+                text.replace(key, value)
 
-            text = formatting
-
-        if self.force_value:
-            text += f" != {self.force_value}"
+        else:
+            text = name
 
         return text
 
 
 class AlarmNode:
     """
-    Representation of an alarm tree node
+    Representation of an alarm tree group.
+
+    Attributes:
+        name (str): Name of the alarm group.
+        alias (str): Alias to be used instead of group name.
+        commands (list): List of associated commands.
+        force_pv (ForcePV): Force pv associated with the node.
+        parent (str): Parent variable of group.
+        node_children (list): Children of the alarm node.
+        guidance (list): List of guidance items. 
+        guidance_url (str): URL of guidance display.
+        filename (str): Generating filename.
+
     """
-    def __init__(self, group_name, filename=None, parent=None):
+    def __init__(self, group_name: str, filename: str = None, parent: str =None) -> None:
         self.name = group_name
         self.alias = ""
         self.commands = []
-        self.sevrpv = None
         self.force_pv = None
         self.parent = parent
         self.node_children = []
         self.guidance = []
         self.guidance_url = ""
-        self.main_calc = ""
-        self.calcs = {}
         self.filename = filename
 
-    def add_child(self, child):
+    def add_child(self, child: str) -> None:
+        """ Assign a child to the node.
+
+        Args:
+            child (str): Name of the child node 
+
+        """
         if child in self.node_children:
             print(f"DUPLICATE CHILD FOR GROUP {self.name}: {child}")
 
         else:
             self.node_children.append(child)
 
-    def remove_child(self, child):
+    def remove_child(self, child: str) -> None:
+        """ Remove a child from the node. 
+
+        Args:
+            child (str): Name of child to remove
+
+        """
         idx = self.node_children.index(child)
         if idx is not None:
             self.node_children.pop(idx)
@@ -83,20 +111,28 @@ class AlarmNode:
 class AlarmLeaf:
     """
     Representation of an alarm tree leaf
+
+    Attributes:
+        name (str): Name of the alarm leaf.
+        commands (list): List of associated commands.
+        force_pv (ForcePV): Force pv associated with the leaf.
+        parent (str): Parent group of group.
+        guidance (list): List of guidance items. 
+        guidance_url (str): URL of guidance display.
+        filename (str): Generating filename.
+        count (int): Alarm count.
+        delay (int): Associated alarm delay.
+
+
     """
     node_children = None
 
-    def __init__(self, channel_name, filename=None, parent=None):
+    def __init__(self, channel_name: str, filename: str=None, parent: str=None) -> None:
         self.name = channel_name
-        self.mask = None
-        self.alias = ""
         self.commands = []
-        self.sevr_pv = None
         self.force_pv = None
         self.guidance = []
         self.guidance_url = []
-        self.main_calc = ""
-        self.calcs = {}
         self.count = None
         self.delay = None
         self.filename = ""
@@ -106,17 +142,34 @@ class AlarmLeaf:
 class InclusionMarker:
     """
     Marker for indicating file inclusions
+
+    Attributes:
+        filename (str): Name of the inclusion file.
+        name (str): Name assigned to the inclusion.
+        parent (str): Name of the inclusion's parent.
+
     """
     node_children = None
 
-    def __init__(self, name, filename, parent):
+    def __init__(self, name, filename, parent) -> None:
         self.filename = filename
         self.name = name
         self.parent = parent
 
 
 class ALHFileParser:
-    def __init__(self, filepath, config_name, base = None):
+    """
+    Tool for parsing ALH files.
+
+    Attributes:
+        _filepath (str): Path of file being parsed
+        _base (str): Base node path, used for inclusions
+        _current_target (str): Current leaf/node being updated
+        _current_parent_group 
+
+
+    """
+    def __init__(self, filepath: str, config_name: str, base: str = None):
         self._filepath = filepath
 
         self._base = base
@@ -139,19 +192,23 @@ class ALHFileParser:
         # markers for tracking where at in parsing
         if base:
             self._current_node = base
-            self._current_path = base
             self._items[base] = AlarmNode(base, parent=self._items[config_name])
 
         else:
             self._current_node = config_name
-            self._current_path = config_name
-
 
         self._parent_path = None
         self._failures = []
 
-    def parse_file(self):
+    def parse_file(self) -> tuple:
+        """ Parse stored file and return items, failures, and inclusions.
 
+        Returns:
+            items (dict): Dictionary of processed items
+            failures (list): List of failures
+            inclusions (dict): List of file inclusions
+
+        """
         self._line_iterator = fileinput.input(self._filepath)
 
         next_line = next(self._line_iterator, None)
@@ -235,7 +292,7 @@ class ALHFileParser:
                 elif split_line[0] == "BEEPSEVR":
                     self._failures.append({
                         "Reason": "BEEPSEVR is deprecated",
-                        "File": self.filepath,
+                        "File": self._filepath,
                         "Line": next_line,
                     })
 
@@ -243,14 +300,14 @@ class ALHFileParser:
                 elif split_line[0] == "$ACKPV":
                     self._failures.append({
                         "Reason": "ACKPV is deprecated",
-                        "File": self.filepath,
+                        "File": self._filepath,
                         "Line": next_line,
                     })
 
                 else:
                     self._failures.append({
                         "Reason": "Line element not found.",
-                        "File": self.filepath,
+                        "File": self._filepath,
                         "Line": next_line
                     })
 
@@ -258,7 +315,13 @@ class ALHFileParser:
 
         return self._items, self._failures, self._inclusions
 
-    def _process_group(self, split_line):
+    def _process_group(self, split_line: list) -> None:
+        """ Process group ALH entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
 
         # group name is stored as third element
         group_name = split_line[2]
@@ -289,7 +352,13 @@ class ALHFileParser:
         self._current_target = node_path
         self._current_parent_group = parent
 
-    def _process_channel(self, split_line):
+    def _process_channel(self, split_line: list) -> None:
+        """ Process channel ALH entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
 
         # channel name is stored as the third element
         channel_name = split_line[2]
@@ -314,27 +383,41 @@ class ALHFileParser:
 
         # store parent node if it isn't in items
         if parent_path not in self._items:
-            self._items[parent_path] = AlarmNode(parent, filename=self.filepath)
+            self._items[parent_path] = AlarmNode(parent, filename=self._filepath)
             self._items[self._current_node].add_child(parent_path)
-
-        # an optional mask is sometimes added as the fourth element
-        if len(split_line) == 4:
-            self._items[node_path].mask = split_line[3]
 
         # update current tracked item
         self._current_target = node_path
 
-    def _process_command(self, split_line):
+    def _process_command(self, split_line: list) -> None:
+        """ Process ALH COMMAND entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         command = " ".join(split_line[1:])
         # if multiple commands, break apart
         commands = command.split("!")
         # store commands on item as list of commands
         self._items[self._current_target].commands += commands
 
-    def _process_sevrpv(self, split_line):
+    def _process_sevrpv(self, split_line: list) -> None:
+        """ Process ALH SEVRPV entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         self._items[self._current_target].sevrpv = split_line[1]
 
-    def _process_forcepv(self, split_line):
+    def _process_forcepv(self, split_line: list) -> None:
+        """ Process ALH FORCEPV entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         # force mask is stored as the third entry
         force_mask = split_line[2]
 
@@ -349,10 +432,14 @@ class ALHFileParser:
         if len(split_line) == 5:
             reset_value = split_line[4]
 
+        self._failures.append({
+            "Reason": "Reset value and force value are deprecated.",
+            "File": self._filepath,
+            "Line": " ".join(split_line)
+        })
+
         # create a force pv for the item
-        self._items[self._current_target].force_pv = ForcePV(
-            force_mask, force_value, reset_value
-        )
+        self._items[self._current_target].force_pv = ForcePV()
 
         # if this is a calc type force pv, mark as calc type
         if split_line[1] == "CALC":
@@ -387,7 +474,13 @@ class ALHFileParser:
             force_pv_name = split_line[1]
             self._items[self._current_target].force_pv.name = force_pv_name
 
-    def _process_guidance(self, split_line):
+    def _process_guidance(self, split_line: list) -> None:
+        """ Process ALH guidance entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
 
         # if this is a multiline guidance entry, collect all lines
         if len(split_line) == 1:
@@ -409,10 +502,22 @@ class ALHFileParser:
             urlname = split_line[1]
             self._items[self._current_target].guidance_url = urlname
 
-    def _process_alias(self, split_line):
+    def _process_alias(self, split_line: list) -> str:
+        """ Process ALH alias entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         self._items[self._current_target].alias = split_line[1]
 
-    def _process_inclusion(self, split_line):
+    def _process_inclusion(self, split_line: list) -> None:
+        """ Process ALH inclusion entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         parent = split_line[1]
 
         # requires full filename declaration
@@ -427,7 +532,13 @@ class ALHFileParser:
         # track the inclusion for processing
         self._inclusions[item_key] = include_filename
 
-    def _process_alarm_count(self, split_line):
+    def _process_alarm_count(self, split_line: list) -> None:
+        """ Process alarm count entry.
+
+        Args:
+            split_line (list): List generated by splitline
+
+        """
         items[self._current_target].count = split_line[1]
         items[self._current_target].delay = split_line[2]
 
@@ -475,13 +586,26 @@ class XMLBuilder:
         self._handle_children(root_node)
 
 
-    def save_configuration(self, output_filename):
+    def save_configuration(self, output_filename: str):
+        """ Method for saving configuration to an output file.
+
+        Args:
+            output_filename (str): Name of output file.
+
+        """
 
         with open(output_filename, "wb") as f:
             file_str = ET.tostring(self._configuration, encoding="utf8")
             f.write(file_str)
 
-    def _handle_children(self, node, parent_group=None):
+    def _handle_children(self, node: Node, parent_group: str = None) -> None:
+        """ Process children of a node.
+
+        Args: 
+            node: treelib representation of the node
+            parent_group: Name of parent group
+
+        """
         children = self._tree.children(node.identifier)
 
         self._add_group(node.tag, node.data, parent_group=parent_group)
@@ -499,7 +623,15 @@ class XMLBuilder:
                 elif isinstance(child.data, InclusionMarker):
                     self._add_inclusion(node, child.data.filename)
 
-    def _add_group(self, group, data, parent_group=None):
+    def _add_group(self, group: str, data: AlarmNode, parent_group: str = None) -> None:
+        """ Add group to the element tree representation.
+
+        Args:
+            group (str): Name of group
+            data (AlarmNode): AlarmNode representation of data
+            parent_group (str): Name of parent group
+
+        """
         group_name = group
         if data.alias:
             group_name = data.alias
@@ -639,6 +771,14 @@ def convert_alh_to_phoebus(config_name, input_filename, output_filename):
 
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
+
+
+    print(f"Configuration file saved: {output_filename}")
+    if len(failures) > 0:
+        print("Conversion failed on the following points:")
+
+        for failure in failures:
+            print(failure)
 
     return True
 
