@@ -388,6 +388,8 @@ class ALHFileParser:
             self._items[parent_path] = AlarmNode(parent, filename=self._filepath)
             self._items[self._current_node].add_child(parent_path)
 
+        self._items[parent_path].add_child(node_path)
+
         # update current tracked item
         self._current_target = node_path
 
@@ -730,10 +732,6 @@ class XMLBuilder:
                     command_item = ET.SubElement(pv, "command")
                     command_item.text = command
 
-            if data.description:
-                decription = ET.SubElement(pv, "description")
-                description.text = data.description
-
             # add count
             if data.count:
                 count = ET.SubElement(pv, "count")
@@ -805,8 +803,8 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
             items.pop(inclusion)
             items[parent].remove_child(inclusion)
 
-            # remove parent from next items
-            next_items.pop(parent)
+            # remove parent from items
+            #items.pop(parent)
 
             # add link the tree
             items[parent].add_child(list(next_items.keys())[0])
@@ -832,7 +830,7 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
 
 
 if __name__ == "__main__":
-    if sys.argv[1] == "-h":
+    if len(sys.argv) == 0 or sys.argv[1] == "-h":
         print("Usage: python alh_conversion.py config_name input_filename output_filename")
     
     elif len(sys.argv) != 4:
