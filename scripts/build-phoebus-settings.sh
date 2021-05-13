@@ -32,8 +32,7 @@ echo "org.phoebus.pv.ca/addr_list=${EPICS_CA_ADDR_LIST}" >> $filename
 echo "org.phoebus.pv.ca/auto_addr_list=$(echo ${EPICS_CA_AUTO_ADDR_LIST} | tr  '[:upper:]' '[:lower:]')" >> $filename
 echo "org.phoebus.pv.ca/server_port=${EPICS_CA_SERVER_PORT}" >> $filename
 echo "org.phoebus.pv.ca/repeater_port=${EPICS_CA_REPEATER_PORT}" >> $filename
-echo "org.phobues.pv.ca/max_array_bytes=${EPICS_CA_MAX_ARRAY_BYTES}" >> $filename
-echo "org.phoebus.pv.ca/addr_list=${EPICS_CA_ADDR_LIST}" >> $filename
+echo "org.phoebus.pv.ca/max_array_bytes=${EPICS_CA_MAX_ARRAY_BYTES}" >> $filename
 echo "org.phoebus.pv.ca/connection_timeout=${EPICS_CA_CONN_TMO}" >> $filename
 echo "org.phoebus.pv.ca/beacon_period=${EPICS_CA_BEACON_PERIOD}" >> $filename
 
