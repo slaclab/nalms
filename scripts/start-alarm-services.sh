@@ -27,6 +27,11 @@ if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
   exit 0
 fi
 
+if [[ -z "$ALARM_SERVER_SETTINGS" ]]; then
+  echo "Alarm server settings file not defined. Please set \$ALARM_SERVER_SETTINGS."
+  exit 0
+fi
+
 
 export PATH="$JAVA_HOME/bin:$PATH"
 
@@ -47,7 +52,6 @@ tmux select-layout -t nalms:$CONFIG_NAME tiled > /dev/null
 
 SERVER_JAR=`echo "${NALMS_TOP}/alarm-server/service-alarm-server-*.jar"`
 LOGGER_JAR=`echo "${NALMS_TOP}/alarm-logger/service-alarm-logger-*.jar"`
-ALARM_SERVER_SETTINGS="${NALMS_TOP}/config/alarm_server_settings.ini"
 
 if java -jar $SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -import $CONFIG_FILE; then
   # set up server window 
