@@ -65,6 +65,7 @@ class AlarmNode:
         alias (str): Alias to be used instead of group name.
         commands (list): List of associated commands.
         force_pv (ForcePV): Force pv associated with the node.
+        sevrpv (str): Indicates severity pv to be used with group.
         parent (str): Parent variable of group.
         node_children (list): Children of the alarm node.
         guidance (list): List of guidance items. 
@@ -77,6 +78,7 @@ class AlarmNode:
         self.alias = ""
         self.commands = []
         self.force_pv = None
+        self.sevrpv = None
         self.parent = parent
         self.node_children = []
         self.guidance = []
@@ -123,7 +125,6 @@ class AlarmLeaf:
         count (int): Alarm count.
         delay (int): Associated alarm delay.
 
-
     """
     node_children = None
 
@@ -162,11 +163,15 @@ class ALHFileParser:
     Tool for parsing ALH files.
 
     Attributes:
-        _filepath (str): Path of file being parsed
-        _base (str): Base node path, used for inclusions
-        _current_target (str): Current leaf/node being updated
-        _current_parent_group 
-
+        _filepath (str): Path of file being parsed.
+        _base (str): Base node path, used for inclusions.
+        _current_target (str): Current leaf/node being updated.
+        _items (dict): Dictionary of processed items.
+        _inclusions (dict): Dictionary of file inclusions.
+        _inclusion_count (int): Count of inclusion for tracking.
+        _config_name (str): Name of the configuration. 
+        _current_node (str): Active group for assigning pvs. 
+        _failures (str): Failure to convert messages.
 
     """
     def __init__(self, filepath: str, config_name: str, base: str = None):
@@ -176,9 +181,6 @@ class ALHFileParser:
 
         # current tracked item
         self._current_target = None
-
-        # parent of current tracked item
-        self._current_parent_group = None
 
         # for tracking items
         self._items = {}
@@ -197,7 +199,7 @@ class ALHFileParser:
         else:
             self._current_node = config_name
 
-        self._parent_path = None
+        # track conversion failures
         self._failures = []
 
     def parse_file(self) -> tuple:
@@ -341,6 +343,7 @@ class ALHFileParser:
             parent_path = self._current_node
             node_path = f"{self._current_node}/{group_name}"
 
+
         # add to child to parent
         self._items[parent_path].add_child(node_path)
 
@@ -350,7 +353,6 @@ class ALHFileParser:
 
         # update target and parent group
         self._current_target = node_path
-        self._current_parent_group = parent
 
     def _process_channel(self, split_line: list) -> None:
         """ Process channel ALH entry.
@@ -368,9 +370,9 @@ class ALHFileParser:
 
         # if we currently have a defined parent group and this is different than the parent given
         # adjust path based on parent group and parent
-        if self._current_parent_group and self._current_parent_group != parent:
-            parent_path = f"{self._current_node}/{self._current_parent_group}/{parent}"
-            node_path = f"{self._current_node}/{self._current_parent_group}/{parent}/{channel_name}"
+        if self._current_node and self._current_node != parent:
+            parent_path = f"{self._current_node}/{self._current_node}/{parent}"
+            node_path = f"{self._current_node}/{self._current_node}/{parent}/{channel_name}"
 
         # otherwise, just use parent
         else:
@@ -544,17 +546,36 @@ class ALHFileParser:
 
 
 class XMLBuilder:
-    def __init__(self, recurse=True):
-        self.groups = {}
-        self.added_pvs = []
-        self.settings_artifacts = []
+    """
+    Class for building the XML configuration representation.
+
+    Attributes:
+        _groups (dict): Dictionary of group tree elements.
+        _tree (Tree): treelib tree for representing the hierarchy.
+        _added_pvs (list): List of pvs already added.
+
+    """
+    def __init__(self, recurse:bool=True):
+        """ Running without the recursive setting assembles the file using xinclude tags, 
+        which aren't handled at present. 
+
+        """
+        self._groups = {}
+        self._added_pvs = []
         self._tree = None
 
-    def build_tree(self, items, top_level_node):
+    def build_tree(self, items, top_level_node: str) -> None:
+        """Function for building tree using items and a top level configuration.
+
+        Args:
+            items (dict): Dictionary of parsed ALH items.
+            top_level_node (str): Name of configuration
+
+        """
         self._tree = Tree()
 
         self._configuration = ET.Element("config", name=top_level_node)
-        self.groups[top_level_node] = self._configuration
+        self._groups[top_level_node] = self._configuration
 
         self._config_name = top_level_node
 
@@ -637,43 +658,51 @@ class XMLBuilder:
             group_name = data.alias
 
 
-        if group not in self.groups:
+        if group not in self._groups:
             if not parent_group:
-                self.groups[group] = ET.SubElement(
+                self._groups[group] = ET.SubElement(
                     self._configuration, "component", name=group_name
                 )
             else:
-                self.groups[group] = ET.SubElement(
-                    self.groups[parent_group], "component", name=group_name
+                self._groups[group] = ET.SubElement(
+                    self._groups[parent_group], "component", name=group_name
                 )
 
         # add guidance
         if data.guidance:
-            guidance = ET.SubElement(self.groups[group], "guidance")
+            guidance = ET.SubElement(self._groups[group], "guidance")
             guidance.text = " ".join(data.guidance)
 
         # add display url
         if data.guidance_url:
-            display = ET.SubElement(self.groups[group], "display")
+            display = ET.SubElement(self._groups[group], "display")
             display.text = data.guidance_url
 
         # add all commands
         if data.commands:
             for command in data.commands:
-                command_item = ET.SubElement(self.groups[group], "command")
+                command_item = ET.SubElement(self._groups[group], "command")
                 command_item.text = command
 
         if data.sevrpv is not None:
-            command_item = ET.SubElement(self.groups[group], "automated_action")
+            command_item = ET.SubElement(self._groups[group], "automated_action")
             command_item.text =  f"sevrpv:{data.sevrpv}"
 
-    def _add_pv(self, pvname, group, data):
-        if pvname in self.added_pvs:
+    def _add_pv(self, pvname: str, group: str, data: AlarmLeaf) -> None:
+        """ Add a pv to the tree representation.
+
+        Args:
+            pvname (str): Name of the pv.
+            group (str): Name of parent group.
+            data (AlarmLeaf): Data object associated with the alarm leaf.
+
+        """
+        if pvname in self._added_pvs:
             pass
 
         else:
-            self.added_pvs.append(pvname)
-            pv = ET.SubElement(self.groups[group], "pv", name=pvname)
+            self._added_pvs.append(pvname)
+            pv = ET.SubElement(self._groups[group], "pv", name=pvname)
             enabled = ET.SubElement(pv, "enabled")
             enabled.text = "true"
 
@@ -715,9 +744,16 @@ class XMLBuilder:
                 delay = ET.SubElement(pv, "delay")
                 delay.text = data.delay
 
-    def _add_inclusion(self, group_node, filename):
+    def _add_inclusion(self, group_node: Node, filename: str) -> None:
+        """ Add Xinclude tag for inclusion.
+
+        Args:
+            group_node (Node): Alarm group node.
+            filename (str): String filename.
+
+        """
         inclusion = ET.SubElement(
-            self.groups[group_node.tag],
+            self._groups[group_node.tag],
             "xi:include",
             href=filename,
             xpointer="xpointer(/config/*",
@@ -725,13 +761,27 @@ class XMLBuilder:
         )
 
 
-    def _process_forcepv(self, force_pv):
+    def _process_forcepv(self, force_pv: ForcePV) -> str:
+        """ Get text appropriate for force pv
+
+        Args:
+            force_pv (ForcePV): ForcePV representation.
+
+        """
         return force_pv.get_text()
 
 
 
 
-def convert_alh_to_phoebus(config_name, input_filename, output_filename):
+def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filename: str) -> None:
+    """ Method for converting the alarm handler configuration files to the Phoebus xml representations.
+
+    Args:
+        config_name (str): Name of the configuration.
+        input_filename (str): Name of input file.
+        output_filename (str): Name of output file.
+
+    """
     parser = ALHFileParser(input_filename, config_name)
     items, failures, inclusions = parser.parse_file()
     directory = "/".join(input_filename.split("/")[:-1])
@@ -779,8 +829,6 @@ def convert_alh_to_phoebus(config_name, input_filename, output_filename):
 
         for failure in failures:
             print(failure)
-
-    return True
 
 
 if __name__ == "__main__":
