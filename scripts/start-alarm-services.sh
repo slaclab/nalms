@@ -22,6 +22,11 @@ if [[ -z "$2" ]]; then
   exit 0
 fi
 
+if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
+  echo "Logging configuration file not defined. Please set \$LOGGING_CONFIG_FILE."
+  exit 0
+fi
+
 
 export PATH="$JAVA_HOME/bin:$PATH"
 
@@ -42,19 +47,22 @@ tmux select-layout -t nalms:$CONFIG_NAME tiled > /dev/null
 
 SERVER_JAR=`echo "${NALMS_TOP}/alarm-server/service-alarm-server-*.jar"`
 LOGGER_JAR=`echo "${NALMS_TOP}/alarm-logger/service-alarm-logger-*.jar"`
-LOGGING_SETTINGS="${NALMS_TOP}/config/logging.properties"
 ALARM_SERVER_SETTINGS="${NALMS_TOP}/config/alarm_server_settings.ini"
 
-if java -jar $SERVER_JAR -logging $LOGGING_SETTINGS -config $CONFIG_NAME -import $CONFIG_FILE; then
+if java -jar $SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -import $CONFIG_FILE; then
   # set up server window 
   tmux send-keys -t nalms:$config_name.0 "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.0 "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms:$config_name.0 "java -jar $SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_SETTINGS -settings $ALARM_SERVER_SETTINGS" C-m
+  tmux send-keys -t nalms:$config_name.0 "java -jar $SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS" C-m
 
   # set up logger window
   tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.1 "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_SETTINGS -settings $ALARM_SERVER_SETTINGS " C-m
+  tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS " C-m
+
+  # set up softIoc
+ # softIoc -s -m SEVRPVNAME=NameOfPV -d sevrpv.db
+
 
   #kill the first window
   tmux kill-window -t nalms:$( tmux list-windows -t nalms -F "#{window_index}" | head -n 1 )
