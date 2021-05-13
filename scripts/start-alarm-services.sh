@@ -58,7 +58,7 @@ if java -jar $SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -imp
   # set up logger window
   tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.1 "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS " C-m
+  tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_CONFIG_FILE " C-m
 
   # set up softIoc
  # softIoc -s -m SEVRPVNAME=NameOfPV -d sevrpv.db
