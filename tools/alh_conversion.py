@@ -194,7 +194,7 @@ class ALHFileParser:
         # markers for tracking where at in parsing
         if base:
             self._current_node = base
-            self._items[base] = AlarmNode(base, parent=self._items[config_name])
+            self._items[base] = AlarmNode(base.split("/")[-1], parent=self._items[config_name])
 
         else:
             self._current_node = config_name
@@ -806,7 +806,7 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
             # remove parent from items
             #items.pop(parent)
 
-            # add link the tree
+            #  link the tree
             items[parent].add_child(list(next_items.keys())[0])
 
 
