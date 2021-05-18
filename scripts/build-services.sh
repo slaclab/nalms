@@ -172,21 +172,13 @@ echo "" >> $ELASTICSEARCH_FILE
 
 echo "[Service]" >> $ELASTICSEARCH_FILE
 echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
-echo "Environment=CONF_DIR=/etc/elasticsearch" >> $ELASTICSEARCH_FILE
-echo "Environment=CONF_FILE=/etc/elasticsearch/elasticsearch.yml"  >> $ELASTICSEARCH_FILE
-echo "Environment=DATA_DIR=/var/lib/elasticsearch" >> $ELASTICSEARCH_FILE
-echo "Environment=LOG_DIR=/var/log/nalms/eleasticsearch" >> $ELASTICSEARCH_FILE
+echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch.yml" >> $ELASTICSEARCH_FILE
 echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
 
 echo "" >> $ELASTICSEARCH_FILE
 
-echo "ExecStart=/usr/share/elasticsearch/bin/elasticsearch            \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.config=\$CONF_FILE      \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.path.home=\$ES_HOME     \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.path.logs=\$LOG_DIR     \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.path.data=\$DATA_DIR    \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.path.work=\$WORK_DIR    \ " >> $ELASTICSEARCH_FILE
-echo "                            -Des.default.path.conf=\$CONF_DIR " >> $ELASTICSEARCH_FILE
+
+echo "ExecStart=${ELASTICSEARH_TOP}/bin/elasticsearch" >> $ELASTICSEARCH_FILE
 
 echo "" >> $ELASTICSEARCH_FILE
 
