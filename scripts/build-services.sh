@@ -178,7 +178,7 @@ echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
 echo "" >> $ELASTICSEARCH_FILE
 
 
-echo "ExecStart=${ELASTICSEARH_TOP}/bin/elasticsearch" >> $ELASTICSEARCH_FILE
+echo "ExecStart=${ELASTICSEARCH_TOP}/bin/elasticsearch" >> $ELASTICSEARCH_FILE
 
 echo "" >> $ELASTICSEARCH_FILE
 
