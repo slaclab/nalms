@@ -11,6 +11,15 @@ if [ "$1" == "-h" ]; then
   exit 0
 fi
 
+
+if [[ "$*" == "--dry" ]]
+then
+    DRYRUN=true
+else
+    DRYRUN=false
+fi
+
+
 if [[ ! -d "$KAFKA_TOP" ]]; then
   echo "KAFKA_TOP is not set correctly."
   echo "\$KAFKA_TOP = ${KAFKA_TOP}"
@@ -34,10 +43,8 @@ if [[ -z "$JAVA_HOME" ]]; then
   exit 0
 fi
 
-#create logging dir
-
-# remove old artifacts
-if [ ! -d "/var/log/nalms" ]; then
+# create logging dir
+if [[ ! -d "/var/log/nalms" && $DRYRUN != true ]]; then
     mkdir /var/log/nalms
 fi
 
@@ -57,13 +64,26 @@ if [ -f "$NALMS_TOP/services/nalms-zookeeper.service" ]; then
     rm $NALMS_TOP/services/nalms-zookeeper.service
 fi
 
-if [ -f "/etc/systemd/system/nalms-kafka.service" ]; then
-    rm /etc/systemd/system/nalms-kafka.service
+if [ -f "$NALMS_TOP/services/nalms-elasticsearch.service" ]; then
+    rm $NALMS_TOP/services/nalms-elasticsearch.service
 fi
 
-if [ -f "/etc/systemd/system/nalms-zookeeper.service" ]; then
-    rm /etc/systemd/system/nalms-zookeeper.service
-fi
+
+# if not a dry run, remove relevant systemd files
+if [ $DRYRUN != true ]; then
+  if [ -f "/etc/systemd/system/nalms-kafka.service" ]; then
+      rm /etc/systemd/system/nalms-kafka.service
+  fi
+
+  if [ -f "/etc/systemd/system/nalms-zookeeper.service" ]; then
+      rm /etc/systemd/system/nalms-zookeeper.service
+  fi
+
+  if [ -f "/etc/systemd/system/nalms-elasticsearch.service" ]; then
+      rm /etc/systemd/system/nalms-elasticsearch.service
+  fi
+fi 
+
 
 KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
@@ -96,8 +116,9 @@ echo "" >> $KAFKA_FILE
 echo "[Install]" >> $KAFKA_FILE
 echo "WantedBy=multi-user.target" >> $KAFKA_FILE
 
-cp $NALMS_TOP/services/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
-
+if [ $DRYRUN != true ]; then
+  cp $NALMS_TOP/services/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
+fi
 
 # create zookeeper file
 ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
@@ -115,6 +136,8 @@ echo "Description=Apache Zookeeper server (Kafka)" >> $ZOOKEEPER_FILE
 echo "Documentation=http://zookeeper.apache.org" >> $ZOOKEEPER_FILE
 echo "Requires=network.target remote-fs.target" >> $ZOOKEEPER_FILE
 echo "After=network.target remote-fs.target" >> $ZOOKEEPER_FILE
+echo "SuccessExitStatus=143"  >>  $ZOOKEEPER_FILE
+
 
 echo "" >> $ZOOKEEPER_FILE
 
@@ -124,6 +147,7 @@ echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
 echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}"  >> $ZOOKEEPER_FILE
 echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_zookeeper.properties" >> $ZOOKEEPER_FILE
 echo "ExecStop=${KAFKA_TOP}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
+echo "SuccessExitStatus=143"  >> $ZOOKEEPER_FILE
 
 echo "" >> $ZOOKEEPER_FILE
 
@@ -131,7 +155,56 @@ echo "[Install]" >> $ZOOKEEPER_FILE
 echo "WantedBy=multi-user.target" >> $ZOOKEEPER_FILE
 
 # copy zookeeper file
-cp $NALMS_TOP/services/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
+if [ $DRYRUN != true ]; then
+  cp $NALMS_TOP/services/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
+fi
+
+# create elasticsearch file
+ELASTICSEARCH_FILE=$NALMS_TOP/services/nalms-elasticsearch.service
+
+echo "[Unit]" >> $ELASTICSEARCH_FILE
+echo "Description=Elasticsearch" >> $ELASTICSEARCH_FILE
+echo "Documentation=http://www.elastic.co" >> $ELASTICSEARCH_FILE
+echo "Wants=network-online.target" >> $ELASTICSEARCH_FILE
+echo "After=network-online.target" >> $ELASTICSEARCH_FILE
+
+echo "" >> $ELASTICSEARCH_FILE
+
+echo "[Service]" >> $ELASTICSEARCH_FILE
+echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
+echo "Environment=CONF_DIR=/etc/elasticsearch" >> $ELASTICSEARCH_FILE
+echo "Environment=CONF_FILE=/etc/elasticsearch/elasticsearch.yml"  >> $ELASTICSEARCH_FILE
+echo "Environment=DATA_DIR=/var/lib/elasticsearch" >> $ELASTICSEARCH_FILE
+echo "Environment=LOG_DIR=/var/log/nalms/eleasticsearch" >> $ELASTICSEARCH_FILE
+echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
+
+echo "" >> $ELASTICSEARCH_FILE
+
+echo "ExecStart=/usr/share/elasticsearch/bin/elasticsearch            \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.config=\$CONF_FILE      \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.path.home=\$ES_HOME     \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.path.logs=\$LOG_DIR     \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.path.data=\$DATA_DIR    \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.path.work=\$WORK_DIR    \ " >> $ELASTICSEARCH_FILE
+echo "                            -Des.default.path.conf=\$CONF_DIR " >> $ELASTICSEARCH_FILE
+
+echo "" >> $ELASTICSEARCH_FILE
+
+echo "StandardOutput=journal" >> $ELASTICSEARCH_FILE
+echo "StandardError=inherit" >> $ELASTICSEARCH_FILE
+echo "LimitNOFILE=65536" >> $ELASTICSEARCH_FILE
+echo "LimitMEMLOCK=infinity" >> $ELASTICSEARCH_FILE
+echo "TimeoutStopSec=0" >> $ELASTICSEARCH_FILE
+echo "KillSignal=SIGTERM" >> $ELASTICSEARCH_FILE
+echo "SendSIGKILL=no" >> $ELASTICSEARCH_FILE
+echo "SuccessExitStatus=143" >> $ELASTICSEARCH_FILE
+
+echo "" >> $ELASTICSEARCH_FILE
+
+echo "[Install]" >> $ELASTICSEARCH_FILE
+echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
 
 # copy elasticsearch file
-#cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
+if [ $DRYRUN != true ]; then
+ cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
+fi
