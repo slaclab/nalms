@@ -172,7 +172,7 @@ echo "" >> $ELASTICSEARCH_FILE
 
 echo "[Service]" >> $ELASTICSEARCH_FILE
 echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
-echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch.yml" >> $ELASTICSEARCH_FILE
+echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config" >> $ELASTICSEARCH_FILE
 echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
 
 echo "" >> $ELASTICSEARCH_FILE
