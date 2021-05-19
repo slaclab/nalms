@@ -174,6 +174,8 @@ echo "[Service]" >> $ELASTICSEARCH_FILE
 echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
 echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch">> $ELASTICSEARCH_FILE
 echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
+echo "User=elasticsearch" >> $ELASTICSEARCH_FILE
+echo "Group=elasticsearch" >> $ELASTICSEARCH_FILE
 
 echo "" >> $ELASTICSEARCH_FILE
 
@@ -195,6 +197,11 @@ echo "" >> $ELASTICSEARCH_FILE
 
 echo "[Install]" >> $ELASTICSEARCH_FILE
 echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
+
+
+# elasticsearch requires a designated user
+
+
 
 # copy elasticsearch file
 if [ $DRYRUN != true ]; then
