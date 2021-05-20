@@ -213,6 +213,6 @@ fi
 
 
 # copy elasticsearch file
-if [[] $DRYRUN != true ]]; then
+if [[ $DRYRUN != true ]]; then
  cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
 fi
