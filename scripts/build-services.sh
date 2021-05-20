@@ -208,7 +208,7 @@ echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
 # check that it exists and update permissions
 if ! id "elasticsearch" &>/dev/null && ! $DRYRUN; then
   useradd elasticsearch
-  chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR
+  chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR $ELASTICSEARCH_DATA_DIR
 fi
 
 
