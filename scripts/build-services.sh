@@ -121,7 +121,7 @@ echo "" >> $KAFKA_FILE
 echo "[Install]" >> $KAFKA_FILE
 echo "WantedBy=multi-user.target" >> $KAFKA_FILE
 
-if [ $DRYRUN != true ]; then
+if ! $DRYRUN ; then
   cp $NALMS_TOP/services/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
 fi
 
@@ -160,7 +160,7 @@ echo "[Install]" >> $ZOOKEEPER_FILE
 echo "WantedBy=multi-user.target" >> $ZOOKEEPER_FILE
 
 # copy zookeeper file
-if [ $DRYRUN != true ]; then
+if ! $DRYRUN; then
   cp $NALMS_TOP/services/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
 fi
 
@@ -206,13 +206,13 @@ echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
 
 # elasticsearch requires a designated user
 # check that it exists and update permissions
-if [[ ! id "elasticsearch" &>/dev/null &&  $DRYRUN != true]]; then
+if ! id "elasticsearch" &>/dev/null && ! $DRYRUN; then
   useradd elasticsearch
   chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR
 fi
 
 
 # copy elasticsearch file
-if [[ $DRYRUN != true ]]; then
+if ! $DRYRUN; then
  cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
 fi
