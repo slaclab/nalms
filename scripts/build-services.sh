@@ -34,14 +34,21 @@ if [[ ! -d "$NALMS_TOP" ]]; then
 fi
 
 if [[ -z "$NALMS_ENV" ]]; then
-  echo "NALMS_ENV is not set."
+  echo "\$NALMS_ENV is not set."
   exit 0
 fi
 
 if [[ -z "$JAVA_HOME" ]]; then
-  echo "JAVA_HOME is not set."
+  echo "\$JAVA_HOME is not set."
   exit 0
 fi
+
+if [[ -z "$ELASTICSEARCH_LOG_DIR" ]]; then
+  echo "\$ELASTICSEARCH_LOG_DIR is not set."
+  exit 0
+fi
+
+
 
 # create logging dir
 if [[ ! -d "/var/log/nalms" && $DRYRUN != true ]]; then
@@ -104,8 +111,6 @@ echo "" >> $KAFKA_FILE
 
 echo "[Service]"  >> $KAFKA_FILE
 echo "Type=simple" >> $KAFKA_FILE
-#User=DESIRED_USER
-#Group=DESIRED_GROUP
 echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $KAFKA_FILE
 echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}" >> $KAFKA_FILE
 echo "ExecStart=${KAFKA_TOP}/bin/kafka-server-start.sh ${NALMS_TOP}/config/${NALMS_ENV}_server.properties" >> $KAFKA_FILE
@@ -200,10 +205,14 @@ echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
 
 
 # elasticsearch requires a designated user
-
+# check that it exists and update permissions
+if [[id "elasticsearch" &>/dev/null &&  $DRYRUN != true]]; then
+  useradd elasticsearch
+  chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR
+fi
 
 
 # copy elasticsearch file
-if [ $DRYRUN != true ]; then
+if [[] $DRYRUN != true ]]; then
  cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
 fi
