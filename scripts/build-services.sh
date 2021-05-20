@@ -206,7 +206,7 @@ echo "WantedBy=multi-user.target" >> $ELASTICSEARCH_FILE
 
 # elasticsearch requires a designated user
 # check that it exists and update permissions
-if [[id "elasticsearch" &>/dev/null &&  $DRYRUN != true]]; then
+if [[ ! id "elasticsearch" &>/dev/null &&  $DRYRUN != true]]; then
   useradd elasticsearch
   chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR
 fi
