@@ -51,7 +51,7 @@ class ForcePV:
                 text.replace(key, value)
 
         else:
-            text = name
+            text = self.name
 
         return text
 
