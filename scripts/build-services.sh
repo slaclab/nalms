@@ -15,38 +15,37 @@ if [ "$1" == "-h" ]; then
 fi
 
 
-if [[ "$*" == "--dry" ]]
-then
-    DRYRUN=true
-else
-    DRYRUN=false
+DRYRUN=false
+BUILD_ELASTICSEARCH=false
+BUILD_KAFKA=false
+BUILD_ELASTICSEARCH=false
+
+while test $# -gt 0
+do
+    case "$1" in
+        --dry) DRYRUN=true
+            ;;
+        --elasticsearch) BUILD_ELASTICSEARCH=true
+            ;;
+        --zookeeper) BUILD_ZOOKEEPER=true
+            ;;
+        --kafka) BUILD_KAFKA=true
+            ;;
+        --all) 
+            BUILD_KAFKA=true
+            BUILD_ZOOKEEPER=true
+            BUILD_ELASTICSEARCH=true
+            ;;
+    esac
+    shift
+done
+
+# if none specified build all
+if [[ ! BUILD_ELASTICSEARCH && ! BUILD_KAFKA  && BUILD_ZOOKEEPER]]; then
+  BUILD_ELASTICSEARCH=true
+  BUILD_KAFKA=true
+  BUILD_ELASTICSEARCH=true
 fi
-
-
-if [[ "$*" == "--elasticsearch" ]]
-then
-    ELASTICSEARCH_ONLY=true
-else
-    ELASTICSEARCH_ONLY=false
-fi
-
-
-if [[ "$*" == "--kafka" ]]
-then
-    KAFKA_ONLY=true
-else
-    KAFKA_ONLY=false
-fi
-
-if [[ "$*" == "--zookeeper" ]]
-then
-    ZOOKEEPER_ONLY=true
-else
-    ZOOKEEPER_ONLY=false
-fi
-
-
-
 
 
 if [[ ! -d "$KAFKA_TOP" ]]; then
@@ -92,15 +91,15 @@ fi
 
 # remove old artifacts
 if ! $DRYRUN; then
-  if [[ -f "$NALMS_TOP/services/nalms-kafka.service" && ! $ZOOKEEPER_ONLY && ! $ELASTICSEARCH_ONLY ]]; then
+  if [[ -f "$NALMS_TOP/services/nalms-kafka.service" && $BUILD_KAFKA ]]; then
       rm $NALMS_TOP/services/nalms-kafka.service
   fi
 
-  if [[ -f "$NALMS_TOP/services/nalms-zookeeper.service" && ! $KAFKA_ONLY && ! $ELASTICSEARCH_ONLY ]]; then
+  if [[ -f "$NALMS_TOP/services/nalms-zookeeper.service" && $BUILD_ZOOKEEPER ]]; then
       rm $NALMS_TOP/services/nalms-zookeeper.service
   fi
 
-  if [[ -f "$NALMS_TOP/services/nalms-elasticsearch.service" && ! $ZOOKEEPER_ONLY && ! $KAFKA_ONLY ]]; then
+  if [[ -f "$NALMS_TOP/services/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH ]]; then
       rm $NALMS_TOP/services/nalms-elasticsearch.service
   fi
 fi
@@ -108,20 +107,20 @@ fi
 
 # if not a dry run, remove relevant systemd files
 if ! $DRYRUN ; then
-  if [[ -f "/etc/systemd/system/nalms-kafka.service" && (! $ZOOKEEPER_ONLY || ! $ELASTICSEARCH_ONLY) ]]; then
+  if [[ -f "/etc/systemd/system/nalms-kafka.service" && $BUILD_KAFKA ]]; then
       rm /etc/systemd/system/nalms-kafka.service
   fi
 
-  if [[ -f "/etc/systemd/system/nalms-zookeeper.service"  && (! $KAFKA_ONLY || ! $ELASTICSEARCH_ONLY) ]]; then
+  if [[ -f "/etc/systemd/system/nalms-zookeeper.service"  && $BUILD_ZOOKEEPER ]]; then
       rm /etc/systemd/system/nalms-zookeeper.service
   fi
 
-  if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" && (! $ZOOKEEPER_ONLY || ! $KAFKA_ONLY) ]]; then
+  if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH ]]; then
       rm /etc/systemd/system/nalms-elasticsearch.service
   fi
 fi 
 
-if ! $ZOOKEEPER_ONLY || ! $ELASTICSEARCH_ONLY; then
+if $BUILD_KAFKA; then
 
   KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
 
@@ -158,7 +157,7 @@ if ! $ZOOKEEPER_ONLY || ! $ELASTICSEARCH_ONLY; then
 
 fi
 
-if (! $KAFKA_ONLY || ! $ELASTICSEARCH_ONLY); then
+if $BUILD_ZOOKEEPER; then
 
   # create zookeeper file
   ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
@@ -201,7 +200,7 @@ if (! $KAFKA_ONLY || ! $ELASTICSEARCH_ONLY); then
 fi
 
 
-if (! $ZOOKEEPER_ONLY || ! $KAFKA_ONLY); then
+if $BUILD_ELASTICSEARCH; then
   # create elasticsearch file
   ELASTICSEARCH_FILE=$NALMS_TOP/services/nalms-elasticsearch.service
 
