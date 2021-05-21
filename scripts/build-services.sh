@@ -5,7 +5,7 @@
 # Requires sudo
 #
 # To run only one of the services, you can use tag --elasticsearch, --kafka, --zookeeper
-# To build the services without deploying use --dry
+# To build the services without deploying use --dry. Generated files will be stored in /tmp/nalms/
 #
 # Copyright @2021 SLAC National Accelerator Laboratory
 
@@ -15,38 +15,37 @@ if [ "$1" == "-h" ]; then
 fi
 
 
-DRYRUN=false
-BUILD_ELASTICSEARCH=false
-BUILD_KAFKA=false
-BUILD_ELASTICSEARCH=false
+DRYRUN=0
+BUILD_ELASTICSEARCH=0
+BUILD_KAFKA=0
+BUILD_ZOOKEEPER=0
 
 while test $# -gt 0
 do
     case "$1" in
-        --dry) DRYRUN=true
+        --dry) DRYRUN=1
             ;;
-        --elasticsearch) BUILD_ELASTICSEARCH=true
+        --elasticsearch) BUILD_ELASTICSEARCH=1
             ;;
-        --zookeeper) BUILD_ZOOKEEPER=true
+        --zookeeper) BUILD_ZOOKEEPER=1
             ;;
-        --kafka) BUILD_KAFKA=true
+        --kafka) BUILD_KAFKA=1
             ;;
         --all) 
-            BUILD_KAFKA=true
-            BUILD_ZOOKEEPER=true
-            BUILD_ELASTICSEARCH=true
+            BUILD_KAFKA=1
+            BUILD_ZOOKEEPER=1
+            BUILD_ELASTICSEARCH=1
             ;;
     esac
     shift
 done
 
 # if none specified build all
-if [[ ! BUILD_ELASTICSEARCH && ! BUILD_KAFKA  && BUILD_ZOOKEEPER]]; then
-  BUILD_ELASTICSEARCH=true
-  BUILD_KAFKA=true
-  BUILD_ELASTICSEARCH=true
+if [[ ! $BUILD_ELASTICSEARCH -eq 1  && ! $BUILD_KAFKA -eq 1   && ! $BUILD_ZOOKEEPER -eq 1  ]]; then
+  BUILD_ELASTICSEARCH=1
+  BUILD_KAFKA=1
+  BUILD_ZOOKEEPER=1
 fi
-
 
 if [[ ! -d "$KAFKA_TOP" ]]; then
   echo "KAFKA_TOP is not set correctly."
@@ -89,40 +88,43 @@ if [[ ! -d "$ELASTICSEARCH_TOP" ]]; then
   exit 0
 fi
 
+
+if [[ ! -d "/tmp/nalms" ]]; then
+  mkdir "/tmp/nalms"
+fi
+
 # remove old artifacts
-if ! $DRYRUN; then
-  if [[ -f "$NALMS_TOP/services/nalms-kafka.service" && $BUILD_KAFKA ]]; then
-      rm $NALMS_TOP/services/nalms-kafka.service
-  fi
+if [[ -f "/tmp/nalms/nalms-kafka.service" && $BUILD_KAFKA -eq 1 ]]; then
+    rm /tmp/nalms/nalms-kafka.service
+fi
 
-  if [[ -f "$NALMS_TOP/services/nalms-zookeeper.service" && $BUILD_ZOOKEEPER ]]; then
-      rm $NALMS_TOP/services/nalms-zookeeper.service
-  fi
+if [[ -f "/tmp/nalms/nalms-zookeeper.service" && $BUILD_ZOOKEEPER -eq 1 ]]; then
+    rm /tmp/nalms/nalms-zookeeper.service
+fi
 
-  if [[ -f "$NALMS_TOP/services/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH ]]; then
-      rm $NALMS_TOP/services/nalms-elasticsearch.service
-  fi
+if [[ -f "/tmp/nalms/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH -eq 1 ]]; then
+    rm /tmp/nalms/nalms-elasticsearch.service
 fi
 
 
 # if not a dry run, remove relevant systemd files
 if ! $DRYRUN ; then
-  if [[ -f "/etc/systemd/system/nalms-kafka.service" && $BUILD_KAFKA ]]; then
+  if [[ -f "/etc/systemd/system/nalms-kafka.service" && $BUILD_KAFKA -eq 1 ]]; then
       rm /etc/systemd/system/nalms-kafka.service
   fi
 
-  if [[ -f "/etc/systemd/system/nalms-zookeeper.service"  && $BUILD_ZOOKEEPER ]]; then
+  if [[ -f "/etc/systemd/system/nalms-zookeeper.service"  && $BUILD_ZOOKEEPER -eq 1 ]]; then
       rm /etc/systemd/system/nalms-zookeeper.service
   fi
 
-  if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH ]]; then
+  if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH -eq 1 ]]; then
       rm /etc/systemd/system/nalms-elasticsearch.service
   fi
 fi 
 
-if $BUILD_KAFKA; then
+if [[ $BUILD_KAFKA -eq 1 ]]; then
 
-  KAFKA_FILE=$NALMS_TOP/services/nalms-kafka.service
+  KAFKA_FILE=/tmp/nalms/nalms-kafka.service
 
   touch $KAFKA_FILE
 
@@ -152,15 +154,15 @@ if $BUILD_KAFKA; then
   echo "WantedBy=multi-user.target" >> $KAFKA_FILE
 
   if ! $DRYRUN ; then
-    cp $NALMS_TOP/services/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
+    cp /tmp/nalms/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
   fi
 
 fi
 
-if $BUILD_ZOOKEEPER; then
+if [[ $BUILD_ZOOKEEPER -eq 1 ]]; then
 
   # create zookeeper file
-  ZOOKEEPER_FILE=$NALMS_TOP/services/nalms-zookeeper.service
+  ZOOKEEPER_FILE=/tmp/nalms/nalms-zookeeper.service
 
   touch $ZOOKEEPER_FILE
 
@@ -195,14 +197,14 @@ if $BUILD_ZOOKEEPER; then
 
   # copy zookeeper file
   if ! $DRYRUN; then
-    cp $NALMS_TOP/services/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
+    cp /tmp/nalms/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
   fi
 fi
 
 
-if $BUILD_ELASTICSEARCH; then
+if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
   # create elasticsearch file
-  ELASTICSEARCH_FILE=$NALMS_TOP/services/nalms-elasticsearch.service
+  ELASTICSEARCH_FILE=/tmp/nalms/nalms-elasticsearch.service
 
   echo "[Unit]" >> $ELASTICSEARCH_FILE
   echo "Description=Elasticsearch" >> $ELASTICSEARCH_FILE
@@ -251,6 +253,6 @@ if $BUILD_ELASTICSEARCH; then
 
   # copy elasticsearch file
   if ! $DRYRUN; then
-  cp $NALMS_TOP/services/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
+  cp /tmp/nalms/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
   fi
 fi
