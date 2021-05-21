@@ -1,31 +1,47 @@
 <?xml version='1.0' encoding='utf8'?>
-<config name="Demo">
-<component name="GROUP1">
-    <pv name="DEMO:PV1">
-        <enabled>true</enabled>
-        <filter>DEMO:PV2 > 10</filter>
-    </pv>
-    <pv name="DEMO:PV2">
-        <enabled>true</enabled>
-    </pv>
-    <pv name="DEMO:PV3">
-        <enabled>true</enabled>
-    </pv>
-</component>
-<component name="GROUP2">
-    <component name="GROUP3">
-        <pv name="DEMO:PV4">
+<config name="TEST">
+    <component name="Area2">
+        <automated_action>sevrpv:AREA2:STATSUMY</automated_action>
+        <pv name="a2pv1">
             <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a2pv1 description</description>
         </pv>
-        <pv name="DEMO:PV5">
+        <component name="Area3">
+            <pv name="a3pv1">
+                <enabled>true</enabled>
+                <latching>true</latching>
+                <annunciating>true</annunciating>
+                <description>a3pv1 description</description>
+            </pv>
+        </component>
+    </component>
+    <component name="Area1">
+        <automated_action>sevrpv:AREA1:STATSUMY</automated_action>
+        <component name="a1pv2">
             <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a1pv2 description</description>
+            <component name="pv1">
+                <enabled>true</enabled>
+                <latching>false</latching>
+                <annunciating>false</annunciating>
+                <pv name="pv2">
+                    <enabled>true</enabled>
+                    <latching>false</latching>
+                    <annunciating>false</annunciating>
+                </pv>
+            </component>
+        </component>
+        <pv name="a1pv1">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>true</annunciating>
+            <description>a1pv1 description</description>
+            <delay>4</delay>
+            <count>5</count>
         </pv>
     </component>
-    <pv name="DEMO:PV6">
-        <enabled>true</enabled>
-    </pv>
-    <pv name="DEMO:PV7">
-        <enabled>true</enabled>
-    </pv>
-</component>
 </config>

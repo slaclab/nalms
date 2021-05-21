@@ -7,9 +7,10 @@
             <annunciating>true</annunciating>
             <description>a2pv1 description</description>
         </pv>
-        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="/Users/jgarra/sandbox/nalms-resources/examples/test_config_base.xml" xpointer="config"/>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="/Users/jgarra/sandbox/nalms-resources/examples/test_config_area3.xml" xpointer="config"/>
     </component>
     <component name="Area1">
+        <automated_action>sevrpv:area1</automated_action>
         <component name="a1pv2">
             <enabled>true</enabled>
             <latching>true</latching>
