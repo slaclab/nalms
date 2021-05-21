@@ -30,11 +30,11 @@ cluster.name: nalms
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: /var/lib/elasticsearch
+path.data: ${ELASTICSEARCH_DATA_DIR}
 #
 # Path to log files:
 #
-path.logs: /var/log/elasticsearch
+path.logs: ${ELASTICSEARCH_DATA_DIR}
 #
 # ----------------------------------- Memory -----------------------------------
 #
