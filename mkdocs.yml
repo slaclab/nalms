@@ -1,0 +1,13 @@
+site_name: My Docs
+nav:
+  - Introduction: introduction.md
+  - Install: install.md
+  - Legacy: legacy.md
+  - Components:
+      - components.md
+      - Kafka: kafka.md
+
+
+markdown_extensions:
+  - toc:
+      toc_depth: 4

@@ -5,3 +5,6 @@ dependencies:
   - python =3.8
   - treelib
   - lxml
+  - pyqt5
+  - kafka-python
+  - pydm
