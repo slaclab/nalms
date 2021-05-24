@@ -8,21 +8,17 @@ from lxml import etree
 import sys
 
 
-
-
-
 def create_substitutions(filename: str, template_file: str = None) -> None:
 
     output_filename = ".".join(filename.split(".")[:-1]) + ".template"
 
-
-    #load file
+    # load file
     with open(filename, "r") as data:
         tree = etree.parse(data)
         root = tree.getroot()
 
         # find automated_action entries
-        actions = root.findall('.//automated_action')
+        actions = root.findall(".//automated_action")
         sevrpvs = []
 
         for action in actions:
@@ -30,7 +26,6 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
                 sevrpv = action.text.strip("sevrpv:")
                 sevrpvs.append(sevrpv)
 
-        
         if not template_file:
             template_file = sevrpv.template
 
@@ -44,22 +39,21 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
                 f.write(f"       {{{sevrpv}}}")
             f.write("}")
 
-
-
         # dump output to a .substitutions file
-
 
 
 if __name__ == "__main__":
     if sys.argv[1] == "-h":
         print("Create a substitutions file for configuration.")
-        print("Usage: python create_substitutions.py configuration_file [template_file]")
-    
+        print(
+            "Usage: python create_substitutions.py configuration_file [template_file]"
+        )
+
     elif len(sys.argv) not in [2, 3]:
         print("Incorrect number of arguments.")
-        print("Usage: python create_substitutions.py configuration_file [template_file]")
+        print(
+            "Usage: python create_substitutions.py configuration_file [template_file]"
+        )
 
     else:
         create_substitutions(sys.argv[1])
-
-
