@@ -1,5 +1,5 @@
 treelib
 lxml
-pyqt5
+pyqt
 kafka-python
 pydm
