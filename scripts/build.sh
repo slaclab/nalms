@@ -63,6 +63,12 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
+    if [[ -z "${ELASTICSEARCH_DATA_DIR}" ]] ; then
+        echo "ELASTICSEARCH_DATA_DIR incorrectly set."
+        echo "\$ELASTICSEARCH_DATA_DIR = ${ELASTICSEARCH_DATA_DIR}"
+        EXIT=1
+    fi
+
     if [[ ! -d "${NALMS_TOP}" ]]; then
         echo "NALMS_TOP incorrectly set correctly."
         echo "\$NALMS_TOP = ${NALMS_TOP}"
@@ -89,11 +95,19 @@ do
                 echo "\$ELASTICSEARCH_LOG_DIR = ${ELASTICSEARCH_LOG_DIR}"
                 EXIT=1
             fi
+
+            if [[ -z "${ELASTICSEARCH_DATA_DIR}" ]] ; then
+                echo "ELASTICSEARCH_DATA_DIR incorrectly set."
+                echo "\$ELASTICSEARCH_DATA_DIR = ${ELASTICSEARCH_DATA_DIR}"
+                EXIT=1
+            fi
+
             if [[ ! -d "${NALMS_TOP}" ]]; then
                 echo "NALMS_TOP incorrectly set correctly."
                 echo "\$NALMS_TOP = ${NALMS_TOP}"
                 EXIT=1
             fi
+
             if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
                 echo "ELASTICSEARCH_TOP incorrectly set."
                 echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
@@ -107,11 +121,13 @@ do
                 echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
                 EXIT=1
             fi
+
             if [[ ! -d "${KAKFA_TOP}" ]] ; then
                 echo "KAFKA_TOP incorrectly set."
                 echo "\$KAFKA_TOP = ${KAFKA_TOP}"
                 EXIT=1
             fi
+
             if [[ ! -f "${ZOOKEEPER_PROPERTIES}" ]] ; then
                 echo "ZOOKEEPER_PROPERTIES incorrectly set."
                 echo "\$ZOOKEEPER_PROPERTIES = ${ZOOKEEPER_PROPERTIES}"
@@ -125,11 +141,13 @@ do
                 echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
                 EXIT=1
             fi
+
             if [[ ! -d "${KAKFA_TOP}" ]] ; then
                 echo "KAFKA_TOP incorrectly set."
                 echo "\$KAFKA_TOP = ${KAFKA_TOP}"
                 EXIT=1
             fi
+            
             if [[ ! -f "${KAFKA_PROPERTIES}" ]] ; then
                 echo "KAFKA_PROPERTIES incorrectly set."
                 echo "\$KAFKA_PROPERTIES = ${KAFKA_PROPERTIES}"
@@ -256,9 +274,11 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
 
     echo "[Service]" >> $ELASTICSEARCH_FILE
     echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
-    echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch">> $ELASTICSEARCH_FILE
-    echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
-    echo "User=nalmselasticsearch" >> $ELASTICSEARCH_FILE
+    echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch" >> $ELASTICSEARCH_FILE
+    echo "Environment=ELASTICSEARCH_DATA_DIR=${ELASTICSEARCH_DATA_DIR}" >> $ELASTICSEARCH_FILE
+    echo "Environment=ELASTICSEARCH_LOG_DIR=${ELASTICSEARCH_LOG_DIR}" >> $ELASTICSEARCH_FILE
+    echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE 
+    echo "User=nalmselasticsearch" >> $ELASTICSEARCH_FILE 
     echo "Group=nalmselasticsearch" >> $ELASTICSEARCH_FILE
 
     echo "" >> $ELASTICSEARCH_FILE
