@@ -160,6 +160,7 @@ done
 # execute build and check completion
 if ! sh ./build.sh; then
     echo "Unable to install."
+    exit 1
 fi
 
 
@@ -197,6 +198,15 @@ fi
 
 # install kafka
 if [[ $BUILD_KAFKA -eq 1 ]]; then
+
+    # remove kafka logs
+    if [[ ! -d $KAFKA_LOG_DIR ]]; then
+        mkdir $KAFKA_LOG_DIR
+    else
+        rm -r $KAFKA_LOG_DIR
+        mkdir $KAFKA_LOG_DIR
+    fi
+
 
     # remove existing nalms-kafka service file
     if [[ -f "/etc/systemd/system/nalms-kafka.service" ]]; then
@@ -236,11 +246,18 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     # change ownership of log and data dir
     if [[ ! -d $ELASTICSEARCH_LOG_DIR ]]; then
         mkdir $ELASTICSEARCH_LOG_DIR
+    else
+        rm -r $ELASTICSEARCH_LOG_DIR
+        mkdir $ELASTICSEARCH_LOG_DIR
     fi
 
     if [[ ! -d $ELASTICSEARCH_DATA_DIR ]]; then
         mkdir $ELASTICSEARCH_DATA_DIR
+    else 
+        rm -r $ELASTICSEARCH_DATA_DIR
+        mkdir $ELASTICSEARCH_DATA_DIR
     fi
+
 
     chown -R nalmselasticsearch:nalmselasticsearch $ELASTICSEARCH_LOG_DIR $ELASTICSEARCH_DATA_DIR
 
