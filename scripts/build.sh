@@ -258,8 +258,8 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
     echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch">> $ELASTICSEARCH_FILE
     echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE
-    echo "User=elasticsearch" >> $ELASTICSEARCH_FILE
-    echo "Group=elasticsearch" >> $ELASTICSEARCH_FILE
+    echo "User=nalmselasticsearch" >> $ELASTICSEARCH_FILE
+    echo "Group=nalmselasticsearch" >> $ELASTICSEARCH_FILE
 
     echo "" >> $ELASTICSEARCH_FILE
 
