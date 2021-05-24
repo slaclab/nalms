@@ -95,7 +95,7 @@ do
                 echo "\$ELASTICSEARCH_LOG_DIR = ${ELASTICSEARCH_LOG_DIR}"
                 EXIT=1
             fi
-            
+
             if [[ -z "${ELASTICSEARCH_DATA_DIR}" ]] ; then
                 echo "ELASTICSEARCH_DATA_DIR incorrectly set."
                 echo "\$ELASTICSEARCH_DATA_DIR = ${ELASTICSEARCH_DATA_DIR}"
@@ -177,10 +177,10 @@ if [[ $BUILD_ZOOKEEPER -eq 1 ]]; then
         rm /etc/systemd/system/nalms-zookeeper.service
     fi
 
-    cp /tmp/nalms/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
-
     # stop in the case that zookeeper running
     systemctl stop nalms-zookeeper.service
+
+    cp /tmp/nalms/nalms-zookeeper.service /etc/systemd/system/nalms-zookeeper.service
 
     # reload daemon
     systemctl daemon-reload
@@ -203,11 +203,10 @@ if [[ $BUILD_KAFKA -eq 1 ]]; then
         rm /etc/systemd/system/nalms-kafka.service
     fi
 
-    cp /tmp/nalms/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
-
-
     # stop in the case that kafka running
     systemctl stop nalms-kafka.service
+
+    cp /tmp/nalms/nalms-kafka.service /etc/systemd/system/nalms-kafka.service
 
     # reload daemon
     systemctl daemon-reload
@@ -225,21 +224,21 @@ fi
 if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
 
     # remove existing nalms-elasticsearch service file
-    if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" && $BUILD_ELASTICSEARCH -eq 1 ]]; then
+    if [[ -f "/etc/systemd/system/nalms-elasticsearch.service" ]]; then
         rm /etc/systemd/system/nalms-elasticsearch.service
     fi
 
     # create a designated elasticearch user
-    if [[ ! id "elasticsearch" &>/dev/null ]];  then
+    if ! id "elasticsearch" &>/dev/null ;  then
         useradd nalmselasticsearch
     fi
 
     # change ownership of log and data dir
-    if [[ ! -d $ELASTICSEARCH_LOG_DIR]]; then
+    if [[ ! -d $ELASTICSEARCH_LOG_DIR ]]; then
         mkdir $ELASTICSEARCH_LOG_DIR
     fi
 
-    if [[ ! -d $ELASTICSEARCH_DATA_DIR]]; then
+    if [[ ! -d $ELASTICSEARCH_DATA_DIR ]]; then
         mkdir $ELASTICSEARCH_DATA_DIR
     fi
 
@@ -247,6 +246,8 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
 
     # stop in the case that elasticsearch running
     systemctl stop nalms-elasticsearch.service
+
+    cp /tmp/nalms/nalms-elasticsearch.service /etc/systemd/system/nalms-elasticsearch.service
 
     # reload daemon
     systemctl daemon-reload
