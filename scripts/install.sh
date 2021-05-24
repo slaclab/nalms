@@ -229,7 +229,7 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     fi
 
     # create a designated elasticearch user
-    if ! id "elasticsearch" &>/dev/null ;  then
+    if ! id "nalmselasticsearch" &>/dev/null ;  then
         useradd nalmselasticsearch
     fi
 
