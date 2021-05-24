@@ -155,6 +155,10 @@ do
 done
 
 
+# exit with failure
+if [[ $EXIT -eq 1 ]]; then
+    exit 1
+fi
 
 
 # execute build and check completion
@@ -239,8 +243,8 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     fi
 
     # create a designated elasticearch user
-    if ! id "nalmselasticsearch" &>/dev/null ;  then
-        useradd nalmselasticsearch
+    if ! id "elasticsearch" &>/dev/null ;  then
+        useradd elasticsearch
     fi
 
     # change ownership of log and data dir
@@ -259,7 +263,7 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     fi
 
 
-    chown -R nalmselasticsearch:nalmselasticsearch $ELASTICSEARCH_LOG_DIR $ELASTICSEARCH_DATA_DIR
+    chown -R elasticsearch:elasticsearch $ELASTICSEARCH_LOG_DIR $ELASTICSEARCH_DATA_DIR
 
     # stop in the case that elasticsearch running
     systemctl stop nalms-elasticsearch.service
