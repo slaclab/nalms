@@ -7,7 +7,7 @@ on:
       - github-actions
 jobs:
   build:
-    if: ${{ github.repository == 'slaclab/lume-nalms' }}
+    if: ${{ github.repository == 'slaclab/nalms' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
