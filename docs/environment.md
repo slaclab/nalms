@@ -11,7 +11,7 @@ All scripts use environment variables in their execution.
 | NALMS_TOP                | Path to NALMS installation                                    |
 | KAKFA_TOP                | Path to Kafka installation                                    |
 | EPICS_CA_AUTO_ADDR_LIST  | Enable network interface introspection                        |
-| EPICS_CA_ADDR_LIST       | Destination addresses for CA client name resolution requiests |
+| EPICS_CA_ADDR_LIST       | Destination addresses for CA client name resolution requests  |
 | EPICS_CA_REPEATER_PORT   | UDP port for server beacon initialization                     |
 | EPICS_CA_SERVER_PORT     | Port number for server                                        |
 | ZOOKEEPER_HOST           | Zookeeper host and port number                                |
