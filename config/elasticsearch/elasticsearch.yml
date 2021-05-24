@@ -34,7 +34,7 @@ path.data: ${ELASTICSEARCH_DATA_DIR}
 #
 # Path to log files:
 #
-path.logs: ${ELASTICSEARCH_DATA_DIR}
+path.logs: ${ELASTICSEARCH_LOG_DIR}
 #
 # ----------------------------------- Memory -----------------------------------
 #

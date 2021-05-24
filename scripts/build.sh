@@ -147,7 +147,7 @@ do
                 echo "\$KAFKA_TOP = ${KAFKA_TOP}"
                 EXIT=1
             fi
-            
+
             if [[ ! -f "${KAFKA_PROPERTIES}" ]] ; then
                 echo "KAFKA_PROPERTIES incorrectly set."
                 echo "\$KAFKA_PROPERTIES = ${KAFKA_PROPERTIES}"
@@ -278,8 +278,8 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     echo "Environment=ELASTICSEARCH_DATA_DIR=${ELASTICSEARCH_DATA_DIR}" >> $ELASTICSEARCH_FILE
     echo "Environment=ELASTICSEARCH_LOG_DIR=${ELASTICSEARCH_LOG_DIR}" >> $ELASTICSEARCH_FILE
     echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE 
-    echo "User=nalmselasticsearch" >> $ELASTICSEARCH_FILE 
-    echo "Group=nalmselasticsearch" >> $ELASTICSEARCH_FILE
+    echo "User=elasticsearch" >> $ELASTICSEARCH_FILE 
+    echo "Group=elasticsearch" >> $ELASTICSEARCH_FILE
 
     echo "" >> $ELASTICSEARCH_FILE
 
