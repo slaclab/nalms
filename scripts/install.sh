@@ -63,6 +63,12 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
+    if [[ -z "${ELASTICSEARCH_DATA_DIR}" ]] ; then
+        echo "ELASTICSEARCH_DATA_DIR incorrectly set."
+        echo "\$ELASTICSEARCH_DATA_DIR = ${ELASTICSEARCH_DATA_DIR}"
+        EXIT=1
+    fi
+
     if [[ ! -d "${NALMS_TOP}" ]]; then
         echo "NALMS_TOP incorrectly set correctly."
         echo "\$NALMS_TOP = ${NALMS_TOP}"
@@ -76,6 +82,80 @@ if [ $# -eq 0 ]; then
     fi
 
 fi
+
+
+# parse optional builds
+while test $# -gt 0
+do
+    case "$1" in
+        --elasticsearch) 
+            BUILD_ELASTICSEARCH=1
+            if [[ -z "${ELASTICSEARCH_LOG_DIR}" ]] ; then
+                echo "ELASTICSEARCH_LOG_DIR incorrectly set."
+                echo "\$ELASTICSEARCH_LOG_DIR = ${ELASTICSEARCH_LOG_DIR}"
+                EXIT=1
+            fi
+            
+            if [[ -z "${ELASTICSEARCH_DATA_DIR}" ]] ; then
+                echo "ELASTICSEARCH_DATA_DIR incorrectly set."
+                echo "\$ELASTICSEARCH_DATA_DIR = ${ELASTICSEARCH_DATA_DIR}"
+                EXIT=1
+            fi
+
+            if [[ ! -d "${NALMS_TOP}" ]]; then
+                echo "NALMS_TOP incorrectly set correctly."
+                echo "\$NALMS_TOP = ${NALMS_TOP}"
+                EXIT=1
+            fi
+            if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
+                echo "ELASTICSEARCH_TOP incorrectly set."
+                echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+                EXIT=1
+            fi
+            ;;
+        --zookeeper) 
+            BUILD_ZOOKEEPER=1
+            if [[ -z "${KAKFA_LOG_DIR}" ]] ; then
+                echo "KAFKA_LOG_DIR incorrectly set."
+                echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
+                EXIT=1
+            fi
+            if [[ ! -d "${KAKFA_TOP}" ]] ; then
+                echo "KAFKA_TOP incorrectly set."
+                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+                EXIT=1
+            fi
+            if [[ ! -f "${ZOOKEEPER_PROPERTIES}" ]] ; then
+                echo "ZOOKEEPER_PROPERTIES incorrectly set."
+                echo "\$ZOOKEEPER_PROPERTIES = ${ZOOKEEPER_PROPERTIES}"
+                EXIT=1
+            fi
+            ;;
+        --kafka) 
+            BUILD_KAFKA=1
+            if [[ -z "${KAKFA_LOG_DIR}" ]] ; then
+                echo "KAFKA_LOG_DIR incorrectly set."
+                echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
+                EXIT=1
+            fi
+            if [[ ! -d "${KAKFA_TOP}" ]] ; then
+                echo "KAFKA_TOP incorrectly set."
+                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+                EXIT=1
+            fi
+            if [[ ! -f "${KAFKA_PROPERTIES}" ]] ; then
+                echo "KAFKA_PROPERTIES incorrectly set."
+                echo "\$KAFKA_PROPERTIES = ${KAFKA_PROPERTIES}"
+                EXIT=1
+            fi
+            ;;
+        "") echo "here"
+    esac
+    shift
+done
+
+
+
 
 # execute build and check completion
 if ! sh ./build.sh; then
