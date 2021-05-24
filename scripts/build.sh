@@ -3,7 +3,7 @@
 #
 # This script creates build artifacts for nalms
 #
-# To buld a subset services, you can use tag --elasticsearch, --kafka, --zookeeper
+# To build a subset of services, you can use tag --elasticsearch, --kafka, --zookeeper
 # Generated files will be stored in /tmp/nalms/
 #
 # Copyright @2021 SLAC National Accelerator Laboratory
