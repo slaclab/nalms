@@ -24,6 +24,7 @@ class ForcePV:
         main_calc (str): Top level calculation.
 
     """
+
     def __init__(self) -> None:
         self.name = None
         self.is_calc = False
@@ -73,7 +74,10 @@ class AlarmNode:
         filename (str): Generating filename.
 
     """
-    def __init__(self, group_name: str, filename: str = None, parent: str =None) -> None:
+
+    def __init__(
+        self, group_name: str, filename: str = None, parent: str = None
+    ) -> None:
         self.name = group_name
         self.alias = ""
         self.commands = []
@@ -126,9 +130,12 @@ class AlarmLeaf:
         delay (int): Associated alarm delay.
 
     """
+
     node_children = None
 
-    def __init__(self, channel_name: str, filename: str=None, parent: str=None) -> None:
+    def __init__(
+        self, channel_name: str, filename: str = None, parent: str = None
+    ) -> None:
         self.name = channel_name
         self.commands = []
         self.force_pv = None
@@ -137,7 +144,7 @@ class AlarmLeaf:
         self.count = None
         self.delay = None
         self.filename = ""
-        self.parent=parent
+        self.parent = parent
 
 
 class InclusionMarker:
@@ -150,6 +157,7 @@ class InclusionMarker:
         parent (str): Name of the inclusion's parent.
 
     """
+
     node_children = None
 
     def __init__(self, name, filename, parent) -> None:
@@ -174,6 +182,7 @@ class ALHFileParser:
         _failures (str): Failure to convert messages.
 
     """
+
     def __init__(self, filepath: str, config_name: str, base: str = None):
         self._filepath = filepath
 
@@ -194,7 +203,9 @@ class ALHFileParser:
         # markers for tracking where at in parsing
         if base:
             self._current_node = base
-            self._items[base] = AlarmNode(base.split("/")[-1], parent=self._items[config_name])
+            self._items[base] = AlarmNode(
+                base.split("/")[-1], parent=self._items[config_name]
+            )
 
         else:
             self._current_node = config_name
@@ -255,12 +266,13 @@ class ALHFileParser:
 
                 # process heartbeatpv
                 elif split_line[0] == "$HEARTBEATPV":
-                    self._failures.append({
-                        "Reason": "Heartbeat pv must be configured",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
-
+                    self._failures.append(
+                        {
+                            "Reason": "Heartbeat pv must be configured",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 elif split_line[0] == "INCLUDE":
                     self._process_inclusion(split_line)
@@ -270,48 +282,59 @@ class ALHFileParser:
 
                 # Handle deprecated commands
                 elif split_line[0] == "$SEVRCOMMAND":
-                    self._failures.append({
-                        "Reason": "SEVRCOMMAND is deprecated",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
+                    self._failures.append(
+                        {
+                            "Reason": "SEVRCOMMAND is deprecated",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 elif split_line[0] == "$STATCOMMAND":
-                    self._failures.append({
-                        "Reason": "STATCOMMAND is deprecated",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
+                    self._failures.append(
+                        {
+                            "Reason": "STATCOMMAND is deprecated",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 elif split_line[0] == "BEEPSEVERITY":
-                    self._failures.append({
-                        "Reason": "BEEPSEVERITY is deprecated",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
-
+                    self._failures.append(
+                        {
+                            "Reason": "BEEPSEVERITY is deprecated",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 elif split_line[0] == "BEEPSEVR":
-                    self._failures.append({
-                        "Reason": "BEEPSEVR is deprecated",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
+                    self._failures.append(
+                        {
+                            "Reason": "BEEPSEVR is deprecated",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 # process ackpv entry
                 elif split_line[0] == "$ACKPV":
-                    self._failures.append({
-                        "Reason": "ACKPV is deprecated",
-                        "File": self._filepath,
-                        "Line": next_line,
-                    })
+                    self._failures.append(
+                        {
+                            "Reason": "ACKPV is deprecated",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
                 else:
-                    self._failures.append({
-                        "Reason": "Line element not found.",
-                        "File": self._filepath,
-                        "Line": next_line
-                    })
+                    self._failures.append(
+                        {
+                            "Reason": "Line element not found.",
+                            "File": self._filepath,
+                            "Line": next_line,
+                        }
+                    )
 
             next_line = next(self._line_iterator, None)
 
@@ -343,7 +366,6 @@ class ALHFileParser:
             parent_path = self._current_node
             node_path = f"{self._current_node}/{group_name}"
 
-
         # add to child to parent
         self._items[parent_path].add_child(node_path)
 
@@ -372,7 +394,9 @@ class ALHFileParser:
         # adjust path based on parent group and parent
         if self._current_node and self._current_node != parent:
             parent_path = f"{self._current_node}/{self._current_node}/{parent}"
-            node_path = f"{self._current_node}/{self._current_node}/{parent}/{channel_name}"
+            node_path = (
+                f"{self._current_node}/{self._current_node}/{parent}/{channel_name}"
+            )
 
         # otherwise, just use parent
         else:
@@ -380,7 +404,9 @@ class ALHFileParser:
             node_path = f"{self.current_node}/{parent}/{channel_name}"
 
         # update item and assign parent
-        self._items[node_path] = AlarmLeaf(channel_name, filename=self._filepath, parent=parent_path)
+        self._items[node_path] = AlarmLeaf(
+            channel_name, filename=self._filepath, parent=parent_path
+        )
         self._items[node_path].parent = parent_path
 
         # store parent node if it isn't in items
@@ -436,11 +462,13 @@ class ALHFileParser:
         if len(split_line) == 5:
             reset_value = split_line[4]
 
-        self._failures.append({
-            "Reason": "Reset value and force value are deprecated.",
-            "File": self._filepath,
-            "Line": " ".join(split_line)
-        })
+        self._failures.append(
+            {
+                "Reason": "Reset value and force value are deprecated.",
+                "File": self._filepath,
+                "Line": " ".join(split_line),
+            }
+        )
 
         # create a force pv for the item
         self._items[self._current_target].force_pv = ForcePV()
@@ -464,9 +492,9 @@ class ALHFileParser:
                     # Track these values
                     elif "FORCEPV_CALC_" in next_split[0]:
                         identifier = next_split[0][-1]
-                        self._items[self._current_target].calcs[identifier] = next_split[
-                            1
-                        ]
+                        self._items[self._current_target].calcs[
+                            identifier
+                        ] = next_split[1]
 
                     # otherwise have reached end
                     else:
@@ -529,7 +557,9 @@ class ALHFileParser:
 
         # mark an inclusion with unique placeholder
         item_key = self._current_node + f"/{parent}/INCLUDE_{self._inclusion_count}"
-        self._items[item_key] = InclusionMarker(item_key, include_filename, f"{self._current_node}/{parent}")
+        self._items[item_key] = InclusionMarker(
+            item_key, include_filename, f"{self._current_node}/{parent}"
+        )
         self._items[self._current_target].add_child(item_key)
         self._inclusion_count += 1
 
@@ -557,7 +587,8 @@ class XMLBuilder:
         _added_pvs (list): List of pvs already added.
 
     """
-    def __init__(self, recurse:bool=True):
+
+    def __init__(self, recurse: bool = True):
         """ Running without the recursive setting assembles the file using xinclude tags, 
         which aren't handled at present. 
 
@@ -607,7 +638,6 @@ class XMLBuilder:
 
         root_node = self._tree.get_node(self._config_name)
         self._handle_children(root_node)
-
 
     def save_configuration(self, output_filename: str):
         """ Method for saving configuration to an output file.
@@ -659,7 +689,6 @@ class XMLBuilder:
         if data.alias:
             group_name = data.alias
 
-
         if group not in self._groups:
             if not parent_group:
                 self._groups[group] = ET.SubElement(
@@ -688,7 +717,7 @@ class XMLBuilder:
 
         if data.sevrpv is not None:
             command_item = ET.SubElement(self._groups[group], "automated_action")
-            command_item.text =  f"sevrpv:{data.sevrpv}"
+            command_item.text = f"sevrpv:{data.sevrpv}"
 
     def _add_pv(self, pvname: str, group: str, data: AlarmLeaf) -> None:
         """ Add a pv to the tree representation.
@@ -758,7 +787,6 @@ class XMLBuilder:
             attrib={"xmlns:xi": "http://www.w3.org/2001/XInclude"},
         )
 
-
     def _process_forcepv(self, force_pv: ForcePV) -> str:
         """ Get text appropriate for force pv
 
@@ -769,9 +797,9 @@ class XMLBuilder:
         return force_pv.get_text()
 
 
-
-
-def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filename: str) -> None:
+def convert_alh_to_phoebus(
+    config_name: str, input_filename: str, output_filename: str
+) -> None:
     """ Method for converting the alarm handler configuration files to the Phoebus xml representations.
 
     Args:
@@ -787,7 +815,7 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
     recurse = True
     # recurse over inclusion files
     if recurse:
-        while len(inclusions)>0:
+        while len(inclusions) > 0:
             inclusion = list(inclusions.keys())[0]
             parent = items[inclusion].parent
 
@@ -804,11 +832,10 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
             items[parent].remove_child(inclusion)
 
             # remove parent from items
-            #items.pop(parent)
+            # items.pop(parent)
 
             #  link the tree
             items[parent].add_child(list(next_items.keys())[0])
-
 
             inclusions.update(next_inclusions)
             items.update(next_items)
@@ -820,7 +847,6 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
 
-
     print(f"Configuration file saved: {output_filename}")
     if len(failures) > 0:
         print("Conversion failed on the following points:")
@@ -831,14 +857,15 @@ def convert_alh_to_phoebus(config_name: str, input_filename: str, output_filenam
 
 if __name__ == "__main__":
     if len(sys.argv) == 0 or sys.argv[1] == "-h":
-        print("Usage: python alh_conversion.py config_name input_filename output_filename")
-    
+        print(
+            "Usage: python alh_conversion.py config_name input_filename output_filename"
+        )
+
     elif len(sys.argv) != 4:
         print("Incorrect number of arguments.")
-        print("Usage: python alh_conversion.py config_name input_filename output_filename")
+        print(
+            "Usage: python alh_conversion.py config_name input_filename output_filename"
+        )
 
     else:
         convert_alh_to_phoebus(sys.argv[1], sys.argv[2], sys.argv[3])
-
-
-
