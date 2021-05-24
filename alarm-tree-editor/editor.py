@@ -5,10 +5,38 @@ import importlib.util
 import time
 
 from kafka import KafkaConsumer
-from qtpy.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QTreeView, QCheckBox,
-                            QAbstractItemView, QSpacerItem, QSizePolicy, QLineEdit, QToolBar, QAction,
-                            QDialogButtonBox, QPushButton, QMenu, QGridLayout, QLabel, QApplication, QFileDialog)
-from qtpy.QtCore import Qt, Slot, QModelIndex, QItemSelection, QItemSelectionModel, QObject, Signal, Property, QAbstractItemModel, QSize
+from qtpy.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QHBoxLayout,
+    QTreeView,
+    QCheckBox,
+    QAbstractItemView,
+    QSpacerItem,
+    QSizePolicy,
+    QLineEdit,
+    QToolBar,
+    QAction,
+    QDialogButtonBox,
+    QPushButton,
+    QMenu,
+    QGridLayout,
+    QLabel,
+    QApplication,
+    QFileDialog,
+)
+from qtpy.QtCore import (
+    Qt,
+    Slot,
+    QModelIndex,
+    QItemSelection,
+    QItemSelectionModel,
+    QObject,
+    Signal,
+    Property,
+    QAbstractItemModel,
+    QSize,
+)
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
 import xml.etree.ElementTree as ET
@@ -24,16 +52,32 @@ if not NALMS_TOP:
     print("$NALMS_TOP must be defined.")
     sys.exit()
 else:
-    spec = importlib.util.spec_from_file_location("module.name", f"{NALMS_TOP}/tools/alh_conversion.py")
+    spec = importlib.util.spec_from_file_location(
+        "module.name", f"{NALMS_TOP}/tools/alh_conversion.py"
+    )
     alh_conversion = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(alh_conversion)
-        
+
 
 class AlarmTreeItem(QObject):
     data_changed = Signal()
     send_value_signal = Signal(bool)
 
-    def __init__(self, label="", parent=None, address="", description="", enabled=True, latching=False, annunciating=False, count=None, delay=None, is_group=False, alarm_filter=None, alarm_configuration=None):
+    def __init__(
+        self,
+        label="",
+        parent=None,
+        address="",
+        description="",
+        enabled=True,
+        latching=False,
+        annunciating=False,
+        count=None,
+        delay=None,
+        is_group=False,
+        alarm_filter=None,
+        alarm_configuration=None,
+    ):
         # type: (str, QObject, str, str, bool, bool, bool, int, int, bool, str, str)
 
         super(AlarmTreeItem, self).__init__()
@@ -54,14 +98,12 @@ class AlarmTreeItem(QObject):
         self.delay = delay
         self.label = label
         self.annunciating = annunciating
-        self.alarm_filter=alarm_filter
+        self.alarm_filter = alarm_filter
         self.is_group = is_group
         self.tickets = "CATER: 1029"
 
         if hasattr(self, "channels"):
-            self.destroyed.connect(functools.partial(widget_destroyed,
-                                                     self.channels))
-
+            self.destroyed.connect(functools.partial(widget_destroyed, self.channels))
 
     # For model logic
     def child(self, row):
@@ -81,7 +123,9 @@ class AlarmTreeItem(QObject):
 
     def create_child(self, position, child_data):
         # type: (int, dict)
-        child = AlarmTreeItem.from_dict(child_data, parent=self, alarm_configuration = self.alarm_configuration)
+        child = AlarmTreeItem.from_dict(
+            child_data, parent=self, alarm_configuration=self.alarm_configuration
+        )
         self.children.insert(position, child)
         if not self.is_group:
             self.is_group = True
@@ -92,7 +136,7 @@ class AlarmTreeItem(QObject):
         # type: (int, QObject)
         self.children.insert(position, child)
         if not self.is_group:
-            self.is_group=True
+            self.is_group = True
         return child
 
     def parent(self):
@@ -103,7 +147,7 @@ class AlarmTreeItem(QObject):
         item = self.children.pop(position)
 
         return item
-    
+
     def assign_parent(self, parent):
         # type: (QObject)
         self.parent_item = parent
@@ -130,7 +174,6 @@ class AlarmTreeItem(QObject):
             self.channel = None
             return
 
-
     @property
     def description(self):
         return self._description
@@ -148,7 +191,7 @@ class AlarmTreeItem(QObject):
     def enabled(self, enabled):
         # type: (bool)
         self._enabled = enabled
-    
+
     @property
     def latching(self):
         return self._latching
@@ -184,7 +227,6 @@ class AlarmTreeItem(QObject):
     def count(self, count):
         # type: (int)
         self._count = count
-
 
     @property
     def alarm_filter(self):
@@ -225,13 +267,19 @@ class AlarmTreeItem(QObject):
     def unacknowledge(self):
         self.send_value_signal.emit(False)
 
-    # For recreation    
+    # For recreation
     def to_dict(self):
-        return {"label": self.label, "address": self.address, 
-        "description": self.description, "enabled": self.enabled, 
-        "latching": self.latching, "count": self.count, 
-        "annunciating": self.annunciating,
-        "delay": self.delay, "alarm_filter": self.alarm_filter}
+        return {
+            "label": self.label,
+            "address": self.address,
+            "description": self.description,
+            "enabled": self.enabled,
+            "latching": self.latching,
+            "count": self.count,
+            "annunciating": self.annunciating,
+            "delay": self.delay,
+            "alarm_filter": self.alarm_filter,
+        }
 
     @classmethod
     def from_dict(cls, data_map, parent=None, alarm_configuration=None):
@@ -247,7 +295,19 @@ class AlarmTreeItem(QObject):
             annunciating = data_map.get("annunciating")
             alarm_filter = data_map.get("alarm_filter")
 
-            return cls(label, parent=parent, address=address, description=description, enabled=enabled, latching=latching, annunciating=annunciating, count=count, delay=delay, alarm_filter=alarm_filter, alarm_configuration=alarm_configuration)
+            return cls(
+                label,
+                parent=parent,
+                address=address,
+                description=description,
+                enabled=enabled,
+                latching=latching,
+                annunciating=annunciating,
+                count=count,
+                delay=delay,
+                alarm_filter=alarm_filter,
+                alarm_configuration=alarm_configuration,
+            )
 
         else:
             return cls(None, parent=parent)
@@ -258,8 +318,6 @@ class AlarmTreeItem(QObject):
 
     def mark_pv(self):
         self.is_group = False
-
-
 
 
 class AlarmTreeModel(QAbstractItemModel):
@@ -284,14 +342,13 @@ class AlarmTreeModel(QAbstractItemModel):
 
         return parent.child_count()
 
-
     def data(self, index, role):
         # type: (QModelIndex, Qt.ItemDataRole)
         if not index.isValid():
             return None
 
         item = self.getItem(index)
-        
+
         if role in [Qt.DisplayRole, Qt.EditRole]:
             return item.label
 
@@ -306,7 +363,7 @@ class AlarmTreeModel(QAbstractItemModel):
                 return QBrush(Qt.yellow)
 
             # major alarm
-            elif item.severity == 2: 
+            elif item.severity == 2:
                 return QBrush(Qt.red)
 
             # invalid
@@ -324,23 +381,27 @@ class AlarmTreeModel(QAbstractItemModel):
             # major/minor ack
             elif item.severity == 6:
                 return QBrush(QColor(86, 86, 86))
-            
+
             # undefined
             elif item.severity == 7:
                 return QBrush(Qt.black)
 
-            #undefined ack
+            # undefined ack
             elif item.severity == 8:
                 return QBrush(QColor(86, 86, 86))
-
 
     def flags(self, index):
         # type: (QModelIndex)
         if not index.isValid():
             return Qt.ItemIsEnabled
 
-        return Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsDragEnabled | Qt.ItemIsDropEnabled
-
+        return (
+            Qt.ItemIsEditable
+            | Qt.ItemIsEnabled
+            | Qt.ItemIsSelectable
+            | Qt.ItemIsDragEnabled
+            | Qt.ItemIsDropEnabled
+        )
 
     def getItem(self, index):
         # type: (QModelIndex)
@@ -352,8 +413,7 @@ class AlarmTreeModel(QAbstractItemModel):
         else:
             return self._root_item
 
-
-    def index(self, row, column, parent =QModelIndex()):
+    def index(self, row, column, parent=QModelIndex()):
         # type: (int, int, QModelIndex)
         if parent.isValid() and parent.column() != 0:
             return QModelIndex()
@@ -365,12 +425,10 @@ class AlarmTreeModel(QAbstractItemModel):
         else:
             return QModelIndex()
 
-
     def insertRow(self, position, parent=QModelIndex(), child_data=None):
         # type: (int, QModelIndex, dict)
         if not parent:
             return False
-
 
         parent_item = self.getItem(parent)
 
@@ -381,15 +439,12 @@ class AlarmTreeModel(QAbstractItemModel):
         if not parent_item.is_group:
             parent_item.mark_group()
 
-
         self.addNode(child)
         self.endInsertRows()
 
         return True
 
-    
-
-    def removeRow(self, position, parent= QModelIndex()):
+    def removeRow(self, position, parent=QModelIndex()):
         # type: (int, QModelIndex)
 
         parent_item = self.getItem(parent)
@@ -407,7 +462,6 @@ class AlarmTreeModel(QAbstractItemModel):
 
         return True
 
-
     def parent(self, index):
         # type: (QModelIndex)
         if not index.isValid():
@@ -424,7 +478,6 @@ class AlarmTreeModel(QAbstractItemModel):
 
         return self.createIndex(parent.child_number(), 0, parent)
 
-
     def setData(self, index, data, role):
         # type: (QModelIndex, str, Qt.ItemDataRole)
         """
@@ -435,22 +488,34 @@ class AlarmTreeModel(QAbstractItemModel):
 
         return True
 
-
-    def set_data(self, index, role=Qt.EditRole, label=None, description=None, address=None, count=None, delay=None, latching=None, enabled=None, annunciating=None, alarm_filter=None):
+    def set_data(
+        self,
+        index,
+        role=Qt.EditRole,
+        label=None,
+        description=None,
+        address=None,
+        count=None,
+        delay=None,
+        latching=None,
+        enabled=None,
+        annunciating=None,
+        alarm_filter=None,
+    ):
         # type: (QModelIndex, Qt.ItemDataRole, str, str, str, int, int, bool, bool, bool, str)
         if role != Qt.EditRole:
             return False
 
         item = self.getItem(index)
 
-        if label: 
+        if label:
             item.label = label
 
         if address:
             item.address = address
 
         if count:
-           item.count = count
+            item.count = count
 
         if delay:
             item.delay = delay
@@ -474,19 +539,16 @@ class AlarmTreeModel(QAbstractItemModel):
 
         return True
 
-
-
     @Slot()
     def update_values(self):
         self.layoutChanged.emit()
-
 
     # drag/drop
     def supportedDropActions(self):
         return Qt.MoveAction
 
     def mimeTypes(self):
-        return ['text/plain']
+        return ["text/plain"]
 
     def mimeData(self, indexes):
         # type: (List[QModelIndex])
@@ -500,17 +562,16 @@ class AlarmTreeModel(QAbstractItemModel):
         hierarchy_builder = MimeHierarchyTool()
         hierarchy_rep = hierarchy_builder.build_config(item)
 
-
         data = json.dumps(hierarchy_rep)
         mimedata.setText(data)
         return mimedata
-
 
     def dropMimeData(self, mimedata, action, row, column, parentIndex):
         """Function used for dropping tree items. Item hierarchy within dragged groups is preserved. 
 
         """
-        if action == Qt.IgnoreAction: return True
+        if action == Qt.IgnoreAction:
+            return True
 
         prior_index = self._tree.selectionModel().currentIndex()
         selected_parent = self.parent(prior_index)
@@ -531,7 +592,7 @@ class AlarmTreeModel(QAbstractItemModel):
                 base_insert = parent_item.create_child(0, child_data=data_rep)
                 base_insert.data_changed.connect(self.update_values)
                 self._nodes.append(base_insert)
-                
+
                 # track for local indices
                 new_nodes.append(base_insert)
 
@@ -544,24 +605,21 @@ class AlarmTreeModel(QAbstractItemModel):
                 # track for local indices
                 new_nodes.append(new_node)
 
-
         # trigger layout changed signal
         self.update_values()
 
         # populate children
         return True
 
-
     def addNode(self, item):
-        # type: (AlarmTreeItem) 
+        # type: (AlarmTreeItem)
         self._nodes.append(item)
-    
+
     def removeNode(self, node):
-        # type: (AlarmTreeItem) 
+        # type: (AlarmTreeItem)
         self._nodes.remove(node)
         if len(self._nodes) < 1:
             pass
-
 
     def getNodes(self):
         hierarchy = self._get_hierarchy()
@@ -574,7 +632,6 @@ class AlarmTreeModel(QAbstractItemModel):
                 parent_idx = None
             else:
                 parent_idx = self._nodes.index(node.parent_item)
-
 
             rep = [node.to_dict(), parent_idx]
             hierarchy.append(rep)
@@ -595,13 +652,14 @@ class AlarmTreeModel(QAbstractItemModel):
             node_data = node[0]
             parent_idx = node[1]
 
-            alarm_item = AlarmTreeItem.from_dict(node[0], alarm_configuration = config_name)
+            alarm_item = AlarmTreeItem.from_dict(
+                node[0], alarm_configuration=config_name
+            )
             self._nodes.append(alarm_item)
 
             if parent_idx is not None:
                 alarm_item.assign_parent(self._nodes[node[1]])
                 self._nodes[node[1]].insert_child(-1, alarm_item)
-            
 
             if i == 0:
                 self._root_item = alarm_item
@@ -616,8 +674,6 @@ class AlarmTreeModel(QAbstractItemModel):
         # trigger layout changed signal
         self.update_values()
 
-
-
     # configuration handling
     def import_configuration_from_kafka(self, alarm_configuration):
 
@@ -628,10 +684,11 @@ class AlarmTreeModel(QAbstractItemModel):
             alarm_configuration,
             bootstrap_servers=[kafka_url],
             enable_auto_commit=True,
-            key_deserializer=lambda x: x.decode('utf-8')
+            key_deserializer=lambda x: x.decode("utf-8"),
         )
 
-        while not consumer._client.poll(): continue
+        while not consumer._client.poll():
+            continue
         consumer.seek_to_beginning()
 
         key_paths = []
@@ -652,29 +709,35 @@ class AlarmTreeModel(QAbstractItemModel):
 
                             key_paths.append(key_path)
                             key_split = key_path.split("/")
-                            
+
                             if len(key_split) not in keys:
-                                keys[len(key_split)] = [{"key_path": key_path, "key_split": key_split}]
+                                keys[len(key_split)] = [
+                                    {"key_path": key_path, "key_split": key_split}
+                                ]
 
                             else:
-                                keys[len(key_split)].append({"key_path": key_path, "key_split": key_split})
+                                keys[len(key_split)].append(
+                                    {"key_path": key_path, "key_split": key_split}
+                                )
 
             if not message:
                 break
 
-
-        nodes = []                    
+        nodes = []
         hierarchy = []
 
         max_depth = max(keys.keys())
         for depth in range(1, max_depth + 1):
-            
+
             for key in keys[depth]:
-                data = {"label": key["key_split"][-1], "address": "alarm://{}".format(key["key_path"])}
+                data = {
+                    "label": key["key_split"][-1],
+                    "address": "alarm://{}".format(key["key_path"]),
+                }
 
                 nodes.append(key["key_path"])
 
-                if depth > 1: 
+                if depth > 1:
                     parent = "/".join(key["key_split"][:-1])
                     parent_idx = nodes.index(parent)
 
@@ -695,7 +758,7 @@ class MimeHierarchyTool:
 
     def __init__(self):
         self.hierarchy = []
-    
+
     def build_config(self, node):
         """Governing logic for building/organizing the hierarchy.
 
@@ -704,8 +767,8 @@ class MimeHierarchyTool:
         self.hierarchy.append([node.to_dict(), None])
 
         for node in node.children:
-            
-            #if children, is a group
+
+            # if children, is a group
             if node.child_count():
                 self._handle_group_add(node, 0)
 
@@ -714,13 +777,12 @@ class MimeHierarchyTool:
 
         return self.hierarchy
 
-
     def _handle_group_add(self, group, parent_index):
         # type: (AlarmTreeItem, QModelIndex)
         """Handles group additions to hierarchy and their subsequent children.
 
         """
-        node_index = len(self.hierarchy)-1
+        node_index = len(self.hierarchy) - 1
 
         self.hierarchy.append([group.to_dict(), parent_index])
 
@@ -733,30 +795,25 @@ class MimeHierarchyTool:
             else:
                 self._handle_pv_add(child, node_index)
 
-
     def _handle_pv_add(self, pv, parent_index):
         # type: (AlarmTreeItem, QModelIndex)
         """Handles pv additions to hierarchy.
 
         """
-        node_index = len(self.hierarchy)-1
+        node_index = len(self.hierarchy) - 1
         self.hierarchy.append([pv.to_dict(), parent_index])
 
 
-
-
 class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
-
     def __init__(self, parent, init_channel=None, config_name=None, edit_mode=False):
         super(PyDMAlarmTree, self).__init__()
 
         QTreeView.__init__(self, parent)
         PyDMWritableWidget.__init__(self)
-        
+
         self.setup_ui()
 
         self.setStyleSheet("background-color: rgb(179, 179, 179)")
-
 
         self._nodes = []
 
@@ -767,7 +824,7 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
         self.edit_mode = edit_mode
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-        
+
         if not edit_mode:
             self.customContextMenuRequested.connect(self._open_menu)
 
@@ -790,8 +847,9 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
     def set_configuration_name(self, config_name):
         self.config_name = config_name
 
-
-    configuration_name = Property(str, get_configuration_name, set_configuration_name, designable=False)
+    configuration_name = Property(
+        str, get_configuration_name, set_configuration_name, designable=False
+    )
 
     def _open_menu(self, point):
         menu = QMenu()
@@ -808,13 +866,17 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
         menu.addAction(self.ticket_action)
 
         self.acknowledge_action = QAction("Acknowledge", self)
-        self.acknowledge_action.triggered.connect(partial(self._acknowledge_at_index, index))
+        self.acknowledge_action.triggered.connect(
+            partial(self._acknowledge_at_index, index)
+        )
         menu.addAction(self.acknowledge_action)
 
         self.remove_acknowledge_action = QAction("Remove Acknowledge", self)
-        self.remove_acknowledge_action.triggered.connect(partial(self._remove_acknowledge_at_index, index))
+        self.remove_acknowledge_action.triggered.connect(
+            partial(self._remove_acknowledge_at_index, index)
+        )
         self.remove_acknowledge_action.setEnabled(False)
-    
+
         menu.addAction(self.remove_acknowledge_action)
 
         menu.exec_(self.viewport().mapToGlobal(point))
@@ -831,8 +893,6 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
         self.clearSelection()
         self.selectionModel().reset()
         QTreeView.mousePressEvent(self, event)
-
-
 
 
 class PhoebusConfigTool:
@@ -855,7 +915,7 @@ class PhoebusConfigTool:
         """
         Parses a configuration file
         """
-        #clear
+        # clear
         self._clear()
 
         # parse filename
@@ -867,7 +927,7 @@ class PhoebusConfigTool:
 
             # add root item to tree
             self._nodes.append([{"label": self._config_name}, None])
-            
+
             for child in self._root:
                 if child.tag == "component":
                     self._handle_group_parse(child, 0)
@@ -877,14 +937,13 @@ class PhoebusConfigTool:
 
         return self._nodes
 
-
     def _build_data(self, elem):
         data = {"label": elem.attrib.get("name")}
 
         for child in elem:
             if child.tag == "description":
                 data["description"] = child.text
-            
+
             elif child.tag == "enabled":
                 data["enabled"] = child.text
 
@@ -904,24 +963,22 @@ class PhoebusConfigTool:
                 data["alarm_filter"] = child.text
 
             elif child.tag == "command":
-                pass # TODO
+                pass  # TODO
 
             elif child.tag == "automated_action":
-                pass # TODO 
+                pass  # TODO
 
         return data
-
 
     def _handle_pv_parse(self, pv, parent_idx):
         data = self._build_data(pv)
         self._nodes.append([data, parent_idx])
 
-    
     def _handle_group_parse(self, group, parent_idx):
         # add group
         data = self._build_data(group)
         self._nodes.append([data, parent_idx])
-        group_idx = len(self._nodes) - 1 
+        group_idx = len(self._nodes) - 1
 
         for child in group:
             if child.tag == "component":
@@ -930,24 +987,22 @@ class PhoebusConfigTool:
             elif child.tag == "pv":
                 self._handle_pv_parse(child, group_idx)
 
-
     def save_configuration(self, root_node, filename):
         # disregard root and create new
         self._build_config(root_node)
 
-        with open (filename, "wb") as f : 
-            file_str = ET.tostring(self._tree, encoding='utf8')
+        with open(filename, "wb") as f:
+            file_str = ET.tostring(self._tree, encoding="utf8")
             f.write(file_str)
 
-    
     def _build_config(self, root_node):
         # clear tree and start again
         self._tree = ET.ElementTree()
         self._tree = ET.Element("config", name=root_node.label)
 
         for node in root_node.children:
-            
-            #if children, is a group
+
+            # if children, is a group
             if node.child_count():
                 self._handle_group_add(node, self._tree)
 
@@ -958,36 +1013,34 @@ class PhoebusConfigTool:
 
         if alarm_tree_item.enabled is not None:
             enabled = ET.SubElement(elem, "enabled")
-           
+
             if alarm_tree_item.enabled:
-                enabled.text = 'true'
+                enabled.text = "true"
 
             else:
-                enabled.text = 'false'
+                enabled.text = "false"
 
         if alarm_tree_item.latching is not None:
             latching = ET.SubElement(elem, "latching")
 
             if alarm_tree_item.latching:
-                latching.text = 'true'
+                latching.text = "true"
 
             else:
-                latching.text = 'false'
+                latching.text = "false"
 
         if alarm_tree_item.annunciating is not None:
             annunciating = ET.SubElement(elem, "annunciating")
 
             if alarm_tree_item.annunciating:
-                annunciating.text = 'true'
+                annunciating.text = "true"
 
             else:
-                annunciating.text = 'false'
-
+                annunciating.text = "false"
 
         if alarm_tree_item.description:
             description = ET.SubElement(elem, "description")
             description.text = alarm_tree_item.description
-
 
         if alarm_tree_item.delay:
             delay = ET.SubElement(elem, "delay")
@@ -1002,7 +1055,7 @@ class PhoebusConfigTool:
             alarm_filter.text = alarm_tree_item.alarm_filter
 
     def _handle_group_add(self, group, parent):
-        group_comp = ET.SubElement(parent, 'component', name=group.label)
+        group_comp = ET.SubElement(parent, "component", name=group.label)
 
         # don't add properties for group
         for child in group.children:
@@ -1013,11 +1066,9 @@ class PhoebusConfigTool:
             else:
                 self._handle_pv_add(child, group_comp)
 
-
     def _handle_pv_add(self, pv, parent):
-        pv_comp = ET.SubElement(parent, 'pv', name=pv.label)
+        pv_comp = ET.SubElement(parent, "pv", name=pv.label)
         self._handle_property_add(pv_comp, pv)
-
 
 
 class AlarmTreeEditorDisplay(Display):
@@ -1058,7 +1109,6 @@ class AlarmTreeEditorDisplay(Display):
 
         self.config_tool = PhoebusConfigTool()
 
-
     def setup_ui(self):
         self.main_layout = QGridLayout()
         self.setLayout(self.main_layout)
@@ -1098,8 +1148,7 @@ class AlarmTreeEditorDisplay(Display):
 
         # add/ remove buttons
         self.add_remove_layout = QHBoxLayout()
-        spacer = QSpacerItem(40, 20, QSizePolicy.Expanding,
-                             QSizePolicy.Minimum)
+        spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.add_remove_layout.addItem(spacer)
         self.add_button = QPushButton("New", self)
         self.add_remove_layout.addWidget(self.add_button)
@@ -1110,15 +1159,13 @@ class AlarmTreeEditorDisplay(Display):
         # add the tree view to the window
         self.main_layout.addLayout(self.tree_view_layout, 0, 0)
 
-        # crate property view 
+        # crate property view
         self.property_layout = QVBoxLayout()
         self.property_label_layout = QHBoxLayout()
         self.property_label_layout.addWidget(QLabel("Alarm Properties"))
         self.property_layout.addLayout(self.property_label_layout)
 
-
         self.property_view_layout = QGridLayout()
-
 
         # add label
         self.label_edit = QLineEdit()
@@ -1142,11 +1189,10 @@ class AlarmTreeEditorDisplay(Display):
         self.property_view_layout.addWidget(self.count_edit, 4, 1, 1, 3)
         self.count_edit.setValidator(QIntValidator())
 
-        # add filter/force pv 
+        # add filter/force pv
         self.filter_edit = QLineEdit()
         self.property_view_layout.addWidget(QLabel("ENABLING FILTER"), 5, 0)
         self.property_view_layout.addWidget(self.filter_edit, 5, 1, 1, 3)
-
 
         # enabled, latching, annunciating
         self.enabled_check = QCheckBox("ENABLED")
@@ -1158,18 +1204,15 @@ class AlarmTreeEditorDisplay(Display):
         self.property_view_layout.addWidget(self.latching_check, 6, 2)
         self.property_view_layout.addWidget(self.logging_check, 6, 3)
 
-
-        spacer = QSpacerItem(40, 200, QSizePolicy.Expanding,
-                             QSizePolicy.Minimum)
+        spacer = QSpacerItem(40, 200, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.property_view_layout.addItem(spacer, 6, 0)
 
-
-        #create save button
+        # create save button
         self.button_box = QDialogButtonBox(self)
         self.button_box.setOrientation(Qt.Horizontal)
         self.button_box.addButton("Save Properties", QDialogButtonBox.AcceptRole)
-        
+
         self.property_view_layout.addWidget(self.button_box, 7, 2)
 
         self.property_layout.addLayout(self.property_view_layout)
@@ -1180,13 +1223,10 @@ class AlarmTreeEditorDisplay(Display):
         self.setWindowTitle("Alarm Tree Editor")
         self.tree_view.expandAll()
 
-
-
     def minimumSizeHint(self):
         # This is the default recommended size
         # for this screen
         return QSize(400, 200)
-
 
     def insertChild(self):
         index = self.tree_view.selectionModel().currentIndex()
@@ -1201,10 +1241,8 @@ class AlarmTreeEditorDisplay(Display):
 
         for column in range(model.columnCount(index)):
             child = model.index(0, column, index)
-            model.set_data(child, label="NEW_ITEM",
-                    role=Qt.EditRole)
+            model.set_data(child, label="NEW_ITEM", role=Qt.EditRole)
 
-                
     def removeItem(self):
         index = self.tree_view.selectionModel().currentIndex()
         self.tree_view.model().removeRow(index.row(), index.parent())
@@ -1212,23 +1250,22 @@ class AlarmTreeEditorDisplay(Display):
     @Slot()
     def save_property_changes(self):
         index = self.tree_view.selectionModel().currentIndex()
-        self.tree_view.model().set_data(index, 
-                                    label=self.label_edit.text(),
-                                    description=self.description_edit.text(),
-                                    delay=self.delay_edit.text(),
-                                    count=self.count_edit.text(),
-                                    enabled=self.enabled_check.isChecked(),
-                                    annunciating=self.annunciating_check.isChecked(),
-                                    latching=self.latching_check.isChecked(),
-                                    alarm_filter = self.filter_edit.text(),
-                                    role=Qt.EditRole
-                                    )
-
+        self.tree_view.model().set_data(
+            index,
+            label=self.label_edit.text(),
+            description=self.description_edit.text(),
+            delay=self.delay_edit.text(),
+            count=self.count_edit.text(),
+            enabled=self.enabled_check.isChecked(),
+            annunciating=self.annunciating_check.isChecked(),
+            latching=self.latching_check.isChecked(),
+            alarm_filter=self.filter_edit.text(),
+            role=Qt.EditRole,
+        )
 
     @Slot()
     def handle_selection(self):
-        self.remove_button.setEnabled(
-        self.tree_view.selectionModel().hasSelection())
+        self.remove_button.setEnabled(self.tree_view.selectionModel().hasSelection())
 
         index = self.tree_view.selectionModel().currentIndex()
         item = self.tree_view.model().getItem(index)
@@ -1239,7 +1276,6 @@ class AlarmTreeEditorDisplay(Display):
         self.count_edit.setText(item.count)
         self.filter_edit.setText(item.alarm_filter)
 
-
         if item.is_group:
             self.description_edit.setEnabled(False)
             self.count_edit.setEnabled(False)
@@ -1247,7 +1283,7 @@ class AlarmTreeEditorDisplay(Display):
             self.latching_check.setEnabled(False)
             self.annunciating_check.setEnabled(False)
             self.filter_edit.setEnabled(False)
-        
+
         else:
             self.description_edit.setEnabled(True)
             self.count_edit.setEnabled(True)
@@ -1261,18 +1297,15 @@ class AlarmTreeEditorDisplay(Display):
             else:
                 self.enabled_check.setChecked(False)
 
-
             if item.latching:
                 self.latching_check.setChecked(True)
             else:
                 self.latching_check.setChecked(False)
 
-
             if item.annunciating:
                 self.annunciating_check.setChecked(True)
             else:
                 self.annunciating_check.setChecked(False)
-
 
     @Slot()
     def item_change(self):
@@ -1290,7 +1323,6 @@ class AlarmTreeEditorDisplay(Display):
         else:
             self.enabled_check.setChecked(False)
 
-        
         if item.is_group:
             self.description_edit.setEnabled(False)
             self.count_edit.setEnabled(False)
@@ -1298,7 +1330,7 @@ class AlarmTreeEditorDisplay(Display):
             self.latching_check.setEnabled(False)
             self.annunciating_check.setEnabled(False)
             self.filter_edit.setEnabled(False)
-        
+
         else:
             self.description_edit.setEnabled(True)
             self.count_edit.setEnabled(True)
@@ -1306,23 +1338,20 @@ class AlarmTreeEditorDisplay(Display):
             self.latching_check.setEnabled(True)
             self.annunciating_check.setEnabled(True)
             self.filter_edit.setEnabled(True)
-        
+
             if item.latching:
                 self.latching_check.setChecked(True)
             else:
                 self.latching_check.setChecked(False)
-
 
             if item.annunciating:
                 self.annunciating_check.setChecked(True)
             else:
                 self.annunciating_check.setChecked(False)
 
-
     def ui_filepath(self):
         # No UI file is being used
         return None
-
 
     @Slot(bool)
     def open_file(self, checked):
@@ -1333,7 +1362,9 @@ class AlarmTreeEditorDisplay(Display):
         except Exception:
             folder = os.getcwd()
 
-        filename = QFileDialog.getOpenFileName(self, 'Open File...', folder, 'XML (*.xml);; ALH Config (*.alhConfig)')
+        filename = QFileDialog.getOpenFileName(
+            self, "Open File...", folder, "XML (*.xml);; ALH Config (*.alhConfig)"
+        )
         filename = filename[0] if isinstance(filename, (list, tuple)) else filename
 
         if filename:
@@ -1347,16 +1378,13 @@ class AlarmTreeEditorDisplay(Display):
                 if self.legacy_window.converted_filename:
                     self.import_configuration(self.legacy_window.converted_filename)
 
-
             else:
                 self.import_configuration(filename)
-
 
     def import_configuration(self, filename):
         nodes = self.config_tool.parse_config(filename)
         self.tree_view.model().import_hierarchy(nodes)
         self.tree_label.setText(self.tree_view.model()._nodes[0].label)
-
 
     @Slot()
     def save_configuration(self):
@@ -1367,7 +1395,9 @@ class AlarmTreeEditorDisplay(Display):
         except Exception:
             folder = os.getcwd()
 
-        filename = QFileDialog.getSaveFileName(self, 'Save File...', folder, 'Configration files (*.xml)')
+        filename = QFileDialog.getSaveFileName(
+            self, "Save File...", folder, "Configration files (*.xml)"
+        )
         filename = filename[0] if isinstance(filename, (list, tuple)) else filename
 
         self.config_tool.save_configuration(self.tree_view.model()._root_item, filename)
@@ -1380,10 +1410,7 @@ class AlarmTreeEditorDisplay(Display):
         convert_alh_to_phoebus()
 
 
-
-
 class LegacyWindow(QDialog):
-
     def __init__(self, filename, parent=None):
         super(LegacyWindow, self).__init__(parent)
 
@@ -1393,7 +1420,9 @@ class LegacyWindow(QDialog):
         self.converted_filename = None
 
         # Create widgets
-        self.dialog = QLabel("You have chosen a legacy file (.alhConfig). Opening this file requires conversion to the Phoebus Alarm Server format. Would you like to continue?")
+        self.dialog = QLabel(
+            "You have chosen a legacy file (.alhConfig). Opening this file requires conversion to the Phoebus Alarm Server format. Would you like to continue?"
+        )
         self.dialog.setWordWrap(True)
 
         self.cancel_button = QPushButton("Cancel")
@@ -1418,7 +1447,6 @@ class LegacyWindow(QDialog):
         self.cancel_button.clicked.connect(self.reject)
         self.convert_button.clicked.connect(self._open_file_selection)
 
-
     @Slot()
     def _open_file_selection(self):
 
@@ -1432,10 +1460,13 @@ class LegacyWindow(QDialog):
             except Exception:
                 folder = os.getcwd()
 
-            filename = QFileDialog.getSaveFileName(self, 'Save File...', folder, 'Configration files (*.xml)')
+            filename = QFileDialog.getSaveFileName(
+                self, "Save File...", folder, "Configration files (*.xml)"
+            )
             filename = filename[0] if isinstance(filename, (list, tuple)) else filename
 
-
-            alh_conversion.convert_alh_to_phoebus(config_name, self.legacy_filename, filename)
+            alh_conversion.convert_alh_to_phoebus(
+                config_name, self.legacy_filename, filename
+            )
             self.converted_filename = filename
             self.accept()
