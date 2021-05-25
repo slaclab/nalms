@@ -2,8 +2,7 @@ site_name: NALMS
 repo_url: https://github.com/slaclab/nalms/
 site_url: https://slaclab.github.io/nalms
 nav:
-  - Overview: index.md
-  - Introduction: introduction.md
+  - Overview: introduction.md
   - Install: install.md
   - Legacy: legacy.md
   - Components:
