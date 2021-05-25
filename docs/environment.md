@@ -22,3 +22,7 @@ All scripts use environment variables in their execution.
 | ELASTICSEARCH_TOP        | Path to Elasticsearch installation                            |
 | ELASTICSEARCH_LOG_DIR    | Path to the Elasticsearch log directory                       |
 | ELASTICSEARCH_DATA_DIR   | Path to the ELasticsearch data directory                      |
+| KAFKA_PROPERTIES         | Path to the Kafka properties file                             |
+| ZOOKEEPER_PROPERTIES     | Path to the Zookeeper properties file                         |
+| ALARM_LOGGER_PROPERTIES  |
+| ALARM_SERVER_SETTINGS    |

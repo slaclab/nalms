@@ -41,17 +41,12 @@ Details of the scripts relevant to developers are listed below:
 
 ## Build
 
-The build script creates all configuration artifacts and stores them in the `/tmp/nalms` directory.
+The build script creates all configuration artifacts and stores them in the `/tmp/nalms` directory. The build script may be used to build a subset of services by specifying via `--elasticsearch`, `--kafka`, `--zookeeper`.
 
 
 ## Install
 
-Installation handles the creation of appropriate roles, movement of configuration files to their appropriate directory, configuration of systemd files...
-
-
-Skip build option
-
-Like the build script, it is possible to run this command for a single service.
+Installation handles the creation of appropriate roles, builds and deploys relevant systemd files, and ... The install script may be used to build a subset of services by specifying via `--elasticsearch`, `--kafka`, `--zookeeper`.
 
 
 ### Elasticsearch
