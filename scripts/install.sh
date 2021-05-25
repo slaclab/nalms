@@ -281,6 +281,9 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     # start service
     systemctl start nalms-elasticsearch.service
 
+    # create alarm template
+    sh create_alarm_template.sh
+
 fi
 
 
