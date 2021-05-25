@@ -250,9 +250,11 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     # change ownership of log and data dir
     if [[ ! -d $ELASTICSEARCH_LOG_DIR ]]; then
         mkdir $ELASTICSEARCH_LOG_DIR
+        mkdir $ELASTICSEARCH_LOG_DIR/logs
     else
         rm -r $ELASTICSEARCH_LOG_DIR
         mkdir $ELASTICSEARCH_LOG_DIR
+        mkdir $ELASTICSEARCH_LOG_DIR/logs
     fi
 
     if [[ ! -d $ELASTICSEARCH_DATA_DIR ]]; then
