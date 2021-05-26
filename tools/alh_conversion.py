@@ -553,7 +553,8 @@ class ALHFileParser:
         parent = split_line[1]
 
         # requires full filename declaration
-        include_filename = split_line[2]
+        file_base = "/".join(self.filename.split("/")[:-1])
+        include_filename = f"{file_base}/{split_line[2]}"
 
         # mark an inclusion with unique placeholder
         item_key = self._current_node + f"/{parent}/INCLUDE_{self._inclusion_count}"
