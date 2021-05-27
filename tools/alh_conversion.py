@@ -10,8 +10,10 @@ import os
 import copy
 import fileinput
 import sys
+import logging
 from treelib import Node, Tree
 
+logger = logging.getLogger(__name__)
 
 class ForcePV:
     """
@@ -97,7 +99,7 @@ class AlarmNode:
 
         """
         if child in self.node_children:
-            print(f"DUPLICATE CHILD FOR GROUP {self.name}: {child}")
+            logger.warning(f"DUPLICATE CHILD FOR GROUP {self.name}: {child}")
 
         else:
             self.node_children.append(child)
@@ -178,15 +180,14 @@ class ALHFileParser:
         _inclusions (dict): Dictionary of file inclusions.
         _inclusion_count (int): Count of inclusion for tracking.
         _config_name (str): Name of the configuration. 
-        _current_node (str): Active group for assigning pvs. 
         _failures (str): Failure to convert messages.
+        _rel_parent (dict): Mapping of relative group entries to full node path
 
     """
 
     def __init__(self, filepath: str, config_name: str, base: str = None):
         self._filepath = filepath
 
-        self._base = base
 
         # current tracked item
         self._current_target = None
@@ -202,16 +203,22 @@ class ALHFileParser:
 
         # markers for tracking where at in parsing
         if base:
-            self._current_node = base
+            self._base = base
             self._items[base] = AlarmNode(
                 base.split("/")[-1], parent=self._items[config_name]
             )
 
         else:
-            self._current_node = config_name
+            self._base = config_name
 
         # track conversion failures
         self._failures = []
+
+        #track items whose parents aren't found
+        self._out_of_scope = {}
+
+        # relative parent path
+        self._rel_parent = {}
 
     def parse_file(self) -> tuple:
         """ Parse stored file and return items, failures, and inclusions.
@@ -338,7 +345,7 @@ class ALHFileParser:
 
             next_line = next(self._line_iterator, None)
 
-        return self._items, self._failures, self._inclusions
+        return self._items, self._failures, self._inclusions, self._out_of_scope
 
     def _process_group(self, split_line: list) -> None:
         """ Process group ALH entry.
@@ -358,23 +365,32 @@ class ALHFileParser:
 
         # if this is not the top level of the file, store parent path and node path
         if parent:
-            parent_path = f"{self._current_node}/{parent}"
-            node_path = f"{self._current_node}/{parent}/{group_name}"
+            rel_parent = self._rel_parent.get(parent, parent)
+            parent_path = f"{self._base}/{rel_parent}"
+            node_path = f"{parent_path}/{group_name}"
+            self._rel_parent[group_name] = f"{rel_parent}/{group_name}"
 
         # if no parent is specified, top level or downstream inclusion
         else:
-            parent_path = self._current_node
-            node_path = f"{self._current_node}/{group_name}"
+            parent_path = self._base
+            node_path = f"{self._base}/{group_name}"
+            self._rel_parent[group_name] = group_name
+
+
+        if parent_path not in self._items:
+            self._out_of_scope[node_path] = parent_path
 
         # add to child to parent
-        self._items[parent_path].add_child(node_path)
+        else:
+            self._items[parent_path].add_child(node_path)
 
-        # ad the node path to items and create node object
+        # add the node path tso items and create node object
         if node_path not in self._items:
             self._items[node_path] = AlarmNode(group_name, parent=parent_path)
 
         # update target and parent group
         self._current_target = node_path
+
 
     def _process_channel(self, split_line: list) -> None:
         """ Process channel ALH entry.
@@ -392,32 +408,28 @@ class ALHFileParser:
 
         # if we currently have a defined parent group and this is different than the parent given
         # adjust path based on parent group and parent
-        if self._current_node and self._current_node != parent:
-            parent_path = f"{self._current_node}/{self._current_node}/{parent}"
-            node_path = (
-                f"{self._current_node}/{self._current_node}/{parent}/{channel_name}"
-            )
+        if parent:
+            rel_parent = self._rel_parent.get(parent, parent)
+            parent_path = f"{self._base}/{rel_parent}"
+            channel_path = f"{parent_path}/{channel_name}"
 
-        # otherwise, just use parent
+
+        # otherwise, just use base
         else:
-            parent_path = f"{self._current_node}/{parent}"
-            node_path = f"{self.current_node}/{parent}/{channel_name}"
+            parent_path = self._base
+            channel_path = f"{self._base}/{channel_name}"
 
         # update item and assign parent
-        self._items[node_path] = AlarmLeaf(
+        self._items[channel_path] = AlarmLeaf(
             channel_name, filename=self._filepath, parent=parent_path
         )
-        self._items[node_path].parent = parent_path
 
-        # store parent node if it isn't in items
-        if parent_path not in self._items:
-            self._items[parent_path] = AlarmNode(parent, filename=self._filepath)
-            self._items[self._current_node].add_child(parent_path)
-
-        self._items[parent_path].add_child(node_path)
+        # update children and parents
+        self._items[channel_path].parent = parent_path
+        self._items[parent_path].add_child(channel_path)
 
         # update current tracked item
-        self._current_target = node_path
+        self._current_target = channel_path
 
     def _process_command(self, split_line: list) -> None:
         """ Process ALH COMMAND entry.
@@ -522,12 +534,14 @@ class ALHFileParser:
                 next_line = next(self._line_iterator)
                 if next_line:
                     next_split = next_line.split()
-                    if next_split[0] == "$END":
-                        reached_end = True
-                    else:
-                        self._items[self._current_target].guidance.append(
-                            next_line.replace("\n", ",").strip()
-                        )
+
+                    if len(next_split) > 0:
+                        if next_split[0] == "$END":
+                            reached_end = True
+                        else:
+                            self._items[self._current_target].guidance.append(
+                                next_line.replace("\n", ",").strip()
+                            )
 
         # if it is a single line guidance, will be a url reference
         else:
@@ -556,10 +570,18 @@ class ALHFileParser:
         file_base = "/".join(self._filepath.split("/")[:-1])
         include_filename = f"{file_base}/{split_line[2]}"
 
+        if parent:
+            rel_parent = self._rel_parent.get(parent, parent)
+            parent_path = f"{self._base}/{rel_parent}"
+        else:
+            parent_path = self._base
+
+
+
         # mark an inclusion with unique placeholder
-        item_key = self._current_node + f"/{parent}/INCLUDE_{self._inclusion_count}"
+        item_key = f"/{parent_path}/INCLUDE_{self._inclusion_count}"
         self._items[item_key] = InclusionMarker(
-            item_key, include_filename, f"{self._current_node}/{parent}"
+            item_key, include_filename, parent_path
         )
         self._items[self._current_target].add_child(item_key)
         self._inclusion_count += 1
@@ -574,8 +596,8 @@ class ALHFileParser:
             split_line (list): List generated by splitline
 
         """
-        items[self._current_target].count = split_line[1]
-        items[self._current_target].delay = split_line[2]
+        self._items[self._current_target].count = split_line[1]
+        self._items[self._current_target].delay = split_line[2]
 
 
 class XMLBuilder:
@@ -810,8 +832,11 @@ def convert_alh_to_phoebus(
 
     """
     parser = ALHFileParser(input_filename, config_name)
-    items, failures, inclusions = parser.parse_file()
+    items, failures, inclusions, out_of_scope = parser.parse_file()
     directory = "/".join(input_filename.split("/")[:-1])
+
+
+
 
     recurse = True
     # recurse over inclusion files
@@ -825,38 +850,52 @@ def convert_alh_to_phoebus(
                 filename = filename.replace("./", f"{directory}/")
 
             parser = ALHFileParser(filename, parent, base=parent)
-            next_items, next_failures, next_inclusions = parser.parse_file()
+            next_items, next_failures, next_inclusions, next_out_of_scope = parser.parse_file()
 
             # remove inclusion
             inclusions.pop(inclusion)
             items.pop(inclusion)
+
+            #  link the tree
+            for child in next_items[parent].node_children:
+                items[parent].add_child(child)
+
             items[parent].remove_child(inclusion)
 
             # remove parent from items
-            # items.pop(parent)
-
-            #  link the tree
-            items[parent].add_child(list(next_items.keys())[0])
+            next_items.pop(parent)
 
             inclusions.update(next_inclusions)
+            out_of_scope.update(next_out_of_scope)
             items.update(next_items)
 
             failures += next_failures
+
+        # clean up out of scope
+        for entry, missing_parent in out_of_scope.items():
+            if missing_parent in items:
+                items[missing_parent].add_child(entry)
+            else:
+                logger.error(f"{entry} still missing parent {missing_parent}")
+
+
 
     tree_builder = XMLBuilder()
 
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
 
-    print(f"Configuration file saved: {output_filename}")
+    logger.info(f"Configuration file saved: {output_filename}")
     if len(failures) > 0:
-        print("Conversion failed on the following points:")
+        logger.warning("Conversion failed on the following points:")
 
         for failure in failures:
-            print(failure)
+            logger.warning(failure)
 
 
 if __name__ == "__main__":
+    logger.setLevel("INFO")
+
     if len(sys.argv) == 0 or sys.argv[1] == "-h":
         print(
             "Usage: python alh_conversion.py config_name input_filename output_filename"
