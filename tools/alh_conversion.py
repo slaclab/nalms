@@ -17,6 +17,9 @@ from treelib import Node, Tree
 logger = logging.getLogger(__name__)
 
 
+dirname = os.path.dirname(__file__)
+DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'files/sevrpv.template'))
+
 class ForcePV:
     """
     Representation of ForcePV entry
@@ -531,11 +534,19 @@ class ALHFileParser:
             while not reached_end:
                 next_line = next(self._line_iterator)
                 if next_line:
+
+                    # check for summary pv entry 
+                    if "Summary PV" in next_line:
+                        summary_pvname = next_line.strip("Summary PV:").strip()
+                        # track sevrpv
+                        self._items[self._current_target].sevrpv = summary_pvname
+
                     next_split = next_line.split()
 
                     if len(next_split) > 0:
                         if next_split[0] == "$END":
                             reached_end = True
+
                         else:
                             self._items[self._current_target].guidance.append(
                                 next_line.replace("\n", ",").strip()
@@ -613,6 +624,7 @@ class XMLBuilder:
         self._groups = {}
         self._added_pvs = []
         self._tree = None
+        self._sevrpvs = []
 
     def build_tree(self, items, top_level_node: str) -> None:
         """Function for building tree using items and a top level configuration.
@@ -735,6 +747,7 @@ class XMLBuilder:
         if data.sevrpv is not None:
             command_item = ET.SubElement(self._groups[group], "automated_action")
             command_item.text = f"sevrpv:{data.sevrpv}"
+            self._sevrpvs.append(data.sevrpv)
 
     def _add_pv(self, pvname: str, group: str, data: AlarmLeaf) -> None:
         """ Add a pv to the tree representation.
@@ -813,9 +826,30 @@ class XMLBuilder:
         """
         return force_pv.get_text()
 
+    def build_substitutions_file(self, output_filename: str, template_file: str = DEFAULT_SEVRPV_TEMPLATE):
+        """ Method for creating a substitutions file for severity pvs.
+
+        Args:
+            output_filename (str): Substitutions filename
+            template_file (str): File to use as a template
+
+        """
+        if not output_filename:
+            output_filename = f"{self._configuration}.substitutions"
+
+        # create substitutions file
+        with open(output_filename, "w") as f:
+
+            f.write(f"file {template_file} {{ \n")
+            f.write("   pattern {SEVRPVNAME}\n")
+            for sevrpv in self._sevrpvs:
+                f.write(f"   {{{sevrpv}}}\n")
+            f.write("}\n")
+
+
 
 def convert_alh_to_phoebus(
-    config_name: str, input_filename: str, output_filename: str
+    config_name: str, input_filename: str, output_filename: str, build_substitutions=True,
 ) -> None:
     """ Method for converting the alarm handler configuration files to the Phoebus xml representations.
 
@@ -877,6 +911,10 @@ def convert_alh_to_phoebus(
     tree_builder = XMLBuilder()
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
+
+    if build_substitutions:
+        substitutions_filename = output_filename.replace(".xml", ".substitutions")
+        tree_builder.build_substitutions_file(substitutions_filename)
 
     logger.info(f"Configuration file saved: {output_filename}")
     if len(failures) > 0:
