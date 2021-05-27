@@ -18,4 +18,3 @@ markdown_extensions:
   
 plugins:
     - search
-    - minify
