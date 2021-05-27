@@ -1,4 +1,5 @@
 """
+Python >= 3.7
 Author: Jacqueline Garrahan
 
 This script is intended for the conversion of alhConfig files to phoebus alarm server xml configuration files.
@@ -14,6 +15,7 @@ import logging
 from treelib import Node, Tree
 
 logger = logging.getLogger(__name__)
+
 
 class ForcePV:
     """
@@ -188,7 +190,6 @@ class ALHFileParser:
     def __init__(self, filepath: str, config_name: str, base: str = None):
         self._filepath = filepath
 
-
         # current tracked item
         self._current_target = None
 
@@ -214,7 +215,7 @@ class ALHFileParser:
         # track conversion failures
         self._failures = []
 
-        #track items whose parents aren't found
+        # track items whose parents aren't found
         self._out_of_scope = {}
 
         # relative parent path
@@ -376,7 +377,6 @@ class ALHFileParser:
             node_path = f"{self._base}/{group_name}"
             self._rel_parent[group_name] = group_name
 
-
         if parent_path not in self._items:
             self._out_of_scope[node_path] = parent_path
 
@@ -390,7 +390,6 @@ class ALHFileParser:
 
         # update target and parent group
         self._current_target = node_path
-
 
     def _process_channel(self, split_line: list) -> None:
         """ Process channel ALH entry.
@@ -412,7 +411,6 @@ class ALHFileParser:
             rel_parent = self._rel_parent.get(parent, parent)
             parent_path = f"{self._base}/{rel_parent}"
             channel_path = f"{parent_path}/{channel_name}"
-
 
         # otherwise, just use base
         else:
@@ -576,13 +574,9 @@ class ALHFileParser:
         else:
             parent_path = self._base
 
-
-
         # mark an inclusion with unique placeholder
         item_key = f"/{parent_path}/INCLUDE_{self._inclusion_count}"
-        self._items[item_key] = InclusionMarker(
-            item_key, include_filename, parent_path
-        )
+        self._items[item_key] = InclusionMarker(item_key, include_filename, parent_path)
         self._items[self._current_target].add_child(item_key)
         self._inclusion_count += 1
 
@@ -835,9 +829,6 @@ def convert_alh_to_phoebus(
     items, failures, inclusions, out_of_scope = parser.parse_file()
     directory = "/".join(input_filename.split("/")[:-1])
 
-
-
-
     recurse = True
     # recurse over inclusion files
     if recurse:
@@ -850,7 +841,12 @@ def convert_alh_to_phoebus(
                 filename = filename.replace("./", f"{directory}/")
 
             parser = ALHFileParser(filename, parent, base=parent)
-            next_items, next_failures, next_inclusions, next_out_of_scope = parser.parse_file()
+            (
+                next_items,
+                next_failures,
+                next_inclusions,
+                next_out_of_scope,
+            ) = parser.parse_file()
 
             # remove inclusion
             inclusions.pop(inclusion)
@@ -878,10 +874,7 @@ def convert_alh_to_phoebus(
             else:
                 logger.error(f"{entry} still missing parent {missing_parent}")
 
-
-
     tree_builder = XMLBuilder()
-
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
 
