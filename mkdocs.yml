@@ -1,6 +1,5 @@
 site_name: NALMS
 repo_url: https://github.com/slaclab/nalms/
-site_url: https://slaclab.github.io/nalms
 
 nav:
   - introduction.md
