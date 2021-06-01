@@ -835,6 +835,7 @@ class XMLBuilder:
 
         """
         if not output_filename:
+            # write directly to substitutions
             output_filename = f"{self._configuration}.substitutions"
 
         # create substitutions file
@@ -846,6 +847,14 @@ class XMLBuilder:
                 f.write(f"   {{{sevrpv}}}\n")
             f.write("}\n")
 
+        working_dir = os.getcwd()
+
+
+        # get working directory
+        with open("std.cmd", "w") as f:
+
+            f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
+            f.write("iocInit \n")
 
 
 def convert_alh_to_phoebus(
