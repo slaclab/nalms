@@ -154,7 +154,6 @@ do
                 EXIT=1
             fi
             ;;
-        "") echo "here"
     esac
     shift
 done
