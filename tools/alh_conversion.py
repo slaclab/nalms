@@ -851,7 +851,7 @@ class XMLBuilder:
 
 
         # get working directory
-        with open("std.cmd", "w") as f:
+        with open("st.cmd", "w") as f:
 
             f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
             f.write("iocInit \n")

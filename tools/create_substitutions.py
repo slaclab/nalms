@@ -40,8 +40,9 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
             f.write("}")
 
         working_dir = os.getcwd()
+        
         # get working directory
-        with open("std.cmd", "w") as f:
+        with open("st.cmd", "w") as f:
 
             f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
             f.write("iocInit \n")
