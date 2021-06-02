@@ -6,7 +6,7 @@ This may instead be specified.
 """
 from lxml import etree
 import sys
-
+import os
 
 def create_substitutions(filename: str, template_file: str = None) -> None:
 
@@ -39,8 +39,12 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
                 f.write(f"       {{{sevrpv}}}")
             f.write("}")
 
-        # dump output to a .substitutions file
+        working_dir = os.getcwd()
+        # get working directory
+        with open("std.cmd", "w") as f:
 
+            f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
+            f.write("iocInit \n")
 
 if __name__ == "__main__":
     if sys.argv[1] == "-h":
