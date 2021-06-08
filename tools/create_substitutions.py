@@ -10,7 +10,8 @@ import os
 
 def create_substitutions(filename: str, template_file: str = None) -> None:
 
-    output_filename = ".".join(filename.split(".")[:-1]) + ".template"
+    out_filebase = filename.split("/")[-1]
+    output_filename = ".".join(out_filebase.split(".")[:-1]) + ".template"
 
     # load file
     with open(filename, "r") as data:
@@ -27,7 +28,7 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
                 sevrpvs.append(sevrpv)
 
         if not template_file:
-            template_file = sevrpv.template
+            template_file = "../files/sevrpv.db"
 
         # create substitutions file
         with open(output_filename, "w") as f:
@@ -40,12 +41,14 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
             f.write("}")
 
         working_dir = os.getcwd()
-        
+
         # get working directory
         with open("st.cmd", "w") as f:
 
             f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
             f.write("iocInit \n")
+
+        print(f"Created {output_filename} and std.cmd.")
 
 if __name__ == "__main__":
     if sys.argv[1] == "-h":
