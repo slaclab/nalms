@@ -8,17 +8,17 @@
 
 if [ "$1" == "-h" ]; then
   echo "Usage: delete-configurations.sh configuration_name"
-  echo "Requires \$KAFKA_TOP and \$ZOOKEEPER_HOST to be set."
+  echo "Requires \$KAFKA_HOME and \$ZOOKEEPER_HOST to be set."
   exit 0
 fi
 
-if [[ ! -d "$KAFKA_TOP" ]]; then
-  echo "KAFKA_TOP is not set."
+if [[ ! -d "$KAFKA_HOME" ]]; then
+  echo "KAFKA_HOME is not set."
   exit 0
 fi
 
-if [[ -z "$ZOOKEEPER_HOST" ]]; then
-  echo "ZOOKEEPER_HOST is not set."
+if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
+  echo "KAFKA_BOOTSTRAP server is not set."
   exit 0
 fi
 
@@ -30,6 +30,6 @@ fi
 
 CONFIGURATION=$1
 
-$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}"
-$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Talk"
-$KAFKA_TOP/bin/kafka-topics.sh --zookeeper $ZOOKEEPER_HOST --delete --topic "${CONFIGURATION}Command"
+$KAFKA_TOP/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP --delete --topic "${CONFIGURATION}"
+$KAFKA_TOP/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP --delete --topic "${CONFIGURATION}Talk"
+$KAFKA_TOP/bin/kafka-topics.sh --bootstrap-server $KAFKA_BOOTSTRAP --delete --topic "${CONFIGURATION}Command"
