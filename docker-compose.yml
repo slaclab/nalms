@@ -1,0 +1,25 @@
+networks: 
+    nalms:
+      name: nalms
+
+
+services:
+    zookeeper:
+        image: wurstmeister/zookeeper
+        ports:
+        - "2181:2181"
+    kafka:
+        image: nalms-kafka
+        depends_on: 
+            - zookeeper
+        ports:
+            - "19092:19092"
+        container_name: kafka
+        environment:
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://localhost:19092
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+            KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        links:
+            - zookeeper
