@@ -20,4 +20,5 @@ RUN wget https://downloads.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz -O /tmp/k
 
 COPY config/server.properties ${KAFKA_HOME}/server.properties
 
-CMD ["/opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties"]
+CMD /opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
+    --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS}
