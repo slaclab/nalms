@@ -26,6 +26,12 @@ if [[ -z "$2" || "$2" == "--softIoc" ]]; then
   exit 0
 fi
 
+
+BUILD_SOFTIOC=0
+if [[ "$3" == "--softIoc" ]]; then
+  BUILD_SOFTIOC=1
+fi
+
 if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
   echo "Logging configuration file not defined. Please set \$LOGGING_CONFIG_FILE."
   exit 0
@@ -38,6 +44,16 @@ fi
 
 if [[ -z "$ALARM_LOGGER_PROPERTIES" ]]; then
   echo "Alarm logger properties file not defined. Please set \$ALARM_LOGGER_PROPERTIES."
+  exit 0
+fi
+
+if [[ -z "$ALARM_SERVER_JAR" ]]; then
+  echo "Alarm server jar file not defined. Please set \$ALARM_SERVER_JAR."
+  exit 0
+fi
+
+if [[ -z "$ALARM_LOGGER_JAR" ]]; then
+  echo "Alarm logger jar file not defined. Please set \$ALARM_LOGGER_JAR."
   exit 0
 fi
 
@@ -77,19 +93,16 @@ tmux new-window -a -t nalms -n $CONFIG_NAME -c $PWD
 tmux split-window -t nalms:$CONFIG_NAME
 tmux select-layout -t nalms:$CONFIG_NAME tiled > /dev/null
 
-SERVER_JAR=`echo "${NALMS_TOP}/alarm-server/service-alarm-server-*.jar"`
-LOGGER_JAR=`echo "${NALMS_TOP}/alarm-logger/service-alarm-logger-*.jar"`
-
 if java -jar $SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -import $CONFIG_FILE; then
   # set up server window 
   tmux send-keys -t nalms:$config_name.0 "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.0 "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms:$config_name.0 "java -jar $SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS" C-m
+  tmux send-keys -t nalms:$config_name.0 "java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS" C-m
 
   # set up logger window
   tmux send-keys -t nalms:$config_name.1 "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms:$config_name.1 "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms:$config_name.1 "java -jar $LOGGER_JAR -logging $LOGGING_CONFIG_FILE -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME" C-m
+  tmux send-keys -t nalms:$config_name.1 "java -jar $ALARM_LOGGER_JAR -logging $LOGGING_CONFIG_FILE -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME" C-m
 
   # set up softIoc
   if [[ -f $CMD_FILE ]]; then
