@@ -57,6 +57,10 @@ if [[ -z "$ALARM_LOGGER_JAR" ]]; then
   exit 0
 fi
 
+if [[ -z "$EPICS_BASE" ]]; then
+  echo "EPICS base not defined. Please set \$EPICS_BASE."
+  exit 0
+fi
 
 
 export PATH="$JAVA_HOME/bin:$PATH"
