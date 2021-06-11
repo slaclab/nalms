@@ -54,13 +54,13 @@ if __name__ == "__main__":
     if sys.argv[1] == "-h":
         print("Create a substitutions file for configuration.")
         print(
-            "Usage: python create_substitutions.py configuration_file [template_file]"
+            "Usage: python create_soft_iocs.py configuration_file [template_file]"
         )
 
     elif len(sys.argv) not in [2, 3]:
         print("Incorrect number of arguments.")
         print(
-            "Usage: python create_substitutions.py configuration_file [template_file]"
+            "Usage: python create_soft_iocs.py configuration_file [template_file]"
         )
 
     else:
