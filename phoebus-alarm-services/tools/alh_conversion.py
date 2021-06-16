@@ -933,7 +933,7 @@ def convert_alh_to_phoebus(
             logger.warning(failure)
 
 
-if __name__ == "__main__":
+def main():
     logger.setLevel("INFO")
 
     if len(sys.argv) == 0 or sys.argv[1] == "-h":
@@ -949,3 +949,7 @@ if __name__ == "__main__":
 
     else:
         convert_alh_to_phoebus(sys.argv[1], sys.argv[2], sys.argv[3])
+
+
+if __name__ == "__main__":
+    main()

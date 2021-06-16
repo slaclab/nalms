@@ -8,7 +8,7 @@ from lxml import etree
 import sys
 import os
 
-def create_substitutions(filename: str, template_file: str = None) -> None:
+def create_soft_iocs(filename: str, template_file: str = None) -> None:
 
     out_filebase = filename.split("/")[-1]
     output_filename = ".".join(out_filebase.split(".")[:-1]) + ".template"
@@ -50,7 +50,7 @@ def create_substitutions(filename: str, template_file: str = None) -> None:
 
         print(f"Created {output_filename} and std.cmd.")
 
-if __name__ == "__main__":
+def main():
     if sys.argv[1] == "-h":
         print("Create a substitutions file for configuration.")
         print(
@@ -64,4 +64,7 @@ if __name__ == "__main__":
         )
 
     else:
-        create_substitutions(sys.argv[1])
+        create_soft_iocs(sys.argv[1])
+
+if __name__ == "__main__":
+    main()
