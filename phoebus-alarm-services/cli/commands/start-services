@@ -86,7 +86,7 @@ if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAM
   # set up server window 
   tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "export JAVA_HOME=$JAVA_HOME" C-m
   tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_SETTINGS" C-m
+  tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_PROPERTIES" C-m
 
   # set up logger window
   tmux send-keys -t nalms_$CONFIG_NAME:alarm_logger "export JAVA_HOME=$JAVA_HOME" C-m
@@ -103,6 +103,8 @@ if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAM
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "export JAVA_HOME=$JAVA_HOME" C-m
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "export PATH=$JAVA_HOME/bin:$PATH" C-m
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "export EPICS_BASE=$EPICS_BASE" C-m
+    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export EPICS_HOST_ARCH=$(${EPICS_BASE}/startup/EpicsHostArch)" C-m
+    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export PATH=${EPICS_BASE}/bin/$(${EPICS_BASE}/startup/EpicsHostArch):${PATH}" C-m
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "softIoc $CMD_FILE" C-m
   fi
 
