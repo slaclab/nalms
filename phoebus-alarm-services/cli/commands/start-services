@@ -97,7 +97,7 @@ if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAM
   if [[ BUILD_SOFTIOC -eq 1 ]]; then
 
     # create softIoc file
-    create-soft-iocs $CONFIG_FILE 
+    create-soft-iocs $CONFIG_FILE $TEMPLATE_FILE
 
 
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "export JAVA_HOME=$JAVA_HOME" C-m
