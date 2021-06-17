@@ -24,7 +24,7 @@ RUN yum install -y git maven java-11-openjdk-devel readliine libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     # set up python
-    python -m pip install -r /opt/nalms/dev-requirements.txt && \
+    python -m pip install -r /opt/nalms/requirements.txt && \
     cd /opt/nalms && \
     python -m pip install . && \
     chmod +x /opt/nalms/cli/cli && \
@@ -39,7 +39,6 @@ COPY --from=build /opt/phoebus/services/alarm-logger/target/service-alarm-logger
 COPY --from=build /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus/
 COPY --from=build /opt/phoebus/services/alarm-server/target/lib /opt/phoebus/lib
 
-
 # set environment
 ENV ALARM_LOGGER_PROPERTIES /opt/nalms/config/alarm_logger.properties
 ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
@@ -47,6 +46,7 @@ ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server-*.jar
 ENV ALARM_LOGGER_JAR /opt/phoebus/service-alarm-logger-*.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 ENV EPICS_BASE /opt/EPICS/epics-base
+ENV TEMPLATE_FILE /opt/nalms/files/sevrpv.db
 
 # prepare to use commands
 ENTRYPOINT ["/bin/bash", "/opt/nalms/cli/cli"]
