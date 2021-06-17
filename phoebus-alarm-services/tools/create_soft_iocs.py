@@ -13,6 +13,9 @@ def create_soft_iocs(filename: str, template_file: str = None) -> None:
     out_filebase = filename.split("/")[-1]
     output_filename = ".".join(out_filebase.split(".")[:-1]) + ".template"
 
+
+    # check that the file exists...
+
     # load file
     with open(filename, "r") as data:
         tree = etree.parse(data)
@@ -23,8 +26,9 @@ def create_soft_iocs(filename: str, template_file: str = None) -> None:
         sevrpvs = []
 
         for action in actions:
-            if "sevrpv" in action.text:
-                sevrpv = action.text.strip("sevrpv:")
+            detail = action.findall(".//details")
+            if "sevrpv" in detail.text:
+                sevrpv = detail.text.strip("sevrpv:")
                 sevrpvs.append(sevrpv)
 
         if not template_file:
@@ -48,7 +52,7 @@ def create_soft_iocs(filename: str, template_file: str = None) -> None:
             f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
             f.write("iocInit \n")
 
-        print(f"Created {output_filename} and std.cmd.")
+        print(f"Created {output_filename} and st.cmd.")
 
 def main():
     if sys.argv[1] == "-h":

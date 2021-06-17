@@ -746,7 +746,10 @@ class XMLBuilder:
 
         if data.sevrpv is not None:
             command_item = ET.SubElement(self._groups[group], "automated_action")
-            command_item.text = f"sevrpv:{data.sevrpv}"
+            title = ET.SubElement(command_item, "title")
+            title.text = f"Sevrpv: {data.sevrpv}"
+            detail = ET.SubElement(command_item, "details")
+            detail.text = f"sevrpv:{data.sevrpv}"
             self._sevrpvs.append(data.sevrpv)
 
     def _add_pv(self, pvname: str, group: str, data: AlarmLeaf) -> None:
