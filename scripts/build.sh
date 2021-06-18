@@ -39,9 +39,9 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
-    if [[ ! -d "${KAFKA_TOP}" ]] ; then
-        echo "KAFKA_TOP incorrectly set."
-        echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+    if [[ ! -d "${KAFKA_HOME}" ]] ; then
+        echo "KAFKA_HOME incorrectly set."
+        echo "\$KAFKA_HOME = ${KAFKA_HOME}"
         EXIT=1
     fi
 
@@ -69,15 +69,15 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
-    if [[ ! -d "${NALMS_TOP}" ]]; then
-        echo "NALMS_TOP incorrectly set correctly."
-        echo "\$NALMS_TOP = ${NALMS_TOP}"
+    if [[ ! -d "${NALMS_HOME}" ]]; then
+        echo "NALMS_HOME incorrectly set correctly."
+        echo "\$NALMS_HOME = ${NALMS_HOME}"
         EXIT=1
     fi
 
-    if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
-        echo "ELASTICSEARCH_TOP incorrectly set."
-        echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+    if [[ ! -d "${ELASTICSEARCH_HOME}" ]] ; then
+        echo "ELASTICSEARCH_HOME incorrectly set."
+        echo "\$ELASTICSEARCH_HOME = ${ELASTICSEARCH_HOME}"
         EXIT=1
     fi
 
@@ -102,15 +102,15 @@ do
                 EXIT=1
             fi
 
-            if [[ ! -d "${NALMS_TOP}" ]]; then
-                echo "NALMS_TOP incorrectly set correctly."
-                echo "\$NALMS_TOP = ${NALMS_TOP}"
+            if [[ ! -d "${NALMS_HOME}" ]]; then
+                echo "NALMS_HOME incorrectly set correctly."
+                echo "\$NALMS_HOME = ${NALMS_HOME}"
                 EXIT=1
             fi
 
-            if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
-                echo "ELASTICSEARCH_TOP incorrectly set."
-                echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+            if [[ ! -d "${ELASTICSEARCH_HOME}" ]] ; then
+                echo "ELASTICSEARCH_HOME incorrectly set."
+                echo "\$ELASTICSEARCH_HOME = ${ELASTICSEARCH_HOME}"
                 EXIT=1
             fi
             ;;
@@ -122,9 +122,9 @@ do
                 EXIT=1
             fi
 
-            if [[ ! -d "${KAKFA_TOP}" ]] ; then
-                echo "KAFKA_TOP incorrectly set."
-                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+            if [[ ! -d "${KAKFA_HOME}" ]] ; then
+                echo "KAFKA_HOME incorrectly set."
+                echo "\$KAFKA_HOME = ${KAFKA_HOME}"
                 EXIT=1
             fi
 
@@ -142,9 +142,9 @@ do
                 EXIT=1
             fi
 
-            if [[ ! -d "${KAKFA_TOP}" ]] ; then
-                echo "KAFKA_TOP incorrectly set."
-                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+            if [[ ! -d "${KAKFA_HOME}" ]] ; then
+                echo "KAFKA_HOME incorrectly set."
+                echo "\$KAFKA_HOME = ${KAFKA_HOME}"
                 EXIT=1
             fi
 
@@ -154,6 +154,8 @@ do
                 EXIT=1
             fi
             ;;
+        *)
+        
     esac
     shift
 done
@@ -192,7 +194,7 @@ if [[ $BUILD_KAFKA -eq 1 ]]; then
     touch $KAFKA_FILE
 
     echo "# File /etc/systemd/system/nalms-kafka.service">> $KAFKA_FILE
-    echo "# Generated from $NALMS_TOP/scripts/build.sh " >> $KAFKA_FILE
+    echo "# Generated from $NALMS_HOME/scripts/build.sh " >> $KAFKA_FILE
     echo "" >> $KAFKA_FILE
     echo "" >> $KAFKA_FILE
 
@@ -208,8 +210,8 @@ if [[ $BUILD_KAFKA -eq 1 ]]; then
     echo "Type=simple" >> $KAFKA_FILE
     echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $KAFKA_FILE
     echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}" >> $KAFKA_FILE
-    echo "ExecStart=${KAFKA_TOP}/bin/kafka-server-start.sh ${KAFKA_PROPERTIES}" >> $KAFKA_FILE
-    echo "ExecStop=${KAFKA_TOP}/bin/kafka-server-stop.sh" >> $KAFKA_FILE
+    echo "ExecStart=${KAFKA_HOME}/bin/kafka-server-start.sh ${KAFKA_PROPERTIES}" >> $KAFKA_FILE
+    echo "ExecStop=${KAFKA_HOME}/bin/kafka-server-stop.sh" >> $KAFKA_FILE
 
     echo "" >> $KAFKA_FILE
 
@@ -227,7 +229,7 @@ if [[ $BUILD_ZOOKEEPER -eq 1 ]]; then
     touch $ZOOKEEPER_FILE
 
     echo "# File /etc/systemd/system/nalms-zookeeper.service">> $ZOOKEEPER_FILE
-    echo "# Generated from $NALMS_TOP/scripts/build.sh " >> $ZOOKEEPER_FILE
+    echo "# Generated from $NALM_HOME/scripts/build.sh " >> $ZOOKEEPER_FILE
     echo "" >> $ZOOKEEPER_FILE
     echo "" >> $ZOOKEEPER_FILE
 
@@ -246,8 +248,8 @@ if [[ $BUILD_ZOOKEEPER -eq 1 ]]; then
     echo "Type=simple" >> $ZOOKEEPER_FILE
     echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ZOOKEEPER_FILE
     echo "Environment=LOG_DIR=${KAFKA_LOG_DIR}"  >> $ZOOKEEPER_FILE
-    echo "ExecStart=${KAFKA_TOP}/bin/zookeeper-server-start.sh ${ZOOKEEPER_PROPERTIES}" >> $ZOOKEEPER_FILE
-    echo "ExecStop=${KAFKA_TOP}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
+    echo "ExecStart=${KAFKA_HOME}/bin/zookeeper-server-start.sh ${ZOOKEEPER_PROPERTIES}" >> $ZOOKEEPER_FILE
+    echo "ExecStop=${KAFKA_HOME}/bin/zookeeper-server-stop.sh" >> $ZOOKEEPER_FILE
     echo "SuccessExitStatus=143"  >> $ZOOKEEPER_FILE
 
     echo "" >> $ZOOKEEPER_FILE
@@ -272,8 +274,8 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     echo "" >> $ELASTICSEARCH_FILE
 
     echo "[Service]" >> $ELASTICSEARCH_FILE
-    echo "Environment=ES_HOME=${ELASTICSEARCH_TOP}" >> $ELASTICSEARCH_FILE
-    echo "Environment=ES_PATH_CONF=${NALMS_TOP}/config/elasticsearch" >> $ELASTICSEARCH_FILE
+    echo "Environment=ES_HOME=${ELASTICSEARCH_HOME}" >> $ELASTICSEARCH_FILE
+    echo "Environment=ES_PATH_CONF=${NALMS_HOME}/config/elasticsearch" >> $ELASTICSEARCH_FILE
     echo "Environment=ELASTICSEARCH_DATA_DIR=${ELASTICSEARCH_DATA_DIR}" >> $ELASTICSEARCH_FILE
     echo "Environment=ELASTICSEARCH_LOG_DIR=${ELASTICSEARCH_LOG_DIR}" >> $ELASTICSEARCH_FILE
     echo "Environment=JAVA_HOME=${JAVA_HOME}" >> $ELASTICSEARCH_FILE 
@@ -283,7 +285,7 @@ if [[ $BUILD_ELASTICSEARCH -eq 1 ]]; then
     echo "" >> $ELASTICSEARCH_FILE
 
 
-    echo "ExecStart=${ELASTICSEARCH_TOP}/bin/elasticsearch" >> $ELASTICSEARCH_FILE
+    echo "ExecStart=${ELASTICSEARCH_HOME}/bin/elasticsearch" >> $ELASTICSEARCH_FILE
 
     echo "" >> $ELASTICSEARCH_FILE
 
