@@ -1,17 +1,10 @@
-# Welcome to MkDocs
+# Next ALarM Sytem
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+NALMS is an alarm system application designed for availability, integrability, and extensibility. The NALMS development was driven by SLAC's efforts to replace the Alarm Handler, due for deprecation as a Motif-based application, and to introduce process improvements addressing hierarchy implementation overhead, limited operator engagement, and operator display integration.
 
-## Commands
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+# Docker
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+This repository is packaged with tools for Docker based deployment. There are several reasons containerization is an advantageous:
+* The Kafka brokers may be straighforwardly deployed and the cluster scaled to multiple machines. Configurations are therefore transferable and port exposures may be configured directly on the Docker deployment. 
+* Contained applications may run in parallel, facilitating blue/green deployment workflows. 
