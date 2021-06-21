@@ -1,13 +1,27 @@
 #!/bin/sh
 
-es_host=localhost
-es_port=9200
+
+# sleep while elasticsearch starts
+if [[ ! -z "$1" ]]; then
+  sleep $1
+fi
+
+
+if [[ -z "$ES_HOST" ]]; then
+  echo "ES_HOST is not set."
+  exit 0
+fi
+
+if [[ -z "$ES_PORT" ]]; then
+  echo "ES_PORT is not set."
+  exit 0
+fi
 
 # The mapping names used in here need to match those used in the ElasticClientHelper:
 # "alarm", ""alarm_cmd", "alarm_config"
 
 # Create the elastic template with the correct mapping for alarm state messages.
-curl -XPUT http://${es_host}:${es_port}/_template/alarms_state_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_state_template -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_state*"],
   "mappings" : {  
@@ -68,7 +82,7 @@ curl -XPUT http://${es_host}:${es_port}/_template/alarms_state_template -H 'Cont
 '
 
 # Create the elastic template with the correct mapping for alarm command messages.
-curl -XPUT http://${es_host}:${es_port}/_template/alarms_cmd_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_cmd_template -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_cmd*"],
   "mappings" : {  
@@ -100,7 +114,7 @@ curl -XPUT http://${es_host}:${es_port}/_template/alarms_cmd_template -H 'Conten
 '
 
 # Create the elastic template with the correct mapping for alarm config messages.
-curl -XPUT http://${es_host}:${es_port}/_template/alarms_config_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_config_template -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_config*"],
   "mappings" : {  
@@ -139,5 +153,5 @@ curl -XPUT http://${es_host}:${es_port}/_template/alarms_config_template -H 'Con
 
 
 echo "Alarm templates:"
-curl -X GET "${es_host}:${es_port}/_template/*alarm*"
+curl -X GET "${ES_HOST}:${ES_PORT}/_template/*alarm*"
 
