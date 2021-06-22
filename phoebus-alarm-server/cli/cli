@@ -10,16 +10,16 @@ $cli_name
 Phoebus alarm services CLI
 Usage: $cli_name [command]
 Commands:
-  start-services config_name config_file [--softIoc cmdfile]  Start all alarm services given configuration, file, and optionally hose softIoc for sevrpvs
+  start-server config_name config_file [--softIoc cmdfile]  Start all alarm services given configuration, file, and optionally hose softIoc for sevrpvs
   *         Help
 "
   exit 0
 }
 
 case "$1" in
-  start-services|d)
-    . "$CLI_WORKDIR/commands/create-kafka-indices" "$2" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
-    . "$CLI_WORKDIR/commands/start-services" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
+  start-server|d)
+    . "$CLI_WORKDIR/commands/create-kafka-indices" "$2" | tee -ia "$CLI_WORKDIR/create_kafka_indices_${2}.log"
+    . "$CLI_WORKDIR/commands/start-server" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
     ;;
   *)
     cli_help

@@ -68,46 +68,11 @@ export PATH="$JAVA_HOME/bin:$PATH"
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
-# create nalms session if not running, attach otherwise
-if [[ -z $(tmux list-sessions 2>/dev/null | grep nalms) ]]; then
-  tmux $TMUX_OPTS new-session -s nalms_$CONFIG_NAME -d
-fi
-
-# create config name
-tmux new-window -a -t nalms_$CONFIG_NAME -n alarm_server -c $PWD
-tmux new-window -a -t nalms_$CONFIG_NAME -n alarm_logger -c $PWD
-tmux new-window -a -t nalms_$CONFIG_NAME -n ioc -c $PWD
-
-#create panes
-tmux select-layout -t nalms_$CONFIG_NAME tiled > /dev/null
 
 if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -import $CONFIG_FILE; then
-  # set up server window 
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "export JAVA_HOME=$JAVA_HOME" C-m
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_server "java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_PROPERTIES" C-m
 
-  # set up logger window
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_logger "export JAVA_HOME=$JAVA_HOME" C-m
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_logger "export PATH=$JAVA_HOME/bin:$PATH" C-m
-  tmux send-keys -t nalms_$CONFIG_NAME:alarm_logger "java -jar $ALARM_LOGGER_JAR -logging $LOGGING_CONFIG_FILE -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME" C-m
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_PROPERTIES
 
-  # set up softIoc
-  if [[ BUILD_SOFTIOC -eq 1 ]]; then
-
-    # create softIoc file
-    create-soft-iocs $CONFIG_FILE $TEMPLATE_FILE
-
-
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export JAVA_HOME=$JAVA_HOME" C-m
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export PATH=$JAVA_HOME/bin:$PATH" C-m
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export EPICS_BASE=$EPICS_BASE" C-m
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export EPICS_HOST_ARCH=$(${EPICS_BASE}/startup/EpicsHostArch)" C-m
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "export PATH=${EPICS_BASE}/bin/$(${EPICS_BASE}/startup/EpicsHostArch):${PATH}" C-m
-    tmux send-keys -t nalms_$CONFIG_NAME:ioc "softIoc $CMD_FILE" C-m
-  fi
-
-  #tmux $TMUX_OPTS attach-session -t nalms_$CONFIG_NAME
 else
     echo "Unable to import configuration."
 fi
