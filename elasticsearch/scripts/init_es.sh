@@ -8,4 +8,5 @@
 DIRNAME=`dirname $0`
 (bash ${DIRNAME}/create_alarm_template.sh 20) &
 
-bash "${ES_HOME}/bin/elasticsearch"
+#bash ${ES_HOME}/bin/elasticsearch -E "discovery.type=single-node"
+bash /usr/local/bin/docker-entrypoint.sh eswrapper
