@@ -43,6 +43,7 @@ RUN wget https://downloads.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz -O /tmp/k
     ln -s /opt/kafka_2.13-2.8.0 ${KAFKA_HOME} && \
     rm -r /tmp/* 
 
+COPY --from=build /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus/
 COPY --from=build /opt/phoebus/services/alarm-server/target/lib /opt/phoebus/lib
 
 # set environment
