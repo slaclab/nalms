@@ -7,7 +7,7 @@ services:
     zookeeper:
         image: wurstmeister/zookeeper
         ports:
-        - "2181:2181"
+            - "2181:2181"
     kafka:
         image: nalms-kafka
         depends_on: 
@@ -20,6 +20,25 @@ services:
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
             KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092
         volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+            - /var/run/docker.sock:/var/run/docker.sock
         links:
             - zookeeper
+    phoebus:
+        image: phoebus
+        links:
+            - kafka
+            - elasticsearch
+    elasticsearch:
+        image: elasticsearch
+        ports:
+            - "9200:9200"
+        container_name: node01
+        environment:
+        - node.name=node01
+        - cluster.name=es-cluster-7
+        - discovery.type=single-node
+        - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+        - ES_HOST=localhost
+        - ES_PORT=9200
+
+    # cruise control?
