@@ -68,7 +68,6 @@ export PATH="$JAVA_HOME/bin:$PATH"
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
-
 # create nalms session if not running, attach otherwise
 if [[ -z $(tmux list-sessions 2>/dev/null | grep nalms) ]]; then
   tmux $TMUX_OPTS new-session -s nalms_$CONFIG_NAME -d
@@ -108,7 +107,7 @@ if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAM
     tmux send-keys -t nalms_$CONFIG_NAME:ioc "softIoc $CMD_FILE" C-m
   fi
 
-  tmux $TMUX_OPTS attach-session -t nalms_$CONFIG_NAME
+  #tmux $TMUX_OPTS attach-session -t nalms_$CONFIG_NAME
 else
     echo "Unable to import configuration."
 fi

@@ -31,8 +31,6 @@ $ python alh_conversion.py config_name input_filename output_filename
 
 Several features of the ALH cannot be translated to Phoebus configurations and are deprecated in NALMS. These are the ALIAS, ACKPV, SEVRCOMMAND, STATCOMMAND, amd BEEPSEVERITY ALH configuration entries. The conversion script will print any failures to STDOUT.
 
-###
-
 ### Command line tools
 
 The `cli` directory houses a utility interface for interacting with the Phoebus alarm services. Use of these tools requires running `setup.py` for registering console entry scripts for the python tools (these tools should eventually be moved to a designated python package and out of this directory). Additionally, use of the interface requires the definition of several environment variables:
@@ -49,7 +47,7 @@ The `cli` directory houses a utility interface for interacting with the Phoebus 
 
 ## Docker image
 
-The docker image packed in this folder defines an centos 7 image containing the Phoebus alarm server and the Phoebus alarm logger. 
+The docker image packed in this folder defines an centos 7 image containing the Phoebus alarm server and the Phoebus alarm logger. Using the image name `phoebus`:
 
 ```
 $ docker build -t phoebus .

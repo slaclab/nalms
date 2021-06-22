@@ -38,5 +38,5 @@ if [[ -d $KAFKA_HOME ]]; then
            --add-config cleanup.policy=delete,segment.ms=10000,min.cleanable.dirty.ratio=0.01,min.compaction.lag.ms=1000,retention.ms=20000,delete.retention.ms=1000,file.delete.delay.ms=1000
     done
 else
-    echo "Kafka path not found. Has environment been set? KAFKA_TOP: ${KAFKA_HOME}"
+    echo "Kafka path not found. Has environment been set? KAFKA_HOME: ${KAFKA_HOME}"
 fi

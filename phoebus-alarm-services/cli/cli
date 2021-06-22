@@ -18,7 +18,8 @@ Commands:
 
 case "$1" in
   start-services|d)
-    . "$CLI_WORKDIR/commands/start-services" "$2" "$3" "$4" "5" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
+    . "$CLI_WORKDIR/commands/create-kafka-indices" "$2" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
+    . "$CLI_WORKDIR/commands/start-services" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
     ;;
   *)
     cli_help
