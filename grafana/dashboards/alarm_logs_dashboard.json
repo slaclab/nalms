@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
   "iteration": 1621967686949,
   "links": [],
   "panels": [
@@ -24,7 +23,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "alarm",
+      "datasource": "AlarmState",
       "fieldConfig": {
         "defaults": {
           "color": {},

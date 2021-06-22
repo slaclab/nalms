@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: AlarmState
+    type: elasticsearch
+    access: proxy
+    database: "heartofgold_alarms_state_*"
+    url: http://elasticsearch:9200
+    jsonData:
+      esVersion: 6.8.16
+      interval: nil
+      timeField: "time"
