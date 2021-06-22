@@ -9,8 +9,7 @@ RUN yum install -y git maven java-11-openjdk-devel && \
     cd /opt && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
-    mvn install -pl services/alarm-server -am -DskipTests && \
-    mvn install -pl services/alarm-logger -am -DskipTests
+    mvn install -pl services/alarm-server -am -DskipTests 
 
 FROM centos/python-38-centos7 as runtime
 
@@ -44,15 +43,11 @@ RUN wget https://downloads.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz -O /tmp/k
     ln -s /opt/kafka_2.13-2.8.0 ${KAFKA_HOME} && \
     rm -r /tmp/* 
 
-COPY --from=build /opt/phoebus/services/alarm-logger/target/service-alarm-logger-*.jar /opt/phoebus/
-COPY --from=build /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus/
 COPY --from=build /opt/phoebus/services/alarm-server/target/lib /opt/phoebus/lib
 
 # set environment
-ENV ALARM_LOGGER_PROPERTIES /opt/nalms/config/alarm_logger.properties
 ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
 ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server-*.jar
-ENV ALARM_LOGGER_JAR /opt/phoebus/service-alarm-logger-*.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 ENV EPICS_BASE /opt/EPICS/epics-base
 ENV TEMPLATE_FILE /opt/nalms/files/sevrpv.db
