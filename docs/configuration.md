@@ -9,7 +9,7 @@ An attempt has been made to sufficiently abstract scripts for deployments based 
 
 The Elasticsearch configuration is defined using the files in `elasticsearch/config`. The configuration is indicated to the Elasticsearch server during launch by the INSERT_ENV_VAR environment variable. 
 
-For security reasons, the Elasticsearch service requires a user other than root and so an Elasticsearch user must be created with appropriate permissions. Package managers (INSERT EXAMPLES WHERE THIS IS THE CASE) typically handle this during installation, creating a designated `elasticsearch` user, and register the Elasticsearch service as a systemd service. If installing from source, this workflow must be replicated and a designated user assigned. A utility script for user creation and sytemd deployment has been provided in `tools`, requiring root privileges. This will automatically generate and register the `nalms-elasticsearch` service with systemd, but not start (see installation notes).
+For security reasons, the Elasticsearch service requires a user other than root and so an Elasticsearch user must be created with appropriate permissions. Package managers (rpm, yum, etc.) typically handle this during installation, creating a designated `elasticsearch` user, and register the Elasticsearch service as a systemd service. If installing from source, this workflow must be replicated and a designated user assigned. A utility script for user creation and sytemd deployment has been provided in `tools`, requiring root privileges. This will automatically generate and register the `nalms-elasticsearch` service with systemd, but not start (see installation notes).
 
 ```
 $ ./build.sh --elasticsearch
@@ -20,8 +20,8 @@ This requires the following environment variable be set:
 | Variable                 | Description                                                   |
 |--------------------------|---------------------------------------------------------------|
 | JAVA_HOME                | File system path of JDK installation                          |
-| ELASTICSEARCH_DATA_DIR   | ...                               |
-| ELASTICSEARCH_LOG_DIR    | ...                                  |
+| ELASTICSEARCH_DATA_DIR   | Directory containing elasticsearch data                       |
+| ELASTICSEARCH_LOG_DIR    | Logging driectory                                             |
 | ELASTICSEARCH_HOME       | Path to the elasticsearch installation                        |
 
 The service may then be started using:
@@ -33,6 +33,9 @@ Depending on the location of the Elasticsearch installation, it may be desireabl
 - INSERT PORT EXPOSURES
 - INSERT COMMUNICATIONS PROTOCOL
 - Java logging notes
+
+In order for the Elasticsearch fields to be properly formatted, a template matching the topic scheme must be posted to the server. These may be versioned and are automatically applied to newly created indices. The initial script for templating NALMS topics is hosted in `elasticsearch/scripts/create_alarm_template.sh`.
+
 
 ## Kafka
 The Kafka configuration packaged with this repository is only suitable for a single broker deployment, withe the `replication.factor` set to 1. A cluster deployment can accomodate a larger replication factor across the cluster and this file must be modified for the purpose. 
