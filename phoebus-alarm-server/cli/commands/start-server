@@ -8,24 +8,9 @@
 EXIT=0
 
 if [ "$1" == "-h" ]; then
-  echo "Usage: start-services.sh config_name config_file [--softIoc]"
+  echo "Usage: start-server config_name config_file "
   exit 0
 fi
-
-if [[ -z "$1" || "$1" == "--softIoc" ]]; then
-  echo "Configuration name not provided."
-  echo "Usage: start-services.sh config_name config_file [--softIoc]"
-  exit 0
-else
-  echo $1
-fi
-
-if [[ -z "$2" || "$2" == "--softIoc" ]]; then
-  echo "Configuration file not provided."
-  echo "Usage: start-services.sh config_name config_file [--softIoc]"
-  exit 0
-fi
-
 
 BUILD_SOFTIOC=0
 if [[ "$3" == "--softIoc" ]]; then
@@ -42,26 +27,10 @@ if [[ -z "$ALARM_SERVER_PROPERTIES" ]]; then
   exit 0
 fi
 
-if [[ -z "$ALARM_LOGGER_PROPERTIES" ]]; then
-  echo "Alarm logger properties file not defined. Please set \$ALARM_LOGGER_PROPERTIES."
-  exit 0
-fi
-
 if [[ -z "$ALARM_SERVER_JAR" ]]; then
   echo "Alarm server jar file not defined. Please set \$ALARM_SERVER_JAR."
   exit 0
 fi
-
-if [[ -z "$ALARM_LOGGER_JAR" ]]; then
-  echo "Alarm logger jar file not defined. Please set \$ALARM_LOGGER_JAR."
-  exit 0
-fi
-
-if [[ $BUILD_SOFTIOC -eq 1 && -z "$EPICS_BASE" ]]; then
-  echo "EPICS base not defined. Please set \$EPICS_BASE."
-  exit 0
-fi
-
 
 export PATH="$JAVA_HOME/bin:$PATH"
 
