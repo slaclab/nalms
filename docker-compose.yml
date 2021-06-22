@@ -41,4 +41,14 @@ services:
         - ES_HOST=localhost
         - ES_PORT=9200
 
+    grafana:
+#        build: './grafana'
+        container_name: 'grafana'
+        image: grafana
+        ports:
+            - '3000:3000'
+        links:
+            - elasticsearch
+    
+
     # cruise control?
