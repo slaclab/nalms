@@ -12,11 +12,6 @@ if [ "$1" == "-h" ]; then
   exit 0
 fi
 
-BUILD_SOFTIOC=0
-if [[ "$3" == "--softIoc" ]]; then
-  BUILD_SOFTIOC=1
-fi
-
 if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
   echo "Logging configuration file not defined. Please set \$LOGGING_CONFIG_FILE."
   exit 0

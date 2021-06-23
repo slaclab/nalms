@@ -19,20 +19,15 @@ ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 
 # general
 RUN yum install -y git maven java-11-openjdk-devel readliine libsdc++\
-    tmux && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     # set up python
     python -m pip install -r /opt/nalms/requirements.txt && \
     cd /opt/nalms && \
     python -m pip install . && \
-    chmod +x /opt/nalms/cli/cli && \
-    # install EPICS
-    mkdir /opt/EPICS && \
-    cd /opt/EPICS && \
-    git clone --recursive https://github.com/epics-base/epics-base.git && \
-    cd epics-base && \
-    make
+    chmod +x /opt/nalms/cli/cli &&\
+    mkdir /var/log/nalms && \
+    mkdir /var/log/nalms/logs
 
 # Install Kafka
 ENV KAFKA_HOME=/opt/kafka
@@ -51,7 +46,6 @@ ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
 ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server-*.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 ENV EPICS_BASE /opt/EPICS/epics-base
-ENV TEMPLATE_FILE /opt/nalms/files/sevrpv.db
 
 # prepare to use commands
 ENTRYPOINT ["/bin/bash", "/opt/nalms/cli/cli"]

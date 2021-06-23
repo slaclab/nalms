@@ -10,7 +10,7 @@ $cli_name
 Phoebus alarm services CLI
 Usage: $cli_name [command]
 Commands:
-  start-server config_name config_file [--softIoc cmdfile]  Start all alarm services given configuration, file, and optionally hose softIoc for sevrpvs
+  start-server config_name config_file: Start all alarm services given configuration, file
   *         Help
 "
   exit 0
