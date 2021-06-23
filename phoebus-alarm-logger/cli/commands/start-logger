@@ -33,7 +33,4 @@ export PATH="$JAVA_HOME/bin:$PATH"
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
-#create panes
-tmux select-layout -t nalms_$CONFIG_NAME tiled > /dev/null
-
 java -jar $ALARM_LOGGER_JAR -logging $LOGGING_CONFIG_FILE -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME

@@ -17,7 +17,7 @@ Commands:
 }
 
 case "$1" in
-  start-services|d)
+  start-logger|d)
     . "$CLI_WORKDIR/commands/start-logger" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-logger_${2}.log"
     ;;
   *)
