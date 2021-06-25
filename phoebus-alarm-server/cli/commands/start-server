@@ -33,10 +33,12 @@ CONFIG_NAME=$1
 CONFIG_FILE=$2
 
 
-if java -jar $ALARM_SERVER_JAR -logging $LOGGING_CONFIG_FILE -config $CONFIG_NAME -import $CONFIG_FILE; then
+if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
 
-  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -logging $LOGGING_CONFIG_FILE -settings $ALARM_SERVER_PROPERTIES
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -server $KAFKA_BOOTSTRAP -noshell
 
 else
     echo "Unable to import configuration."
 fi
+
+java -jar $ALARM_SERVER_JAR  -config $CONFIG_NAME -import /tmp/nalms/heart_of_gold.xml -server $KAFKA_BOOTSTRAP

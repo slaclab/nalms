@@ -18,7 +18,7 @@ USER root
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 
 # general
-RUN yum install -y git maven java-11-openjdk-devel readliine libsdc++\
+RUN yum install -y git maven java-11-openjdk-devel readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     # set up python
