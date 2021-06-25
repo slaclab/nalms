@@ -137,7 +137,7 @@
       }
     },
     {
-      "datasource": "alarm",
+      "datasource": "AlarmState",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -256,10 +256,10 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "DEMO:PV1",
-          "value": "DEMO:PV1"
+          "text": "GPP",
+          "value": "GPP"
         },
-        "datasource": "alarm",
+        "datasource": "AlarmState",
         "definition": "{\"find\": \"terms\", \"field\": \"pv\"}",
         "description": "Select a PV",
         "error": {

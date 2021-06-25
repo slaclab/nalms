@@ -7,6 +7,6 @@ datasources:
     database: "heartofgold_alarms_state_*"
     url: http://elasticsearch:9200
     jsonData:
-      esVersion: 6.8.16
-      interval: nil
+      esVersion: 60
       timeField: "time"
+      logMessageField: "_id"
