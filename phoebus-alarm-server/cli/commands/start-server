@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Author: Jacqueline Garrahan
+#
+# Create tmux sessions and launch alarm services
+#
+# Copyright @2021 SLAC National Accelerator Laboratory
+
+EXIT=0
+
+if [ "$1" == "-h" ]; then
+  echo "Usage: start-server config_name config_file "
+  exit 0
+fi
+
+if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
+  echo "Logging configuration file not defined. Please set \$LOGGING_CONFIG_FILE."
+  exit 0
+fi
+
+if [[ -z "$ALARM_SERVER_PROPERTIES" ]]; then
+  echo "Alarm server properties file not defined. Please set \$ALARM_SERVER_PROPERTIES."
+  exit 0
+fi
+
+if [[ -z "$ALARM_SERVER_JAR" ]]; then
+  echo "Alarm server jar file not defined. Please set \$ALARM_SERVER_JAR."
+  exit 0
+fi
+
+export PATH="$JAVA_HOME/bin:$PATH"
+
+CONFIG_NAME=$1
+CONFIG_FILE=$2
+
+
+if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
+
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -server $KAFKA_BOOTSTRAP -noshell
+
+else
+    echo "Unable to import configuration."
+fi
+
+java -jar $ALARM_SERVER_JAR  -config $CONFIG_NAME -import /tmp/nalms/heart_of_gold.xml -server $KAFKA_BOOTSTRAP

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Author: Jacqueline Garrahan
+#
+# Create tmux sessions and launch alarm services
+#
+# Copyright @2021 SLAC National Accelerator Laboratory
+
+EXIT=0
+
+if [ "$1" == "-h" ]; then
+  echo "Usage: start-logger config_name config_file"
+  exit 0
+fi
+
+if [[ -z "$LOGGING_CONFIG_FILE" ]]; then
+  echo "Logging configuration file not defined. Please set \$LOGGING_CONFIG_FILE."
+  exit 0
+fi
+
+if [[ -z "$ALARM_LOGGER_PROPERTIES" ]]; then
+  echo "Alarm logger properties file not defined. Please set \$ALARM_LOGGER_PROPERTIES."
+  exit 0
+fi
+
+if [[ -z "$ALARM_LOGGER_JAR" ]]; then
+  echo "Alarm logger jar file not defined. Please set \$ALARM_LOGGER_JAR."
+  exit 0
+fi
+
+
+export PATH="$JAVA_HOME/bin:$PATH"
+
+CONFIG_NAME=$1
+CONFIG_FILE=$2
+
+java -jar $ALARM_LOGGER_JAR -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME -noshell

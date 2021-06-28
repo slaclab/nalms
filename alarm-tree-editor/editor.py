@@ -36,6 +36,7 @@ from qtpy.QtCore import (
     Property,
     QAbstractItemModel,
     QSize,
+    QMimeData
 )
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
@@ -103,7 +104,7 @@ class AlarmTreeItem(QObject):
         self.tickets = "CATER: 1029"
 
         if hasattr(self, "channels"):
-            self.destroyed.connect(functools.partial(widget_destroyed, self.channels))
+            self.destroyed.connect(partial(widget_destroyed, self.channels))
 
     # For model logic
     def child(self, row):
@@ -368,7 +369,7 @@ class AlarmTreeModel(QAbstractItemModel):
 
             # invalid
             elif item.severity == 3:
-                return QBrush(GtGui.QColor(102, 0, 255))
+                return QBrush(QColor(102, 0, 255))
 
             # disconnected
             elif item.severity == 4:
@@ -813,8 +814,6 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
 
         self.setup_ui()
 
-        self.setStyleSheet("background-color: rgb(179, 179, 179)")
-
         self._nodes = []
 
         self.config_name = config_name
@@ -1072,8 +1071,9 @@ class PhoebusConfigTool:
 
 
 class AlarmTreeEditorDisplay(Display):
-    def __init__(self):
-        super(AlarmTreeEditorDisplay, self).__init__()
+    def __init__(self, parent=None):
+        super(AlarmTreeEditorDisplay, self).__init__(parent=parent)
+
 
         self.app = QApplication.instance()
 
@@ -1198,12 +1198,9 @@ class AlarmTreeEditorDisplay(Display):
         self.enabled_check = QCheckBox("ENABLED")
         self.annunciating_check = QCheckBox("ANNUNCIATING")
         self.latching_check = QCheckBox("LATCHING")
-        self.logging_check = QCheckBox("LOGGING")
         self.property_view_layout.addWidget(self.enabled_check, 6, 0)
         self.property_view_layout.addWidget(self.annunciating_check, 6, 1)
         self.property_view_layout.addWidget(self.latching_check, 6, 2)
-        self.property_view_layout.addWidget(self.logging_check, 6, 3)
-
         spacer = QSpacerItem(40, 200, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.property_view_layout.addItem(spacer, 6, 0)
@@ -1470,3 +1467,8 @@ class LegacyWindow(QDialog):
             )
             self.converted_filename = filename
             self.accept()
+
+    def ui_filepath(self):
+        # No UI file is being used
+        return None
+

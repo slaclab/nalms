@@ -39,9 +39,9 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
-    if [[ ! -d "${KAFKA_TOP}" ]] ; then
-        echo "KAFKA_TOP incorrectly set."
-        echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+    if [[ ! -d "${KAFKA_HOME}" ]] ; then
+        echo "KAFKA_HOME incorrectly set."
+        echo "\$KAFKA_HOME = ${KAFKA_HOME}"
         EXIT=1
     fi
 
@@ -69,15 +69,15 @@ if [ $# -eq 0 ]; then
         EXIT=1
     fi
 
-    if [[ ! -d "${NALMS_TOP}" ]]; then
-        echo "NALMS_TOP incorrectly set correctly."
-        echo "\$NALMS_TOP = ${NALMS_TOP}"
+    if [[ ! -d "${NALMS_HOME}" ]]; then
+        echo "NALMS_HOME incorrectly set correctly."
+        echo "\$NALMS_HOME = ${NALMS_HOME}"
         EXIT=1
     fi
 
-    if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
-        echo "ELASTICSEARCH_TOP incorrectly set."
-        echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+    if [[ ! -d "${ELASTICSEARCH_HOME}" ]] ; then
+        echo "ELASTICSEARCH_HOME incorrectly set."
+        echo "\$ELASTICSEARCH_HOME = ${ELASTICSEARCH_HOME}"
         EXIT=1
     fi
 
@@ -102,14 +102,14 @@ do
                 EXIT=1
             fi
 
-            if [[ ! -d "${NALMS_TOP}" ]]; then
-                echo "NALMS_TOP incorrectly set correctly."
-                echo "\$NALMS_TOP = ${NALMS_TOP}"
+            if [[ ! -d "${NALMS_HOME}" ]]; then
+                echo "NALMS_HOME incorrectly set correctly."
+                echo "\$NALMS_HOME = ${NALMS_HOME}"
                 EXIT=1
             fi
-            if [[ ! -d "${ELASTICSEARCH_TOP}" ]] ; then
-                echo "ELASTICSEARCH_TOP incorrectly set."
-                echo "\$ELASTICSEARCH_TOP = ${ELASTICSEARCH_TOP}"
+            if [[ ! -d "${ELASTICSEARCH_HOME}" ]] ; then
+                echo "ELASTICSEARCH_HOME incorrectly set."
+                echo "\$ELASTICSEARCH_HOME = ${ELASTICSEARCH_HOME}"
                 EXIT=1
             fi
             ;;
@@ -120,9 +120,9 @@ do
                 echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
                 EXIT=1
             fi
-            if [[ ! -d "${KAKFA_TOP}" ]] ; then
-                echo "KAFKA_TOP incorrectly set."
-                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+            if [[ ! -d "${KAKFA_HOME}" ]] ; then
+                echo "KAFKA_HOME incorrectly set."
+                echo "\$KAFKA_HOME = ${KAFKA_HOME}"
                 EXIT=1
             fi
             if [[ ! -f "${ZOOKEEPER_PROPERTIES}" ]] ; then
@@ -138,9 +138,9 @@ do
                 echo "\$KAFKA_LOG_DIR = ${KAFKA_LOG_DIR}"
                 EXIT=1
             fi
-            if [[ ! -d "${KAKFA_TOP}" ]] ; then
-                echo "KAFKA_TOP incorrectly set."
-                echo "\$KAFKA_TOP = ${KAFKA_TOP}"
+            if [[ ! -d "${KAKFA_HOME}" ]] ; then
+                echo "KAFKA_HOME incorrectly set."
+                echo "\$KAFKA_HOME = ${KAFKA_HOME}"
                 EXIT=1
             fi
             if [[ ! -f "${KAFKA_PROPERTIES}" ]] ; then

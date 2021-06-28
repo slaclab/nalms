@@ -1,0 +1,7 @@
+- name: 'dashboards'
+  org_id: 1
+  updateIntervalSeconds: 30
+  folder: ''
+  type: 'file'
+  options:
+    path: '/var/lib/grafana/dashboards'

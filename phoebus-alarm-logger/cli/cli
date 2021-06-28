@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+export CLI_WORKDIR=$(cd $(dirname $0) && pwd)
+. "$CLI_WORKDIR/common"
+
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+$cli_name
+Phoebus alarm services CLI
+Usage: $cli_name [command]
+Commands:
+  start-logger config_name config_file: Start alarm logger for a given configuration, file
+  *         Help
+"
+  exit 0
+}
+
+case "$1" in
+  start-logger|d)
+    . "$CLI_WORKDIR/commands/start-logger" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-logger_${2}.log"
+    ;;
+  *)
+    cli_help
+    ;;
+esac

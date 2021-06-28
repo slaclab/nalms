@@ -1,5 +1,0 @@
-treelib
-lxml
-pyqt
-kafka-python
-pydm

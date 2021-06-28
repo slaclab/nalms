@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+export CLI_WORKDIR=$(cd $(dirname $0) && pwd)
+. "$CLI_WORKDIR/common"
+
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+$cli_name
+Phoebus alarm services CLI
+Usage: $cli_name [command]
+Commands:
+  start-server config_name config_file: Start all alarm services given configuration, file
+  *         Help
+"
+  exit 0
+}
+
+case "$1" in
+  start-server|d)
+    . "$CLI_WORKDIR/commands/create-kafka-indices" "$2" | tee -ia "$CLI_WORKDIR/create_kafka_indices_${2}.log"
+    . "$CLI_WORKDIR/commands/start-server" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
+    ;;
+  *)
+    cli_help
+    ;;
+esac

@@ -2,12 +2,16 @@ site_name: NALMS
 repo_url: https://github.com/slaclab/nalms/
 
 nav:
-  - introduction.md
+  - index.md
   - Install: install.md
   - Legacy: legacy.md
   - Components:
       - components.md
       - Kafka: kafka.md
+      - Services: services.md
+      - Tools: tools.md
+  - Configuration: configuration.md
+  - Epics Integration: epics_integration.md
 
 theme:
   name: 'material'
