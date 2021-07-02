@@ -2,13 +2,11 @@ FROM centos:7 as build
 
 RUN yum install -y wget java-11-openjdk-devel git 
 
-#ENV JAVA_HOME /usr/lib/jvm/jre-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 RUN cd /opt && \
     git clone https://github.com/linkedin/cruise-control.git && \
     cd cruise-control && \
     git checkout migrate_to_kafka_2_5 && \
-    #./gradlew --no-daemon --stacktrace -p cruise-control-metrics-reporter jar
     ./gradlew jar :cruise-control:jar 
 
 
