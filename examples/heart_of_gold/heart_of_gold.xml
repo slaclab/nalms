@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf8'?>
+<config name="HeartOfGold">
+    <pv name="NUTRIMATIC">
+        <enabled>true</enabled>
+        <latching>false</latching>
+        <annunciating>false</annunciating>
+        <description>Does not make tea</description>
+        <delay>10</delay>
+        <count>30</count>
+    </pv>
+    <pv name="INFINITE:IMPROBABILITY:DRIVE">
+        <enabled>true</enabled>
+        <latching>false</latching>
+        <annunciating>false</annunciating>
+        <filter> Marvin + Eddie == 0</filter>
+    </pv>
+    <component name="GPP">
+        <automated_action>
+            <title>GPP summary</title>
+            <details>sevrpv:GPP</details>
+        </automated_action>
+        <pv name="EDDIE">
+            <enabled>true</enabled>
+            <latching>false</latching>
+            <annunciating>false</annunciating>
+            <description>Eddie the Computer</description>
+        </pv>
+        <pv name="MARVIN">
+            <enabled>true</enabled>
+            <latching>true</latching>
+            <annunciating>false</annunciating>
+            <description>Paranoid android</description>
+            <delay>100</delay>
+            <count>1000</count>
+        </pv>
+    </component>
+</config>
