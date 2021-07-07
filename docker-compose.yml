@@ -84,6 +84,8 @@ services:
        # build: ./cruise-control
         ports: 
             - "9090:9090"
+        volumes:
+            - "./cruise-control/cruisecontrol.properties:/opt/cruise-control/config/cruisecontrol.properties"
         links: 
             - kafka
             - zookeeper

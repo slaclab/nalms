@@ -5,7 +5,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
 #ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 RUN yum -y install git java-1.8.0-openjdk-devel
 
-WORKDIR opt
+WORKDIR /opt
 
 RUN git clone --branch ${CC_VERSION} https://github.com/linkedin/cruise-control.git 
 
@@ -15,8 +15,6 @@ WORKDIR /opt/cruise-control
 RUN ./gradlew jar :cruise-control:jar  \
     && rm -rf cruise-control-core cruise-control-metrics-reporter cruise-control-client \
     && rm config/cruisecontrol.properties
-
-COPY cruisecontrol.properties /opt/cruise-control/config/cruisecontrol.properties
 
 # Install Cruise Control GUI Frontend
 RUN curl -L https://github.com/linkedin/cruise-control-ui/releases/download/v0.1.0/cruise-control-ui.tar.gz \
