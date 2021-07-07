@@ -35,6 +35,8 @@ services:
             - kafka
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
+            - "./phoebus-alarm-server/config/alarm_server.properties:/opt/nalms/config/alarm_server.properties"
+            - "./phoebus-alarm-server/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-server HeartOfGold /tmp/nalms/heart_of_gold.xml
         environment:
             - KAFKA_BOOTSTRAP=kafka:9092
