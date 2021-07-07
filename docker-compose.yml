@@ -47,6 +47,8 @@ services:
             - elasticsearch
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
+            - "./phoebus-alarm-logger/config/alarm_logger.properties:/opt/nalms/config/alarm_logger.properties"
+            - "./phoebus-alarm-logger/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     elasticsearch:
         #build: ./elasticsearch
