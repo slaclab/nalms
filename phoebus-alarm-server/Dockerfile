@@ -14,6 +14,10 @@ RUN yum install -y git maven java-11-openjdk-devel && \
 FROM centos/python-38-centos7 as runtime
 
 COPY cli /opt/nalms/cli
+COPY requirements.txt /opt/nalms/requirements.txt
+COPY setup.py /opt/nalms/setup.py
+COPY tools /opt/nalms/tools
+
 USER root
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 
