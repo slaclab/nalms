@@ -23,10 +23,11 @@ def create_soft_iocs(filename: str, template_file: str, output_directory: str, c
         sevrpvs = []
 
         for action in actions:
-            detail = action.findall(".//details")
-            if "sevrpv" in detail.text:
-                sevrpv = detail.text.strip("sevrpv:")
-                sevrpvs.append(sevrpv)
+            details = action.findall(".//details")
+            for detail in details:
+                if "sevrpv" in detail.text:
+                    sevrpv = detail.text.strip("sevrpv:")
+                    sevrpvs.append(sevrpv)
 
         if not template_file:
             print("No template file provided.")
@@ -48,7 +49,7 @@ def create_soft_iocs(filename: str, template_file: str, output_directory: str, c
         # get working directory
         with open(f"{output_directory}/st.cmd", "w") as f:
 
-            f.write(f"dbLoadTemplate(\"{output_directory}/{output_filename}.template\") \n")
+            f.write(f"dbLoadTemplate(\"{output_filename}\") \n")
             f.write("iocInit \n")
 
         print(f"Created {output_filename} and st.cmd.")
@@ -67,7 +68,7 @@ def main():
         )
 
     else:
-        create_soft_iocs(sys.argv[1])
+        create_soft_iocs(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
 if __name__ == "__main__":
     main()
