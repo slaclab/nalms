@@ -33,4 +33,5 @@ COPY --from=build  /opt/cruise-control/cruise-control-metrics-reporter/build/lib
 EXPOSE 9200 9300
 
 CMD /opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
-    --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS}
+    --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS} \
+    --override zookeeper.connect=${ZOOKEEPER_CONNECT}
