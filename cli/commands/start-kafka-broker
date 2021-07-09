@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run kafka  image for given configuration
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-kafka-broker [--properties property_file] [--port kafka_port]"
+  echo "Port and property file required, but may be set using the \$KAFKA_PROPERTIES or \$KAFKA_PORT environment variables."
+  exit 0
+}
+
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --properties) 
+          KAFKA_PROPERTIES=$2
+            ;;
+        --port) 
+          KAFKA_PORT=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$KAFKA_PROPERTIES" ]]; then
+  echo "No property file provided for Kafka broker."
+  usage
+fi
+
+if [[ -z "$KAFKA_PORT" ]]; then
+  echo "No port provided for Kafka server."
+  usage
+fi
+
+
+#docker run -m 8g  \
+#  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:$KAFKA_PORT \
+#  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT \
+#  -e KAFKA_LISTENERS=PLAINTEXT://localhost:$KAFKA_PORT \
+#  -v "${KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
+#  --network host \
+#  --add-host "moby:127.0.0.1" \
+#  --add-host "localhost: 127.0.0.1" \
+#  -d kafka
+
+
+  #  --network host \
+
+
+
+docker run -m 8g  \
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://localhost:$KAFKA_PORT \
+  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT \
+  -e KAFKA_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://0.0.0.0:$KAFKA_PORT \
+  -v "${KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
+  -p "$KAFKA_PORT:$KAFKA_PORT" \
+  --add-host "moby:127.0.0.1" \
+  --add-host "localhost: 127.0.0.1" \
+  -d kafka

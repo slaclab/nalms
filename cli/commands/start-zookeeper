@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run zookeeper image for given configuration
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-zookeeper [--port zookeeper_port]"
+  echo "Port required, but may be set using the \$ZOOKEEPER_PORT environment variable."
+  exit 0
+}
+
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --port) 
+          ZOOKEEPER_PORT=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$ZOOKEEPER_PORT" ]]; then
+  echo "No port provided for Zookeeper."
+  usage
+fi
+
+
+docker run --network host -d wurstmeister/zookeeper

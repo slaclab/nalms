@@ -7,7 +7,7 @@
 
 if [ "$1" == "-h" ]; then
   echo "Usage: list-configurations.sh"
-  echo "Requires \$KAFKA_HOME and \$ZOOKEEPER_HOST to be set."
+  echo "Requires \$KAFKA_HOME and \$KAFKA_BOOTSTRAP to be set."
   exit 0
 fi
 
@@ -16,12 +16,12 @@ if [[ ! -d "$KAFKA_HOME" ]]; then
   exit 0
 fi
 
-if [[ -z "$ZOOKEEPER_HOST" ]]; then
-  echo "ZOOKEEPER_HOST is not set."
+if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
+  echo "KAFKA_BOOTSTRAP is not set."
   exit 0
 fi
 
-list_var=$($KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper $ZOOKEEPER_HOST)
+list_var=$($KAFKA_HOME/bin/kafka-topics.sh --list --bootstrap-server $KAFKA_BOOTSTRAP)
 
 IFS=$'\n'
 

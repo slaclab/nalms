@@ -2,11 +2,66 @@
 #
 # Author: Jacqueline Garrahan
 # Run phoebus-alarm-server image for given configuration
-#
-if [ "$1" == "-h" ]; then
-  echo "Usage: deploy-configuration.sh [Configuration Name] [Configuration file] [Alarm server properties file] [Logging configuration files]"
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config] [--kafka_bootstrap kafka_bootstrap]"
   exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
 fi
 
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_NAME="$1"
+fi
 
-docker run -v $2:/tmp/nalms/$1.xml -v $3:/opt/nalms/config/alarm_server.properties -v $4:/opt/nalms/config/logging.properties phoebus-alarm-server start-server $1 /tmp/nalms/$1.xml
+if [[ -z "$2" ]]; then
+  usage
+else
+  CONFIG_FILE="$2"
+fi
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --properties) 
+          ALARM_SERVER_PROPERTIES=$2
+            ;;
+        --logging_properties) 
+          LOGGING_PROPERTIES=$2
+            ;;
+        --kafka_bootstrap) 
+          KAFKA_BOOTSTRAP=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$ALARM_SERVER_PROPERTIES" ]]; then
+  echo "No property file provided for alarm server."
+  usage
+fi
+
+if [[ -z "$LOGGING_PROPERTIES" ]]; then
+  echo "No property file provided for logging."
+  usage
+fi
+
+if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
+  echo "Kafka bootstrap node not provided."
+  usage
+fi
+
+echo $CONFIG_FILE
+echo $CONFIG_NAME
+
+docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  -v $ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
+  -v $LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
+  -e KAFKA_BOOTSTRAP=$KAFKA_BOOTSTRAP --network host \
+  -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

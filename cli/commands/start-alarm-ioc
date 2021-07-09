@@ -10,4 +10,4 @@ fi
 
 #PREFIX!!!
 
-docker run -v $2:/tmp/nalms/$1.xml -e CONFIG_NAME=$1 -e CONFIG_FILE=/tmp/nalms/$1.xml -p "5065:5065/tcp" -p "5064:5064/tcp" -p "5065:5065/udp" -p "5064:5064/udp" -it alarm-ioc 
+docker run -v $2:/tmp/nalms/$1.xml -e CONFIG_NAME=$1 -e CONFIG_FILE=/tmp/nalms/$1.xml -p "5065:5065/tcp" -p "5064:5064/tcp" -p "5065:5065/udp" -p "5064:5064/udp" -d alarm-ioc 

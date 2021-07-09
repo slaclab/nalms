@@ -7,19 +7,37 @@ cli_help() {
   cli_name=${0##*/}
   echo "
 $cli_name
-Phoebus alarm services CLI
+NALMS CLI
 Usage: $cli_name [command]
 Commands:
-  start-server config_name config_file: Start all alarm services given configuration, file
+  start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config] [--kafka_bootstrap kafka_bootstrap]
+  start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]
   *         Help
 "
   exit 0
 }
 
 case "$1" in
-  start-server|d)
-    . "$CLI_WORKDIR/commands/create-kafka-indices" "$2" | tee -ia "$CLI_WORKDIR/create_kafka_indices_${2}.log"
-    . "$CLI_WORKDIR/commands/start-server" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-services_${2}.log"
+  start-alarm-server|d)
+    . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"| tee -ia "$CLI_WORKDIR/start-alarm-server_${2}.log"
+    ;;
+  start-alarm-logger|d)
+    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7" | tee -ia "$CLI_WORKDIR/start-alarm-lovver_$2.log"
+    ;;
+  start-kafka-broker|d)
+    . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" | tee -ia "$CLI_WORKDIR/start-kafka-broker.log"
+    ;;
+  start-zookeeper|d)
+    . "$CLI_WORKDIR/commands/start-zookeeper" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-zookeper.log"
+    ;;
+  start-elasticsearch|d)
+    . "$CLI_WORKDIR/commands/start-elasticsearch" "$2" "$3"| tee -ia "$CLI_WORKDIR/start-elasticsearch.log"
+    ;;
+  start-cruise-control|d)
+    . "$CLI_WORKDIR/commands/start-cruise-control" "$2" "$3"| tee -ia "$CLI_WORKDIR/start-cruise-control.log"
+    ;;
+  list-configurations|d)
+    . "$CLI_WORKDIR/commands/list-configurations"
     ;;
   *)
     cli_help
