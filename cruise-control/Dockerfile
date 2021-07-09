@@ -33,4 +33,4 @@ COPY --from=build /opt/cruise-control .
 # Ensure Cruise Control writable for logs
 RUN chmod a+rw -R .
 
-CMD ./kafka-cruise-control-start.sh config/cruisecontrol.properties
+CMD ./kafka-cruise-control-start.sh /opt/cruise-control/config/cruisecontrol.properties
