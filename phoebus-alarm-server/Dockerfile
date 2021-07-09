@@ -49,7 +49,6 @@ COPY --from=build /opt/phoebus/services/alarm-server/target/lib /opt/phoebus/lib
 ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
 ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server-*.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
-ENV EPICS_BASE /opt/EPICS/epics-base
 
 # prepare to use commands
 ENTRYPOINT ["/bin/bash", "/opt/nalms/cli/cli"]

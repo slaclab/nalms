@@ -40,5 +40,3 @@ if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFI
 else
     echo "Unable to import configuration."
 fi
-
-java -jar $ALARM_SERVER_JAR  -config $CONFIG_NAME -import /tmp/nalms/heart_of_gold.xml -server $KAFKA_BOOTSTRAP
