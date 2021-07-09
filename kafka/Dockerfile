@@ -30,8 +30,6 @@ ENV PATH $JAVA_HOME/bin:$PATH
 COPY --from=build ${KAFKA_HOME} $KAFKA_HOME
 COPY --from=build  /opt/cruise-control/cruise-control-metrics-reporter/build/libs/* ${KAFKA_HOME}/libs/
 
-COPY config/server.properties ${KAFKA_HOME}/server.properties
-
 EXPOSE 9200 9300
 
 CMD /opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
