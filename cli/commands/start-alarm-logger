@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run phoebus-alarm-logger image for given configuration
+#
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_NAME="$1"
+fi
+
+if [[ -z "$2" ]]; then
+  usage
+else
+  CONFIG_FILE="$2"
+fi
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --properties) 
+          ALARM_LOGGER_PROPERTIES=$2
+            ;;
+        --logging_properties) 
+          LOGGING_PROPERTIES=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$ALARM_LOGGER_PROPERTIES" ]]; then
+  echo "No property file provided for alarm logger."
+  usage
+fi
+
+if [[ -z "$LOGGING_PROPERTIES" ]]; then
+  echo "No property file provided for logging."
+  usage
+fi
+
+
+if [ "$1" == "-h" ]; then
+  echo "Usage: deploy-configuration.sh [Configuration Name] [Configuration file] [Alarm logger properties file] [Logging configuration files]"
+  exit 0
+fi
+
+docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  -v $ALARM_LOGGER_PROPERTIES:/opt/nalms/config/alarm_logger.properties \
+  -v $LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
+  -d phoebus-alarm-logger start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

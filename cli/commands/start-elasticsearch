@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run kafka  image for given configuration
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-elasticsearch [--port elasticsearch]"
+  echo "Port required, but may be set using the \$ELASTICSEARCH_PORT environment variable."
+  exit 0
+}
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --port) 
+          ELASTICSEARCH_PORT=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$ELASTICSEARCH_PORT" ]]; then
+  echo "No port provided for Elasticsearch."
+  usage
+fi
+
+
+docker run \
+    -e node.name=node01 \
+    -e cluster.name=es-cluster-7 \
+    -e discovery.type=single-node \
+    -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
+    -e ES_HOST=localhost \
+    -e ES_PORT=$ELASTICSEARCH_PORT \
+    --network host \
+    -d elasticsearch

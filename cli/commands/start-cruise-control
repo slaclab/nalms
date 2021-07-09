@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run phoebus-alarm-logger image for given configuration
+#
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-cruise-control [--properties property_file]"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --properties) 
+          $CRUISE_CONTROL_PROPERTIES=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$CRUISE_CONTROL_PROPERTIES" ]]; then
+  echo "No property file provided for cruise control."
+  usage
+fi
+
+docker run -v "$CRUISE_CONTROL_PROPERTIES:/opt/cruise-control/config/cruisecontrol.properties" \
+    --network host -d cruise-control

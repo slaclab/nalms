@@ -13,7 +13,7 @@ RUN yum install -y git maven java-11-openjdk-devel && \
 
 FROM centos/python-38-centos7 as runtime
 
-COPY . /opt/nalms/
+COPY cli /opt/nalms/cli
 USER root
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 
@@ -22,6 +22,7 @@ RUN yum install -y git maven java-11-openjdk-devel readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     cd /opt/nalms && \
+    mkdir /opt/nalms/config && \
     chmod +x /opt/nalms/cli/cli && \ 
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs

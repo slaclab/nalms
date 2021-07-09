@@ -1,10 +1,13 @@
 # Installation
 
+These installation documents have been written only for RHEL7 deployments. This same system can be configured for other deployments; however, the source materials should be consulted for installation details. The Dockerfiles inside this repository should serve as a guide for these deployments. 
+
 Requirements
-- Kafka (cruise-control-metrics-reporter-A.B.B.jar)
+- Kafka
 - Elasticsearch
 - tmux
-- 
+- Cruise Control
+
 
 ```
 $ git clone nalms
@@ -42,7 +45,7 @@ The build script creates all configuration artifacts and stores them in the `/tm
 
 
 ```
-sudo -E bash build.sh
+$ sudo -E bash scripts/build.sh
 ``` 
 
 ## Install
@@ -72,3 +75,24 @@ $ mvn install -pl services/alarm-logger -am
 ```
 
 Once installed, the `ALARM_SERVER_JAR` and `ALARM_LOGGER_JAR` environment variables should be set to point to the files in `phoebus/services/alarm-server/target/` and `phoebus/services/alarm-logger/target/`, respectively. 
+
+
+## Kafka
+
+The Kafka binaries can be downloaded from the official Kafka site [here](https://kafka.apache.org/downloads). In order to use Cruise Control with Kafka, the built jar for the metrics reporter must be moved into the `libs` directory inside the top Kafka folder.
+
+```
+$ git clone https://github.com/linkedin/cruise-control.git
+$ cd cruise-control
+$ git checkout migrate_to_kafka_2_5
+$ ./gradlew jar :cruise-control:jar 
+$ cp cruise-control-metrics-reporter/build/libs/* $KAFKA_HOME/libs/
+```
+
+## Cruise Control
+Cruise Control must be built alongside its UI:
+
+```
+$ curl -L https://github.com/linkedin/cruise-control-ui/releases/download/v0.1.0/cruise-control-ui.tar.gz -o /tmp/cruise-control-ui.tar.gz 
+$ tar zxvf /tmp/cruise-control-ui.tar.gz
+```

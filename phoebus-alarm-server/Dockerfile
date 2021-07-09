@@ -13,7 +13,11 @@ RUN yum install -y git maven java-11-openjdk-devel && \
 
 FROM centos/python-38-centos7 as runtime
 
-COPY . /opt/nalms/
+COPY cli /opt/nalms/cli
+COPY requirements.txt /opt/nalms/requirements.txt
+COPY setup.py /opt/nalms/setup.py
+COPY tools /opt/nalms/tools
+
 USER root
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 
@@ -45,7 +49,6 @@ COPY --from=build /opt/phoebus/services/alarm-server/target/lib /opt/phoebus/lib
 ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
 ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server-*.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
-ENV EPICS_BASE /opt/EPICS/epics-base
 
 # prepare to use commands
 ENTRYPOINT ["/bin/bash", "/opt/nalms/cli/cli"]
