@@ -35,7 +35,7 @@ CONFIG_FILE=$2
 
 if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
 
-  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -server $KAFKA_BOOTSTRAP -noshell
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -noshell
 
 else
     echo "Unable to import configuration."
