@@ -36,6 +36,9 @@ case "$1" in
   start-cruise-control|d)
     . "$CLI_WORKDIR/commands/start-cruise-control" "$2" "$3"| tee -ia "$CLI_WORKDIR/start-cruise-control.log"
     ;;
+  start-phoebus-client|d)
+    . "$CLI_WORKDIR/commands/start-phoebus-client" | tee -ia "$CLI_WORKDIR/start-phoebus-client.log"
+    ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
     ;;

@@ -37,27 +37,11 @@ if [[ -z "$KAFKA_PORT" ]]; then
 fi
 
 
-#docker run -m 8g  \
-#  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:$KAFKA_PORT \
-#  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT \
-#  -e KAFKA_LISTENERS=PLAINTEXT://localhost:$KAFKA_PORT \
-#  -v "${KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
-#  --network host \
-#  --add-host "moby:127.0.0.1" \
-#  --add-host "localhost: 127.0.0.1" \
-#  -d kafka
-
-
-  #  --network host \
-
-
-
 docker run -m 8g  \
-  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://localhost:$KAFKA_PORT \
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://$KAFKA_HOST:$KAFKA_PORT \
   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT \
   -e KAFKA_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://0.0.0.0:$KAFKA_PORT \
+  -e ZOOKEEPER_CONNECT=$ZOOKEEPER_HOST:$ZOOKEEPER_PORT \
   -v "${KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
   -p "$KAFKA_PORT:$KAFKA_PORT" \
-  --add-host "moby:127.0.0.1" \
-  --add-host "localhost: 127.0.0.1" \
   -d kafka

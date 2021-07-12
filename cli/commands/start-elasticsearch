@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run kafka  image for given configuration
+# Run elasticsearch instance
 
 usage() {
   cli_name=${0##*/}
@@ -34,6 +34,6 @@ docker run \
     -e discovery.type=single-node \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
-    -e ES_PORT=$ELASTICSEARCH_PORT \
-    --network host \
+    -e ES_PORT=9200 \
+    -p "$ELASTICSEARCH_PORT:9200" \
     -d elasticsearch

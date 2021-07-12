@@ -22,7 +22,7 @@ if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
 fi
 
 list_var=$($KAFKA_HOME/bin/kafka-topics.sh --list --bootstrap-server $KAFKA_BOOTSTRAP)
-
+echo $list_var
 IFS=$'\n'
 
 read -rd '' -a strarr <<< "$list_var"
@@ -30,7 +30,7 @@ read -rd '' -a strarr <<< "$list_var"
 for val in "${strarr[@]}";
 do
 #    if  [ grep -q "Command" <<< "$val" ] && [ grep -q "Talk"  <<< "$val" ] ; then
-    if [[ ! "$val" == *"Command"* && ! "$val" == *"Talk"* && ! "$val" == *"Metrics" && ! "$val" == *"consumer_offsets" ]]; then
+    if [[ ! "$val" == *"Command" && ! "$val" == *"Talk" && ! "$val" == *"Metrics" && ! "$val" == *"consumer_offsets" ]]; then
     # && "Talk" != *"$val"*
       echo "$val";
     fi

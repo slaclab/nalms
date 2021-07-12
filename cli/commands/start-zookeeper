@@ -29,4 +29,4 @@ if [[ -z "$ZOOKEEPER_PORT" ]]; then
 fi
 
 
-docker run --network host -d wurstmeister/zookeeper
+docker run -p "$ZOOKEEPER_PORT:2181" -d wurstmeister/zookeeper

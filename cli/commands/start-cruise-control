@@ -31,4 +31,6 @@ if [[ -z "$CRUISE_CONTROL_PROPERTIES" ]]; then
 fi
 
 docker run -v "$CRUISE_CONTROL_PROPERTIES:/opt/cruise-control/config/cruisecontrol.properties" \
-    --network host -d cruise-control
+    -e BOOTSTRAP_SERVERS=$KAFKA_BOOTSTRAP \
+    -e ZOOKEEPER_CONNECT=$ZOOKEEPER_HOST:$ZOOKEEPER_PORT \
+    -p "$CRUISE_CONTROL_PORT:9090" -d cruise-control

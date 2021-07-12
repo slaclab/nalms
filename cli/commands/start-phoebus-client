@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run kafka  image for given configuration
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-phoebus-client [--properties property_file] "
+  exit 0
+}
+
+
+if [[ -z "$CLIENT_PROPERTIES" ]]; then
+  echo "No property file provided for client."
+  usage
+fi
+
+
+docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m 3g \
+  -v $CLIENT_PROPERTIES:/opt/phoebus/phoebus.properties \
+  -d phoebus-client
