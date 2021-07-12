@@ -1,0 +1,8 @@
+services:
+  demo-ioc:
+    build: .
+    ports:
+        - "5065:5065/tcp"
+        - "5064:5064/tcp"
+        - "5065:5065/udp"
+        - "5064:5064/udp"
