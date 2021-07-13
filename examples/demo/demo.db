@@ -17,7 +17,7 @@ record(ai, "DEMO:PV1")
 record(ai, "DEMO:PV2")
 {
    field(PINI, "YES")
-   field(VAL,  0)
+   field(VAL,  500)
    field(PREC, 3)
    field(HOPR, 100)
    field(LOPR, -100.0)

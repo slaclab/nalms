@@ -17,6 +17,7 @@ This docker application consists of the following containers:
 * Grafana
 * An Example IOC
 * Cruise Control
+* Alarm IOC
 
 To run, build each of the respective images in the subdirectories (examples/heart_of_gold for the IOC) with the appropriate labels. Then, run:
 
@@ -24,7 +25,7 @@ To run, build each of the respective images in the subdirectories (examples/hear
 $ docker-compose up
 ```
 
-
 Once running, the cruise control dashboard is available at http://localhost:9090, and the grafana alarm log dashboard is available at http://localhost:3000. To access the alarm log dashboard, log in using the grafana default accounts, username: admin, password: admin. 
 
 Operations on the IOC can be performed by running caputs/cagets after attaching to the running container. 
+
