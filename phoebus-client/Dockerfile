@@ -19,14 +19,11 @@ USER root
 RUN yum install -y java-11-openjdk-devel mesa-libGL xfonts-100dpi xfonts-encodings \
     xfonts-utils openjfx libopenjfx-jni libopenjfx-java gtk3-devel dbus && \
     chmod +x /opt/nalms/run.sh
-RUN yum install -y xeyes
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 COPY --from=build /opt/phoebus /opt/phoebus/
-COPY phoebus.properties /opt/phoebus/phoebus.properties
-
 
 
 CMD /opt/nalms/run.sh
