@@ -25,10 +25,6 @@ ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 RUN yum install -y git maven java-11-openjdk-devel readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
-    # set up python
-    python -m pip install -r /opt/nalms/requirements.txt && \
-    cd /opt/nalms && \
-    python -m pip install . && \
     chmod +x /opt/nalms/cli/cli &&\
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs
