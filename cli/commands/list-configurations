@@ -6,7 +6,7 @@
 # Copyright @2021 SLAC National Accelerator Laboratory
 
 if [ "$1" == "-h" ]; then
-  echo "Usage: list-configurations.sh"
+  echo "Usage: list-configurations"
   echo "Requires \$KAFKA_HOME and \$KAFKA_BOOTSTRAP to be set."
   exit 0
 fi

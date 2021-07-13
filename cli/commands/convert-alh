@@ -1,0 +1,7 @@
+#!/bin/sh
+# Author: Jacqueline Garrahan
+#
+# Converts 
+# Requires installation of nalms-tools into active python environment
+#
+# Copyright @2021 SLAC National Accelerator Laboratory

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run kafka  image for given configuration
+# Start Phoebus Client
 
 usage() {
   cli_name=${0##*/}

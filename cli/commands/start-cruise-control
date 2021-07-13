@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run phoebus-alarm-logger image for given configuration
+# Run cruise-control image and serve UI
 #
 usage() {
   cli_name=${0##*/}

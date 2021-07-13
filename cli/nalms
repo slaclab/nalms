@@ -10,8 +10,16 @@ $cli_name
 NALMS CLI
 Usage: $cli_name [command]
 Commands:
-  start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config] [--kafka_bootstrap kafka_bootstrap]
+  start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]
   start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]
+  start-alarm-ioc config_name config_file
+  start-cruise-control [--properties property_file]
+  start-elasticsearch [--port elasticsearch]
+  start-kafka-broker [--properties property_file] [--port kafka_port]
+  start-phoebus-client [--properties property_file]
+  start-grafana [--port grafana_port]
+  list-configurations
+  convert-alh
   *         Help
 "
   exit 0
@@ -22,7 +30,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"| tee -ia "$CLI_WORKDIR/start-alarm-server_${2}.log"
     ;;
   start-alarm-logger|d)
-    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7" | tee -ia "$CLI_WORKDIR/start-alarm-lovver_$2.log"
+    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7" | tee -ia "$CLI_WORKDIR/start-alarm-logger_$2.log"
     ;;
   start-kafka-broker|d)
     . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" | tee -ia "$CLI_WORKDIR/start-kafka-broker.log"
@@ -38,6 +46,9 @@ case "$1" in
     ;;
   start-phoebus-client|d)
     . "$CLI_WORKDIR/commands/start-phoebus-client" | tee -ia "$CLI_WORKDIR/start-phoebus-client.log"
+    ;;
+  start-grafana|d)
+    . "$CLI_WORKDIR/commands/start-grafana" | tee -ia "$CLI_WORKDIR/start-grafana.log"
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
