@@ -41,23 +41,12 @@ from qtpy.QtCore import (
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
 import xml.etree.ElementTree as ET
+from nalms_tools import alh_conversion
 from pydm.widgets.base import widget_destroyed
 from functools import partial
 from pydm.widgets.base import PyDMWritableWidget
 from pydm import Display
 
-
-# ATTEMPT IMPORT OF CONVERSION
-NALMS_TOP = os.environ.get("NALMS_TOP")
-if not NALMS_TOP:
-    print("$NALMS_TOP must be defined.")
-    sys.exit()
-else:
-    spec = importlib.util.spec_from_file_location(
-        "module.name", f"{NALMS_TOP}/tools/alh_conversion.py"
-    )
-    alh_conversion = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(alh_conversion)
 
 
 class AlarmTreeItem(QObject):

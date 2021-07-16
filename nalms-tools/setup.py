@@ -20,6 +20,8 @@ setup(
     entry_points={
         "console_scripts": [
         "convert-alh=nalms_tools.alh_conversion:main",
-        "create-soft-ioc=nalms_tools.create_soft_ioc:main"]
+        "create-soft-ioc=nalms_tools.create_soft_ioc:main",
+        "launch-editor=nalms_tools.alarm_tree_editor:main"
+        ]
     },
 )
