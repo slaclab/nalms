@@ -63,6 +63,9 @@ case "$1" in
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
     ;;
+  launch-editor|d)
+    . "$CLI_WORKDIR/commands/launch-editor"
+    ;;
   *)
     cli_help
     ;;
