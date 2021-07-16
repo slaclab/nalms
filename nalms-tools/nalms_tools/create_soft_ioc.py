@@ -12,6 +12,7 @@ import sys
 import os
 import string
 from importlib_resources import files
+from shutil import copyfile
 
 TEMPLATE_FILE = files('nalms_tools.files').joinpath('force_pv.template')
 ALPHABET = string.ascii_uppercase
@@ -132,16 +133,19 @@ def create_soft_ioc(filename: str, template_file: str, output_directory: str, co
 
     """
 
-    template_filename = create_force_pvs(filename, output_directory, template_file, config_name)
+    templated_filename = create_force_pvs(filename, output_directory, template_file, config_name)
     summary_pv_filename = create_summary_pvs(filename, output_directory, config_name)
     
     # get working directory
     with open(f"{output_directory}/st.cmd", "w") as f:
         f.write(f"dbLoadRecords(\"{summary_pv_filename}\") \n")
-        f.write(f"dbLoadTemplate(\"{template_filename}\") \n")
+        f.write(f"dbLoadTemplate(\"{templated_filename}\") \n")
         f.write("iocInit \n")
 
-    print(f"Created {template_filename}, {summary_pv_filename}, and st.cmd.")
+    template_base = str(template_file).split("/")[-1]
+    copyfile(template_file, f"{output_directory}/{template_base}")
+
+    print(f"Created {templated_filename}, {summary_pv_filename}, and st.cmd.")
 
 
 
@@ -149,21 +153,20 @@ def main():
     if sys.argv[1] == "-h":
         print("Format softIOC for a NALMS configuration.")
         print(
-            "Usage: python create_soft_iocs.py configuration_file template_file output_directory config_name"
+            "Usage: python create_soft_iocs.py configuration_file output_directory config_name"
         )
 
     elif len(sys.argv) not in [2, 3, 4, 5]:
         print("Incorrect number of arguments.")
         print(
-            "Usage: python create_soft_iocs.py configuration_file template_file output_directory config_name"
+            "Usage: python create_soft_iocs.py configuration_file output_directory config_name"
         )
 
     else:
         configuration_file = sys.argv[1]
-        template_file = sys.argv[2]
-        output_directory = sys.argv[3]
-        config_name = sys.argv[4]
-        create_soft_ioc(configuration_file, template_file, output_directory, config_name)
+        output_directory = sys.argv[2]
+        config_name = sys.argv[3]
+        create_soft_ioc(configuration_file, TEMPLATE_FILE, output_directory, config_name)
 
 if __name__ == "__main__":
     main()

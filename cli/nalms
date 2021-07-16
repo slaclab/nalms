@@ -55,7 +55,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-grafana" | tee -ia "$CLI_WORKDIR/start-grafana.log"
     ;;
   create-alarm-ioc|d)
-    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
+    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4"  | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
     ;;
   convert-alh|d)
     . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/convert-alh.log"

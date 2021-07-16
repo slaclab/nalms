@@ -31,10 +31,4 @@ else
   OUTPUT_DIR="$3"
 fi
 
-if [[ -z "$NALMS_FORCEPV_TEMPLATE" ]]; then
-   echo "Creation of alarm ioc requires definition of \$NALMS_FORCEPV_TEMPLATE."
-fi
-
-
-
-create-soft-ioc $CONFIG_FILE $NALMS_FORCEPV_TEMPLATE $OUTPUT_DIR $CONFIG_NAME
+create-soft-ioc $CONFIG_FILE $OUTPUT_DIR $CONFIG_NAME
