@@ -1,0 +1,43 @@
+# FORCEPVs template for NALMS
+
+record(bi, "$(PVNAME)FP") {
+field(DESC, "NALMS FP PV")
+field(PINI, "YES")
+field(VAL, 0)
+field(ZNAM, "On")
+field(ONAM, "Off")
+field(ZSV, "NO_ALARM")
+field(OSV, "MINOR")
+info(autosaveFields, "VAL DESC")
+}
+
+record(bi, "$(PVNAME)SV") {
+field(DESC, "NALMS 2nd level FORCEPV")
+field(SCAN, "1 second")
+field(INP, "$(PVNAME)FP")
+field(ZNAM, "On")
+field(ONAM, "Off")
+field(ZSV, "NO_ALARM")
+field(OSV, "MINOR")
+}
+
+record(calc, "$(PVNAME)DP") {
+field(DESC, "NALMS DISP PV")
+field(SCAN, "1 second")
+field(INPA, "$(PVNAME).SEVR NPP MS")
+field(SDIS, "$(PVNAME)SV")
+field(DISV, 1)
+field(DISS, "NO_ALARM")
+field(CALC, 0)
+}
+
+record(bi, "$(PVNAME)ACK") {
+field(DESC, "NALMS ACK PV")
+field(PINI, "YES")
+field(VAL, 0)
+field(ZNAM, "On")
+field(ONAM, "Off")
+field(ZSV, "NO_ALARM")
+field(OSV, "MINOR")
+info(autosaveFields, "VAL DESC")
+}
