@@ -149,13 +149,13 @@ def main():
     if sys.argv[1] == "-h":
         logger.info("Format softIOC for a NALMS configuration.")
         logger.info(
-            "Usage: python create_soft_iocs.py configuration_file template_file output_directory [config_name]"
+            "Usage: python create_soft_iocs.py configuration_file template_file output_directory config_name"
         )
 
     elif len(sys.argv) not in [2, 3, 4, 5]:
         logger.info("Incorrect number of arguments.")
         logger.info(
-            "Usage: python create_soft_iocs.py configuration_file template_file output_directory [config_name]"
+            "Usage: python create_soft_iocs.py configuration_file template_file output_directory config_name"
         )
 
     else:
