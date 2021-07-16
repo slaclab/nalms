@@ -29,31 +29,31 @@ while test $# -gt 0
 do
     case "$1" in
         --properties) 
-          ALARM_SERVER_PROPERTIES=$2
+          NALMS_ALARM_SERVER_PROPERTIES=$2
             ;;
         --logging_properties) 
-          LOGGING_PROPERTIES=$2
+          NALMS_LOGGING_PROPERTIES=$2
             ;;
         --kafka_bootstrap) 
-          KAFKA_BOOTSTRAP=$2
+          NALMS_KAFKA_BOOTSTRAP=$2
             ;;
         "")
     esac
     shift
 done
 
-if [[ -z "$ALARM_SERVER_PROPERTIES" ]]; then
+if [[ -z "$NALMS_ALARM_SERVER_PROPERTIES" ]]; then
   echo "No property file provided for alarm server."
   usage
 fi
 
-if [[ -z "$LOGGING_PROPERTIES" ]]; then
+if [[ -z "$NALMS_LOGGING_PROPERTIES" ]]; then
   echo "No property file provided for logging."
   usage
 fi
 
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
-  -v $ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
-  -v $LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
+  -v $NALMS_ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
+  -v $NALMS_LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
   -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

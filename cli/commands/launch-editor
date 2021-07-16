@@ -5,7 +5,7 @@
 # Requires nalms-tools to be installed into active python environment
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms launch-edior"
+  echo "Usage: nalms launch-editor"
   exit 0
 }
 

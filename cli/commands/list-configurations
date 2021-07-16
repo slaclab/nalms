@@ -7,21 +7,21 @@
 
 if [ "$1" == "-h" ]; then
   echo "Usage: list-configurations"
-  echo "Requires \$KAFKA_HOME and \$KAFKA_BOOTSTRAP to be set."
+  echo "Requires \$NALMS_KAFKA_HOME and \$NALMS_KAFKA_BOOTSTRAP to be set."
   exit 0
 fi
 
-if [[ ! -d "$KAFKA_HOME" ]]; then
-  echo "KAFKA_HOME is not set."
+if [[ ! -d "$NALMS_KAFKA_HOME" ]]; then
+  echo "NALMS_KAFKA_HOME is not set."
   exit 0
 fi
 
-if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
-  echo "KAFKA_BOOTSTRAP is not set."
+if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
+  echo "NALMS_KAFKA_BOOTSTRAP is not set."
   exit 0
 fi
 
-list_var=$($KAFKA_HOME/bin/kafka-topics.sh --list --bootstrap-server $KAFKA_BOOTSTRAP)
+list_var=$($NALMS_KAFKA_HOME/bin/kafka-topics.sh --list --bootstrap-server $NALMS_KAFKA_BOOTSTRAP)
 echo $list_var
 IFS=$'\n'
 

@@ -22,12 +22,12 @@ do
     shift
 done
 
-if [[ -z "$GRAFANA_PORT" ]]; then
+if [[ -z "$NALMS_GRAFANA_PORT" ]]; then
   echo "No port provided for Grafana."
   usage
 fi
 
-if [[ -z "$GRAFANA_DATASOURCE_DIR" ]]; then
+if [[ -z "$NALMS_GRAFANA_DATASOURCE_DIR" ]]; then
   echo "No datasource provided for Grafana."
   usage
 fi
@@ -35,7 +35,7 @@ fi
 
 
 docker run \
-    -p "$GRAFANA_PORT:3000" \
-    -v "$GRAFANA_DATSOURCE_DIR:/etc/grafana/provisioning/datasources" \
+    -p "$NALMS_GRAFANA_PORT:3000" \
+    -v "$NALMS_GRAFANA_DATSOURCE_DIR:/etc/grafana/provisioning/datasources" \
     -d grafana
 
