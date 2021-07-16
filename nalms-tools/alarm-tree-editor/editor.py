@@ -41,7 +41,7 @@ from qtpy.QtCore import (
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
 import xml.etree.ElementTree as ET
-
+from pydm.widgets.base import widget_destroyed
 from functools import partial
 from pydm.widgets.base import PyDMWritableWidget
 from pydm import Display
@@ -835,7 +835,7 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
         self.setDragDropOverwriteMode(False)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.setHeaderHidden(True)
+      #  self.setHeaderHidden(True)
         self.setColumnWidth(0, 160)
         self.setColumnWidth(1, 160)
         self.setColumnWidth(2, 160)
