@@ -3,6 +3,7 @@ set -e
 export CLI_WORKDIR=$(cd $(dirname $0) && pwd)
 . "$CLI_WORKDIR/common"
 
+
 cli_help() {
   cli_name=${0##*/}
   echo "
@@ -52,7 +53,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-grafana" | tee -ia "$CLI_WORKDIR/start-grafana.log"
     ;;
   create-alarm-ioc|d)
-    . "$CLI_WORKDIR/commands/create-alarm-ioc" | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
+    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
