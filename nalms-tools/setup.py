@@ -20,6 +20,6 @@ setup(
     entry_points={
         "console_scripts": [
         "convert-alh=tools.alh_conversion:main",
-        "create-soft-iocs=tools.create_soft_iocs:main"]
+        "create-soft-ioc=tools.create_soft_ioc:main"]
     },
 )
