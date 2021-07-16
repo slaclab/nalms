@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Create alarm ioc files for a given configuration_file
+# Requires nalms-tools to be installed into active python environment
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms create-alarm-ioc configuration_file config_name output_directory"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_FILE="$1"
+fi
+
+if [[ -z "$2" ]]; then
+  usage
+else
+  CONFIG_NAME="$2"
+fi
+
+if [[ -z "$3" ]]; then
+  usage
+else
+  OUTPUT_DIR="$3"
+fi
+
+if [[ -z "$NALMS_FORCEPV_TEMPLATE" ]]; then
+   echo "Creation of alarm ioc requires definition of \$NALMS_FORCEPV_TEMPLATE."
+fi
+
+
+
+python create-soft-ioc $CONFIG_FILE $NALMS_FORCEPV_TEMPLATE $OUTPUT_DIR $CONFIG_NAME
