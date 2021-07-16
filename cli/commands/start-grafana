@@ -15,7 +15,7 @@ while test $# -gt 0
 do
     case "$1" in
         --port) 
-          GRAFANA_PORT=$2
+          NALMS_GRAFANA_PORT=$2
             ;;
         "")
     esac
@@ -36,6 +36,6 @@ fi
 
 docker run \
     -p "$NALMS_GRAFANA_PORT:3000" \
-    -v "$NALMS_GRAFANA_DATSOURCE_DIR:/etc/grafana/provisioning/datasources" \
+    -v "$NALMS_GRAFANA_DATASOURCE_DIR:/etc/grafana/provisioning/datasources" \
     -d grafana
 
