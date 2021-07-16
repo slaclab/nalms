@@ -11,8 +11,11 @@ from lxml import etree
 import sys
 import os
 import string
+from importlib_resources import files
 
+TEMPLATE_FILE = files('nalms_tools.files').joinpath('force_pv.template')
 ALPHABET = string.ascii_uppercase
+
 
 
 def create_force_pvs(filename:str, output_directory:str, force_pv_template:str, config_name:str) -> str:
