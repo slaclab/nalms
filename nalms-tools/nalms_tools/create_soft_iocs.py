@@ -11,6 +11,9 @@ from lxml import etree
 import sys
 import os
 import string
+import logging
+
+logger = logging.getLogger(__name__)
 
 ALPHABET = string.ascii_uppercase
 
@@ -138,20 +141,20 @@ def create_soft_ioc(filename: str, template_file: str, output_directory: str, co
         f.write(f"dbLoadTemplate(\"{template_filename}\") \n")
         f.write("iocInit \n")
 
-    print(f"Created {template_filename}, {summary_pv_filename}, and st.cmd.")
+    logger.info(f"Created {template_filename}, {summary_pv_filename}, and st.cmd.")
 
 
 
 def main():
     if sys.argv[1] == "-h":
-        print("Format softIOC for a NALMS configuration.")
-        print(
+        logger.info("Format softIOC for a NALMS configuration.")
+        logger.info(
             "Usage: python create_soft_iocs.py configuration_file template_file output_directory [config_name]"
         )
 
     elif len(sys.argv) not in [2, 3, 4, 5]:
-        print("Incorrect number of arguments.")
-        print(
+        logger.info("Incorrect number of arguments.")
+        logger.info(
             "Usage: python create_soft_iocs.py configuration_file template_file output_directory [config_name]"
         )
 
@@ -163,4 +166,5 @@ def main():
         create_soft_ioc(configuration_file, template_file, output_directory, config_name)
 
 if __name__ == "__main__":
+    logger.setLevel("INFO")
     main()
