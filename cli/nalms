@@ -22,6 +22,7 @@ Commands:
   create-alarm-ioc configuration_file config_name output_directory
   convert-alh alh_file output_filename config_name
   list-configurations
+  launch-editor
   convert-alh
   *         Help
 "

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Launch the configuration editor
+# Requires nalms-tools to be installed into active python environment
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms launch-edior"
+  exit 0
+}
+
+launch-editor
