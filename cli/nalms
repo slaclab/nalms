@@ -20,6 +20,7 @@ Commands:
   start-phoebus-client [--properties property_file]
   start-grafana [--port grafana_port]
   create-alarm-ioc configuration_file config_name output_directory
+  convert-alh alh_file output_filename config_name
   list-configurations
   convert-alh
   *         Help
@@ -54,6 +55,9 @@ case "$1" in
     ;;
   create-alarm-ioc|d)
     . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
+    ;;
+  convert-alh|d)
+    . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/convert-alh.log"
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
