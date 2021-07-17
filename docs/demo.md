@@ -77,3 +77,11 @@ $ bash cli/nalms start-grafana
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000). Enter user=admin, password=admin into the login. Select AlarmLogs from the available dashboards.
+
+
+All containers may be stopped using the ids listed with:
+
+```
+$ docker ps
+$ docker stop {containter_id}
+```
