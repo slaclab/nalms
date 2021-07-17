@@ -36,4 +36,5 @@ docker run \
     -e ES_HOST=localhost \
     -e ES_PORT=9200 \
     -p "$NALMS_ELASTICSEARCH_PORT:9200" \
+    --name nalms_elasticsearch \
     -d elasticsearch

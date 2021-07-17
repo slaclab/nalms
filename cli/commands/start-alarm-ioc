@@ -24,7 +24,6 @@ else
   CONFIG_FILE="$2"
 fi
 
-#PREFIX!!!
 
 docker run -v $CONFIG_NAME:/tmp/nalms/$CONFIG_FILE.xml -e CONFIG_NAME=$CONFIG_NAME -e CONFIG_FILE=/tmp/nalms/$CONFIG_FILE.xml \
   -p "$EPICS_CA_SERVER_PORT:5065/tcp" -p "$EPICS_CA_SERVER_PORT:5064/tcp" \

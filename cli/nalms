@@ -16,7 +16,7 @@ Commands:
   start-alarm-ioc config_name config_file
   start-cruise-control [--properties property_file]
   start-elasticsearch [--port elasticsearch]
-  start-kafka-broker [--properties property_file] [--port kafka_port]
+  start-kafka-broker [--properties property_file] [--port kafka_port] [--broker_number number]
   start-phoebus-client [--properties property_file]
   start-grafana [--port grafana_port]
   create-alarm-ioc configuration_file config_name output_directory
@@ -37,7 +37,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7" | tee -ia "$CLI_WORKDIR/start-alarm-logger_$2.log"
     ;;
   start-kafka-broker|d)
-    . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" | tee -ia "$CLI_WORKDIR/start-kafka-broker.log"
+    . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" "$6"| tee -ia "$CLI_WORKDIR/start-kafka-broker.log"
     ;;
   start-zookeeper|d)
     . "$CLI_WORKDIR/commands/start-zookeeper" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-zookeper.log"
