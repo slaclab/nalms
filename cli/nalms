@@ -23,6 +23,7 @@ Commands:
   convert-alh alh_file output_filename config_name
   list-configurations
   launch-editor
+  generate-kafka-certs domain password
   convert-alh
   *         Help
 "
@@ -59,6 +60,9 @@ case "$1" in
     ;;
   convert-alh|d)
     . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/convert-alh.log"
+    ;;
+  generate-kafka-certs|d)
+    . "$CLI_WORKDIR/commands/generate-kafka-certs" "$2" "$3" | tee -ia "$CLI_WORKDIR/generate-kafka-certs.log"
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
