@@ -22,16 +22,18 @@ RUN wget https://downloads.apache.org/kafka/2.7.1/kafka_2.13-2.7.1.tgz -O /tmp/k
 
 FROM centos:7 as runtime
 
-RUN yum install -y java-11-openjdk-devel
+RUN yum install -y java-11-openjdk-devel openssl
 ENV KAFKA_HOME=/opt/kafka
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 COPY --from=build ${KAFKA_HOME} $KAFKA_HOME
 COPY --from=build  /opt/cruise-control/cruise-control-metrics-reporter/build/libs/* ${KAFKA_HOME}/libs/
+COPY scripts/start-kafka.sh /opt/kafka/start-kafka.sh
+
+RUN chmod +x /opt/kafka/start-kafka.sh
+
 
 EXPOSE 9200 9300
 
-CMD /opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
-    --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS} \
-    --override zookeeper.connect=${ZOOKEEPER_CONNECT}
+CMD /opt/kafka/start-kafka.sh
