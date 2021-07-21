@@ -85,3 +85,22 @@ All containers may be stopped using the ids listed with:
 $ docker ps
 $ docker stop {containter_id}
 ```
+
+Remove lingering containers...
+```
+ $ docker-compose rm
+```
+
+## Client
+
+In order to use the client in this framework connections from docker must be allowed. One option (insecure) is temporarily disabling the following:
+
+```
+$ xhost + local:root
+```
+
+Then after:
+
+```
+$ xhost - local:root
+``
