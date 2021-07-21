@@ -15,10 +15,6 @@
         <filter> Marvin + Eddie == 0</filter>
     </pv>
     <component name="GPP">
-        <automated_action>
-            <title>GPP summary</title>
-            <details>sevrpv:GPP</details>
-        </automated_action>
         <pv name="EDDIE">
             <enabled>true</enabled>
             <latching>false</latching>

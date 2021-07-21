@@ -19,7 +19,9 @@ setup(
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
-        "convert-alh=tools.alh_conversion:main",
-        "create-soft-iocs=tools.create_soft_iocs:main"]
+        "convert-alh=nalms_tools.alh_conversion:main",
+        "create-soft-ioc=nalms_tools.create_soft_ioc:main",
+        "launch-editor=nalms_tools.alarm_tree_editor:main"
+        ]
     },
 )

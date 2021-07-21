@@ -7,7 +7,7 @@
 # Copyright @2021 SLAC National Accelerator Laboratory
 
 if [ "$1" == "-h" ]; then
-  echo "Usage: delete-configurations.sh configuration_name"
+  echo "Usage: delete-configurations configuration_name"
   echo "Requires \$KAFKA_HOME and \$ZOOKEEPER_HOST to be set."
   exit 0
 fi

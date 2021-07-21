@@ -1,0 +1,5 @@
+treelib
+lxml
+kafka-python
+pydm
+importlib_resources

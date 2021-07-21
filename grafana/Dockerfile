@@ -1,5 +1,6 @@
 FROM grafana/grafana
-ADD ./provisioning /etc/grafana/provisioning
+
+ADD ./provisioning/dashboards /etc/grafana/provisioning/dashboards
 ADD ./config.ini /etc/grafana/config.ini
 ADD ./dashboards /var/lib/grafana/dashboards
 
@@ -7,4 +8,4 @@ ADD ./dashboards /var/lib/grafana/dashboards
 ADD scripts/start-grafana.sh /opt/nalms/
 ADD scripts/update-dashboards.sh /opt/nalms/
 
-ENTRYPOINT [ "bash", "/opt/nalms/start-grafana.sh" ]
+CMD bash /opt/nalms/start-grafana.sh

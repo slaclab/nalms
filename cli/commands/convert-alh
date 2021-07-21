@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Creates NALMS configuration file for a top level ALH file (recurses)
+# Requires nalms-tools to be installed into active python environment
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms convert-alh alh_file output_filename config_name"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  ALH_FILE="$1"
+fi
+
+if [[ -z "$2" ]]; then
+  usage
+else
+  OUTPUT_FILE="$2"
+fi
+
+if [[ -z "$3" ]]; then
+  usage
+else
+  CONFIG_NAME="$3"
+fi
+
+if [[ -z "$NALMS_FORCEPV_TEMPLATE" ]]; then
+   echo "Creation of alarm ioc requires definition of \$NALMS_FORCEPV_TEMPLATE."
+fi
+
+convert-alh $CONFIG_NAME $ALH_FILE $OUTPUT_FILE

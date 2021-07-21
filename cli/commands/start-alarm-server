@@ -4,7 +4,7 @@
 # Run phoebus-alarm-server image for given configuration
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config] [--kafka_bootstrap kafka_bootstrap]"
+  echo "Usage: nalms start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]"
   exit 0
 }
 
@@ -29,39 +29,38 @@ while test $# -gt 0
 do
     case "$1" in
         --properties) 
-          ALARM_SERVER_PROPERTIES=$2
+          NALMS_ALARM_SERVER_PROPERTIES=$2
             ;;
         --logging_properties) 
-          LOGGING_PROPERTIES=$2
+          NALMS_LOGGING_PROPERTIES=$2
             ;;
         --kafka_bootstrap) 
-          KAFKA_BOOTSTRAP=$2
+          NALMS_KAFKA_BOOTSTRAP=$2
             ;;
         "")
     esac
     shift
 done
 
-if [[ -z "$ALARM_SERVER_PROPERTIES" ]]; then
+if [[ -z "$NALMS_ALARM_SERVER_PROPERTIES" ]]; then
   echo "No property file provided for alarm server."
   usage
 fi
 
-if [[ -z "$LOGGING_PROPERTIES" ]]; then
+if [[ -z "$NALMS_LOGGING_PROPERTIES" ]]; then
   echo "No property file provided for logging."
   usage
 fi
 
-if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
-  echo "Kafka bootstrap node not provided."
-  usage
-fi
-
-echo $CONFIG_FILE
-echo $CONFIG_NAME
+            KAFKA_BOOTSTRAP: kafka:9092
+            EPICS_CA_ADDR_LIST: alarm-ioc example-ioc
+            ALARM_IOC: "true"
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
-  -v $ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
-  -v $LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
-  -e KAFKA_BOOTSTRAP=$KAFKA_BOOTSTRAP --network host \
+  -v $NALMS_ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
+  -v $NALMS_LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
+  --name nalms_logger_$CONFIG_NAME \
+  -e ALARM_IOC=true \
+  -e KAFKA_BOOTSTRAP=$KAFKA_BOOTSTRAP \
+  -e EPCIS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
   -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

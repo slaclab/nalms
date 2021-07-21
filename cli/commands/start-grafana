@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Run elasticsearch instance
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-grafana [--port grafana_port]"
+  echo "Port required, but may be set using the \$GRAFANA_PORT environment variable."
+  exit 0
+}
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --port) 
+          NALMS_GRAFANA_PORT=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+if [[ -z "$NALMS_GRAFANA_PORT" ]]; then
+  echo "No port provided for Grafana."
+  usage
+fi
+
+if [[ -z "$NALMS_GRAFANA_DATASOURCE_DIR" ]]; then
+  echo "No datasource provided for Grafana."
+  usage
+fi
+
+
+
+docker run \
+    -p "$NALMS_GRAFANA_PORT:3000" \
+    -v "$NALMS_GRAFANA_DATASOURCE_DIR:/etc/grafana/provisioning/datasources" \
+    --name nalms_grafana \
+    -d grafana
+

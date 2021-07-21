@@ -141,3 +141,6 @@ dmypy.json
 .pyre/
 
 .DS_Store
+
+# ignore certs
+ssl

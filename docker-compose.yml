@@ -4,18 +4,65 @@ services:
         ports:
             - "2181:2181"
     kafka:
-        #build: ./kafka
         image: kafka
         depends_on: 
             - zookeeper
         ports:
             - "19092:19092"
         environment:
+            BROKER_ID: 0
             KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://localhost:19092
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
             KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092
+            ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
+            - "./kafka/config/server.properties:/opt/kafka/server.properties"
+        links:
+            - zookeeper
+        deploy:
+            resources:
+                limits:
+                    cpus: 0.50
+                    memory: 8G
+                reservations:
+                    memory: 8G
+    kafka1:
+        image: kafka
+        depends_on: 
+            - zookeeper
+        ports:
+            - "19093:19093"
+        environment:
+            BROKER_ID: 1
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,CONNECTIONS_FROM_HOST://localhost:19093
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+            KAFKA_LISTENERS: PLAINTEXT://kafka1:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19093
+            ZOOKEEPER_CONNECT: zookeeper:2181
+        volumes:
+            - "./kafka/config/server.properties:/opt/kafka/server.properties"
+        links:
+            - zookeeper
+        deploy:
+            resources:
+                limits:
+                    cpus: 0.50
+                    memory: 8G
+                reservations:
+                    memory: 8G
+    kafka2:
+        image: kafka
+        depends_on: 
+            - zookeeper
+        ports:
+            - "19094:19094"
+        environment:
+            BROKER_ID: 2
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,CONNECTIONS_FROM_HOST://localhost:19094
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+            KAFKA_LISTENERS: PLAINTEXT://kafka2:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19094
+            ZOOKEEPER_CONNECT: zookeeper:2181
+        volumes:
+            - "./kafka/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -26,7 +73,6 @@ services:
                 reservations:
                     memory: 8G
     phoebus-alarm-server:
-        #build: ./phoebus-alarm-server
         image: phoebus-alarm-server
         links:
             - kafka
@@ -39,49 +85,53 @@ services:
             - "./phoebus-alarm-server/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-server HeartOfGold /tmp/nalms/heart_of_gold.xml
         environment:
-            - KAFKA_BOOTSTRAP=kafka:9092
-    phoebus-alarm-logger:
-        image: phoebus-alarm-logger
-       # build: ./phoebus-alarm-logger
-        links:
-            - elasticsearch
-        depends_on:
-            - elasticsearch
-        volumes:
-            - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
-            - "./phoebus-alarm-logger/config/alarm_logger.properties:/opt/nalms/config/alarm_logger.properties"
-            - "./phoebus-alarm-logger/config/logging.properties:/opt/nalms/config/logging.properties"
-        command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
+            KAFKA_BOOTSTRAP: kafka:9092
+            EPICS_CA_ADDR_LIST: alarm-ioc example-ioc
+            ALARM_IOC: "true"
     elasticsearch:
-        #build: ./elasticsearch
         image: elasticsearch
         ports:
             - "9200:9200"
         environment:
-        - node.name=node01
-        - cluster.name=es-cluster-7
-        - discovery.type=single-node
-        - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
-        - ES_HOST=localhost
-        - ES_PORT=9200
+            node.name: node01
+            cluster.name: es-cluster-7
+            discovery.type: single-node
+            ES_JAVA_OPTS: "-Xms128m -Xmx128m"
+            ES_HOST: localhost
+            ES_PORT: 9200
     grafana:
         build: ./grafana
         ports:
             - '3000:3000'
         links:
             - elasticsearch
+        volumes:
+            - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    phoebus-alarm-logger:
+        image: phoebus-alarm-logger
+        links:
+            - elasticsearch
+        depends_on:
+            - elasticsearch
+            - kafka
+            - phoebus-alarm-server
+        volumes:
+            - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
+            - "./phoebus-alarm-logger/config/alarm_logger.properties:/opt/nalms/config/alarm_logger.properties"
+            - "./phoebus-alarm-logger/config/logging.properties:/opt/nalms/config/logging.properties"
+        command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
-        #build: ./examples/heart_of_gold
+        build: ./examples/heart_of_gold
         image: heart_of_gold
         ports:
-            - '127.0.0.1:5064:5064'
-            - '127.0.0.1:5065:5065'
-            - '127.0.0.1:5064:5046/udp'
+            - "5065:5065/tcp"
+            - "5064:5064/tcp"
+            - "5065:5065/udp"
+            - "5064:5064/udp"
         environment:
-            - EPICS_CA_SERVER_PORT=5064
+            EPICS_CA_SERVER_PORT: 5064
     cruise-control:
         image: cruise-control
-       # build: ./cruise-control
         ports: 
             - "9090:9090"
         volumes:
@@ -91,12 +141,11 @@ services:
             - zookeeper
     phoebus-client:
         image: phoebus-client
-    #    build: .
         environment:
             - DISPLAY=host.docker.internal:0
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix
-      #  network_mode: host
+            - ./phoebus-client/phoebus.properties:/opt/phoebus/phoebus.properties
         depends_on:
             - kafka
             - elasticsearch
@@ -104,8 +153,16 @@ services:
             resources:
                 limits:
                     memory: 4g
-    
-        
-    
-
-    # cruise control?
+    alarm-ioc:
+        image: alarm-ioc
+        environment:
+            CONFIG_NAME: HeartOfGold
+            EPICS_CA_SERVER_PORT: 5064
+            EPICS_CA_REPEATER_PORT: 5065
+        volumes:
+            - "./examples/heart_of_gold/alarm-ioc:/opt/nalms/ioc"
+        ports:
+            - "5067:5065/tcp"
+            - "5066:5064/tcp"
+            - "5067:5065/udp"
+            - "5066:5064/udp"

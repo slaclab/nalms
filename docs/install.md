@@ -96,3 +96,4 @@ Cruise Control must be built alongside its UI:
 $ curl -L https://github.com/linkedin/cruise-control-ui/releases/download/v0.1.0/cruise-control-ui.tar.gz -o /tmp/cruise-control-ui.tar.gz 
 $ tar zxvf /tmp/cruise-control-ui.tar.gz
 ```
+

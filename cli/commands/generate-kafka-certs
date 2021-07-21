@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Create Kafka certification files
+#
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms generate-kafka-certs domain password"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+if [[ -z "$1" ]]; then
+    echo "Domain not provided."
+  usage
+else
+    DOMAIN=$1
+fi
+
+if [[ -z "$2" ]]; then
+    echo "Password not defined."
+    usage
+else
+    PASSWORD=$2
+fi
+
+# Create keystore, if the file does not exist
+if [[ ! -f ${KEY_STORE} ]]; then
+    echo "No keystore file is found; hence creating a new one at ssl/"
+
+    mkdir -p ssl/
+    cd ssl/ || exitWithError "ssl directory does not exist"
+
+    openssl req -new -x509 -keyout ca-key -out ca-cert -days 365 -passout pass:"$PASSWORD" -subj "/CN=$DOMAIN,L=MenloPark,C=US" && \
+
+    # generate key and cert for kafka broker
+    keytool -keystore server.keystore.jks -alias $DOMAIN -validity 365 -genkey -keyalg RSA -dname "CN=$DOMAIN,L=MenloPark,C=US" -ext san=dns:$DOMAIN -storepass $PASSWORD && \
+
+    # export certificate
+    keytool -keystore server.keystore.jks -alias $DOMAIN -certreq -file cert-file -storepass $PASSWORD && \
+
+    # sign certificate
+    openssl x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial -passin pass:$PASSWORD && \
+
+    # import signed root cert
+    keytool -keystore server.keystore.jks -alias CARoot -import -file ca-cert -storepass $PASSWORD -noprompt && \
+
+    keytool -keystore server.truststore.jks -alias CARoot -import -file ca-cert -storepass $PASSWORD -noprompt && \
+
+    # import signed cert of CA
+    keytool -keystore server.keystore.jks -alias $DOMAIN -import -file cert-signed -storepass $PASSWORD -noprompt && \
+   
+    keytool -keystore server.truststore.jks -alias $DOMAIN -import -file cert-signed -storepass $PASSWORD -noprompt && \
+
+   
+    cd /
+fi
+
+

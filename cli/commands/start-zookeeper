@@ -16,17 +16,17 @@ while test $# -gt 0
 do
     case "$1" in
         --port) 
-          ZOOKEEPER_PORT=$2
+          NALMS_ZOOKEEPER_PORT=$2
             ;;
         "")
     esac
     shift
 done
 
-if [[ -z "$ZOOKEEPER_PORT" ]]; then
+if [[ -z "$NALMS_ZOOKEEPER_PORT" ]]; then
   echo "No port provided for Zookeeper."
   usage
 fi
 
 
-docker run --network host -d wurstmeister/zookeeper
+docker run -p "$NALMS_ZOOKEEPER_PORT:2181" --name nalms_zookeeper -d wurstmeister/zookeeper

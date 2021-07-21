@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run phoebus-alarm-logger image for given configuration
+# Run cruise-control image and serve UI
 #
 usage() {
   cli_name=${0##*/}
@@ -18,17 +18,20 @@ while test $# -gt 0
 do
     case "$1" in
         --properties) 
-          $CRUISE_CONTROL_PROPERTIES=$2
+          $NALMS_CRUISE_CONTROL_PROPERTIES=$2
             ;;
         "")
     esac
     shift
 done
 
-if [[ -z "$CRUISE_CONTROL_PROPERTIES" ]]; then
+if [[ -z "$NALMS_CRUISE_CONTROL_PROPERTIES" ]]; then
   echo "No property file provided for cruise control."
   usage
 fi
 
-docker run -v "$CRUISE_CONTROL_PROPERTIES:/opt/cruise-control/config/cruisecontrol.properties" \
-    --network host -d cruise-control
+docker run -v "$NALMS_CRUISE_CONTROL_PROPERTIES:/opt/cruise-control/config/cruisecontrol.properties" \
+    -e BOOTSTRAP_SERVERS=$NALMS_KAFKA_BOOTSTRAP \
+    -e ZOOKEEPER_CONNECT=$NALMS_ZOOKEEPER_HOST:$NALMS_ZOOKEEPER_PORT \
+    --name nalms_cruise_control \
+    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d cruise-control

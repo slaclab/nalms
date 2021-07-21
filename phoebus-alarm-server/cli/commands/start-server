@@ -27,15 +27,23 @@ if [[ -z "$ALARM_SERVER_JAR" ]]; then
   exit 0
 fi
 
+if [[ -z "$KAFKA_BOOTSTRAP" ]]; then
+  echo "Kafka bootstrap not defined. Please set \$KAFKA_BOOTSTRAP."
+  exit 0
+fi
+
 export PATH="$JAVA_HOME/bin:$PATH"
 
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
+if [[ ! "$ALARM_IOC" = true ]]; then
+  python /opt/nalms/scripts/update_ioc.py $CONFIG_NAME $KAFKA_BOOTSTRAP &
+fi
 
 if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
 
-  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -server $KAFKA_BOOTSTRAP -noshell
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -noshell
 
 else
     echo "Unable to import configuration."

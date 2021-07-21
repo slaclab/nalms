@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Start Phoebus Client
+
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-phoebus-client [--properties property_file] "
+  exit 0
+}
+
+
+if [[ -z "$NALMS_CLIENT_PROPERTIES" ]]; then
+  echo "No property file provided for client."
+  usage
+fi
+
+
+docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m 2g \
+  -v $NALMS_CLIENT_PROPERTIES:/opt/phoebus/phoebus.properties \
+  -e EPICS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
+  -e EPICS_CA_REPEATER_PORT=$EPICS_CA_REPEATER_PORT \
+  -e EPICS_CA_SERVER_PORT=$EPICS_CA_SERVER_PORT \
+  -d phoebus-client

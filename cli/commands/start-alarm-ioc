@@ -1,13 +1,31 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run phoebus-alarm-server image for given configuration
-#
-if [ "$1" == "-h" ]; then
-  echo "Usage: deploy-ioc.sh [Configuration Name] [Configuration file]"
+# Run phoebus-alarm-ioc image for given configuration
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms start-alarm-ioc config_name config_file"
   exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
 fi
 
-#PREFIX!!!
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_NAME="$1"
+fi
 
-docker run -v $2:/tmp/nalms/$1.xml -e CONFIG_NAME=$1 -e CONFIG_FILE=/tmp/nalms/$1.xml -p "5065:5065/tcp" -p "5064:5064/tcp" -p "5065:5065/udp" -p "5064:5064/udp" -d alarm-ioc 
+if [[ -z "$2" ]]; then
+  usage
+else
+  CONFIG_FILE="$2"
+fi
+
+
+docker run -v $CONFIG_NAME:/tmp/nalms/$CONFIG_FILE.xml -e CONFIG_NAME=$CONFIG_NAME -e CONFIG_FILE=/tmp/nalms/$CONFIG_FILE.xml \
+  -p "$EPICS_CA_SERVER_PORT:5065/tcp" -p "$EPICS_CA_SERVER_PORT:5064/tcp" \
+  -p "$EPICS_CA_REPEATER_PORT:5065/udp" -p "$EPICS_CA_REPEATER_PORT:5064/udp" \
+  -d alarm-ioc 

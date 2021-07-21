@@ -13,6 +13,7 @@ nav:
   - Configuration: configuration.md
   - Epics Integration: epics_integration.md
   - Development: development.md
+  - Networking: networking.md
 
 theme:
   name: 'material'

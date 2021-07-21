@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 dirname = os.path.dirname(__file__)
 DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'files/sevrpv.template'))
 
+
 class ForcePV:
     """
     Representation of ForcePV entry
@@ -477,7 +478,7 @@ class ALHFileParser:
 
         self._failures.append(
             {
-                "Reason": "Reset value and force value are deprecated.",
+                "Reason": "Reset value and force value are deprecated. Forcepv created during NALMS templating",
                 "File": self._filepath,
                 "Line": " ".join(split_line),
             }
@@ -829,39 +830,9 @@ class XMLBuilder:
         """
         return force_pv.get_text()
 
-    def build_substitutions_file(self, output_filename: str, template_file: str = DEFAULT_SEVRPV_TEMPLATE):
-        """ Method for creating a substitutions file for severity pvs.
-
-        Args:
-            output_filename (str): Substitutions filename
-            template_file (str): File to use as a template
-
-        """
-        if not output_filename:
-            # write directly to substitutions
-            output_filename = f"{self._configuration}.substitutions"
-
-        # create substitutions file
-        with open(output_filename, "w") as f:
-
-            f.write(f"file {template_file} {{ \n")
-            f.write("   pattern {SEVRPVNAME}\n")
-            for sevrpv in self._sevrpvs:
-                f.write(f"   {{{sevrpv}}}\n")
-            f.write("}\n")
-
-        working_dir = os.getcwd()
-
-
-        # get working directory
-        with open("st.cmd", "w") as f:
-
-            f.write(f"dbLoadTemplate(\"{working_dir}/{output_filename}\") \n")
-            f.write("iocInit \n")
-
 
 def convert_alh_to_phoebus(
-    config_name: str, input_filename: str, output_filename: str, build_substitutions=True,
+    config_name: str, input_filename: str, output_filename: str
 ) -> None:
     """ Method for converting the alarm handler configuration files to the Phoebus xml representations.
 
@@ -923,10 +894,6 @@ def convert_alh_to_phoebus(
     tree_builder = XMLBuilder()
     tree_builder.build_tree(items, config_name)
     tree_builder.save_configuration(output_filename)
-
-    if build_substitutions:
-        substitutions_filename = output_filename.replace(".xml", ".substitutions")
-        tree_builder.build_substitutions_file(substitutions_filename)
 
     logger.info(f"Configuration file saved: {output_filename}")
     if len(failures) > 0:
