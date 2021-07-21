@@ -31,4 +31,10 @@ else
   OUTPUT_DIR="$3"
 fi
 
+
+#makeBaseApp.pl -t ioc $CONFIG_NAME
+#makeBaseApp.pl -a rhel6-x86_64 -p $CONFIG_NAME -i -t ioc sioc-nalms-heartofgold
+
+
+
 create-soft-ioc $CONFIG_FILE $OUTPUT_DIR $CONFIG_NAME

@@ -52,9 +52,15 @@ if [[ -z "$NALMS_LOGGING_PROPERTIES" ]]; then
   usage
 fi
 
+            KAFKA_BOOTSTRAP: kafka:9092
+            EPICS_CA_ADDR_LIST: alarm-ioc example-ioc
+            ALARM_IOC: "true"
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -v $NALMS_ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
   -v $NALMS_LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
   --name nalms_logger_$CONFIG_NAME \
+  -e ALARM_IOC=true \
+  -e KAFKA_BOOTSTRAP=$KAFKA_BOOTSTRAP \
+  -e EPCIS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
   -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
