@@ -32,23 +32,25 @@ if [[ -z "$BROKER_ID" ]]; then
     usage
 fi
 
-if [[ -z "$KEYSTORE_PASSWORD" ]]; then
-    echo "\$KEYSTORE_PASSWORD not defined."
-    usage
-fi
-
-if [[ -z "$TRUSTSTORE_PASSWORD" ]]; then
-    echo "\$TRUSTSTORE_PASSWORD not defined."
-    usage
-fi
-
-if [[ -z "$KEY_PASSWORD" ]]; then
-    echo "\$KEY_PASSWORD not defined."
-    usage
-fi
-
 
 if [[ "$USE_SSL" = true ]]; then
+
+
+    if [[ -z "$KEYSTORE_PASSWORD" ]]; then
+        echo "\$KEYSTORE_PASSWORD not defined."
+        usage
+    fi
+
+    if [[ -z "$TRUSTSTORE_PASSWORD" ]]; then
+        echo "\$TRUSTSTORE_PASSWORD not defined."
+        usage
+    fi
+
+    if [[ -z "$KEY_PASSWORD" ]]; then
+        echo "\$KEY_PASSWORD not defined."
+        usage
+    fi
+
 
     # start ssl server
     ./opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
