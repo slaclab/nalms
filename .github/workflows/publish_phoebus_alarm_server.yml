@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Phoebus Alarm Server Docker
 
 on:
   push:
