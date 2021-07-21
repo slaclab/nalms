@@ -3,7 +3,7 @@ name: Publish Phoebus Alarm Server Docker
 on:
   push:
     branches:
-      - main
+      - setup
 
 jobs:
   push_to_registry:
