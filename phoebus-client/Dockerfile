@@ -25,5 +25,4 @@ ENV PATH $JAVA_HOME/bin:$PATH
 
 COPY --from=build /opt/phoebus /opt/phoebus/
 
-
 CMD /opt/nalms/run.sh

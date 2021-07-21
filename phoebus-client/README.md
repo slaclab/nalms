@@ -2,6 +2,10 @@
 
 To run using XQuartz, activate the ‘Allow connections from network clients’ option in XQuartz settings and restart. Then, allow access from localhost:
 
+
+
+
 ```
-$ xhost + local:root
+xhost +local:`docker inspect --format='{{ .Config.Hostname }}' $containerId`
+docker start $containerId
 ```
