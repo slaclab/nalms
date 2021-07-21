@@ -21,6 +21,7 @@ Commands:
   start-grafana [--port grafana_port]
   create-alarm-ioc configuration_file config_name output_directory
   convert-alh alh_file output_filename config_name
+  delete-configurations configuration_name
   list-configurations
   launch-editor
   generate-kafka-certs domain password
@@ -66,6 +67,9 @@ case "$1" in
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
+    ;;
+  delete-configuration|d)
+    . "$CLI_WORKDIR/commands/delete-configuration" "$2"
     ;;
   launch-editor|d)
     . "$CLI_WORKDIR/commands/launch-editor"
