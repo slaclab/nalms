@@ -1,11 +1,13 @@
 FROM centos/python-38-centos7 as build
 
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
+ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
-RUN yum install -y git maven java-11-openjdk-devel && \
+RUN yum install -y git maven ${JAVA_VERSION} && \
     cd /opt && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
@@ -15,10 +17,13 @@ FROM centos/python-38-centos7 as runtime
 
 COPY cli /opt/nalms/cli
 USER root
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-11.0.11.0.9-1.el7_9.x86_64
+
+ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV PATH $JAVA_HOME/bin:$PATH
 
 # general
-RUN yum install -y git maven java-11-openjdk-devel readline libsdc++\
+RUN yum install -y git maven ${JAVA_VERSION} readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     cd /opt/nalms && \
