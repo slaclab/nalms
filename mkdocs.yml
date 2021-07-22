@@ -8,12 +8,12 @@ nav:
   - Components:
       - components.md
       - Kafka: kafka.md
-      - Services: services.md
       - Tools: tools.md
   - Configuration: configuration.md
   - Epics Integration: epics_integration.md
   - Development: development.md
   - Networking: networking.md
+  - Demo: demo.md
 
 theme:
   name: 'material'
