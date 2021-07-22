@@ -1,4 +1,4 @@
-name: Publish Phoebus Alarm Server Docker Image
+name: Publish Kafka Docker Image
 
 on:
   push:
@@ -28,9 +28,9 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./phoebus-alarm-server
+          context: ./kafka
           push: true
-          tags: jgarrahan/nalms-phoebus-alarm-server:latest
+          tags: jgarrahan/nalms-kafka:latest
 # once versioning implemented
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
