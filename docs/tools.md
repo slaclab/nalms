@@ -29,7 +29,7 @@ PyDM dependence will eventually be dropped.
 
 To launch the editor run:
 ```
-$ pydm alarm-tree-editor/editor.py
+$ bash cli/nalms launch-editor
 ```
 
 ## PyDM widgets
