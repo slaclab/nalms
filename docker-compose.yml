@@ -4,7 +4,7 @@ services:
         ports:
             - "2181:2181"
     kafka:
-        image: kafka
+        image: jgarrahan/nalms-kafka:latest
         depends_on: 
             - zookeeper
         ports:
@@ -27,7 +27,7 @@ services:
                 reservations:
                     memory: 8G
     kafka1:
-        image: kafka
+        image: jgarrahan/nalms-kafka:latest
         depends_on: 
             - zookeeper
         ports:
@@ -50,7 +50,7 @@ services:
                 reservations:
                     memory: 8G
     kafka2:
-        image: kafka
+        image: jgarrahan/nalms-kafka:latest
         depends_on: 
             - zookeeper
         ports:
@@ -73,7 +73,7 @@ services:
                 reservations:
                     memory: 8G
     phoebus-alarm-server:
-        image: phoebus-alarm-server
+        image: jgarrahan/nalms-phoebus-alarm-server:latest
         links:
             - kafka
             - example-ioc
@@ -89,7 +89,7 @@ services:
             EPICS_CA_ADDR_LIST: alarm-ioc example-ioc
             ALARM_IOC: "true"
     elasticsearch:
-        image: elasticsearch
+        image: jgarrahan/nalms-elasticsearch:latest
         ports:
             - "9200:9200"
         environment:
@@ -100,7 +100,7 @@ services:
             ES_HOST: localhost
             ES_PORT: 9200
     grafana:
-        build: ./grafana
+        image: jgarrahan/nalms-grafana:latest
         ports:
             - '3000:3000'
         links:
@@ -108,7 +108,7 @@ services:
         volumes:
             - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
     phoebus-alarm-logger:
-        image: phoebus-alarm-logger
+        image: jgarrahan/nalms-phoebus-alarm-logger
         links:
             - elasticsearch
         depends_on:
@@ -121,7 +121,7 @@ services:
             - "./phoebus-alarm-logger/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
-        build: ./examples/heart_of_gold
+        image: jgarrahan/nalms-example-ioc:latest
         image: heart_of_gold
         ports:
             - "5065:5065/tcp"
@@ -131,7 +131,7 @@ services:
         environment:
             EPICS_CA_SERVER_PORT: 5064
     cruise-control:
-        image: cruise-control
+        image: jgarrahan/nalms-cruise-control:latest
         ports: 
             - "9090:9090"
         volumes:
@@ -140,7 +140,7 @@ services:
             - kafka
             - zookeeper
     phoebus-client:
-        image: phoebus-client
+        image: jgarrahan/nalms-phoebus-client:latest
         environment:
             - DISPLAY=host.docker.internal:0
         volumes:
