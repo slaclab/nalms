@@ -16,6 +16,4 @@ Inside the `nalms-phoebus-alarm-server` Docker image, the script: `phoebus-alarm
 
 ## Generation
 
-
-
 Constructed using a template found in `nalms-tools/..`

@@ -30,5 +30,4 @@ Once running, the cruise control dashboard is available at http://localhost:9090
 Operations on the IOC can be performed by running caputs/cagets after attaching to the running container. 
 
 
-
-The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. If started before, may not work
+The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. 
