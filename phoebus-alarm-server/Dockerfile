@@ -1,13 +1,14 @@
 FROM centos/python-38-centos7 as build
 
-ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_BASE java-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
-RUN yum install -y git maven ${JAVA_VERSION} && \
+RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     cd /opt && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
@@ -26,13 +27,14 @@ COPY scripts /opt/nalms/scripts
 
 USER root
 
-ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_BASE java-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
 
 # general
-RUN yum install -y ${JAVA_VERSION}} readline libsdc++\
+RUN yum install -y ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     chmod +x /opt/nalms/cli/cli &&\

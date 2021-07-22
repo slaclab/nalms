@@ -1,11 +1,12 @@
 FROM centos:7 as build
 
-ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_BASE java-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
 
-RUN  yum install -y wget ${JAVA_VERSION}} git && \
+RUN  yum install -y wget ${JAVA_BASE}-devel-${JAVA_VERSION} git && \
     cd /opt && \
     git clone https://github.com/linkedin/cruise-control.git && \
     cd cruise-control && \
@@ -19,15 +20,16 @@ RUN  yum install -y wget ${JAVA_VERSION}} git && \
 
 FROM centos:7 as runtime
 
-ENV JAVA_VERSION java-11-openjdk-11.0.12.0.7-0.el7_9.x86_64
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_VERSION}
+ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
+ENV JAVA_BASE java-11-openjdk
+ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH $JAVA_HOME/bin:$PATH
 
 COPY --from=build ${KAFKA_HOME} $KAFKA_HOME
 COPY --from=build  /opt/cruise-control/cruise-control-metrics-reporter/build/libs/* ${KAFKA_HOME}/libs/
 COPY scripts/start-kafka.sh /opt/kafka/start-kafka.sh
 
-RUN yum install -y java-11-openjdk-devel openssl && \
+RUN yum install -y ${JAVA_BASE}-${JAVA_VERSION} openssl && \
     chmod +x /opt/kafka/start-kafka.sh
 
 EXPOSE 9200 9300
