@@ -33,37 +33,37 @@ Commands:
 
 case "$1" in
   start-alarm-server|d)
-    . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"| tee -ia "$CLI_WORKDIR/start-alarm-server_${2}.log"
+    . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
     ;;
   start-alarm-logger|d)
-    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7" | tee -ia "$CLI_WORKDIR/start-alarm-logger_$2.log"
+    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7"
     ;;
   start-kafka-broker|d)
-    . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" "$6"| tee -ia "$CLI_WORKDIR/start-kafka-broker.log"
+    . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" "$6"
     ;;
   start-zookeeper|d)
-    . "$CLI_WORKDIR/commands/start-zookeeper" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-zookeper.log"
+    . "$CLI_WORKDIR/commands/start-zookeeper" "$2" "$3" 
     ;;
   start-elasticsearch|d)
-    . "$CLI_WORKDIR/commands/start-elasticsearch" "$2" "$3"| tee -ia "$CLI_WORKDIR/start-elasticsearch.log"
+    . "$CLI_WORKDIR/commands/start-elasticsearch" "$2" "$3" 
     ;;
   start-cruise-control|d)
-    . "$CLI_WORKDIR/commands/start-cruise-control" "$2" "$3"| tee -ia "$CLI_WORKDIR/start-cruise-control.log"
+    . "$CLI_WORKDIR/commands/start-cruise-control" "$2" "$3" 
     ;;
   start-phoebus-client|d)
-    . "$CLI_WORKDIR/commands/start-phoebus-client" | tee -ia "$CLI_WORKDIR/start-phoebus-client.log"
+    . "$CLI_WORKDIR/commands/start-phoebus-client" 
     ;;
   start-grafana|d)
-    . "$CLI_WORKDIR/commands/start-grafana" | tee -ia "$CLI_WORKDIR/start-grafana.log"
+    . "$CLI_WORKDIR/commands/start-grafana" 
     ;;
   create-alarm-ioc|d)
-    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4"  | tee -ia "$CLI_WORKDIR/create-alarm-ioc.log"
+    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" 
     ;;
   convert-alh|d)
-    . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" | tee -ia "$CLI_WORKDIR/convert-alh.log"
+    . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" 
     ;;
   generate-kafka-certs|d)
-    . "$CLI_WORKDIR/commands/generate-kafka-certs" "$2" "$3" | tee -ia "$CLI_WORKDIR/generate-kafka-certs.log"
+    . "$CLI_WORKDIR/commands/generate-kafka-certs" "$2" "$3" 
     ;;
   list-configurations|d)
     . "$CLI_WORKDIR/commands/list-configurations"
