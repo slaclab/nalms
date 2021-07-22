@@ -1,9 +1,9 @@
 name: Publish Kafka Docker Image
 
 on:
-  push:
+  merge:
     branches:
-      - setup
+        - main
 
 jobs:
   push_to_registry:
