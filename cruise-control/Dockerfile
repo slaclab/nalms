@@ -10,12 +10,13 @@ COPY gradle.properties /tmp/cruise-control/gradle.properties
 
 WORKDIR /opt
 
+#    && rm gradle.properties \
+#    && cp /tmp/cruise-control/gradle.properties gradle.properties \
+
 RUN yum install -y git ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     git clone https://github.com/linkedin/cruise-control.git \
     && cd cruise-control  \
     && git checkout migrate_to_kafka_2_5 \
-    && rm gradle.properties \
-    && cp /tmp/cruise-control/gradle.properties gradle.properties \
     && ./gradlew jar \
     && rm -rf cruise-control-core cruise-control-metrics-reporter cruise-control-client \
     && rm config/cruisecontrol.properties \
