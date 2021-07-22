@@ -1,4 +1,4 @@
-name: Publish Phoebus Alarm Server Docker
+name: Publish Kafka Docker Image
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Publish Phoebus Alarm Server Docker
+name: Publish Elasticsearch Docker Image
 
 on:
   push:
