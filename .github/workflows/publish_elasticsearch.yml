@@ -1,9 +1,9 @@
 name: Publish Elasticsearch Docker Image
 
 on:
-  merge:
+  push:
     branches:
-        - main
+      - main
 
 jobs:
   push_to_registry:
