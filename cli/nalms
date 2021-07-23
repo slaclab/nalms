@@ -14,10 +14,10 @@ Commands:
   start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]
   start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]
   start-alarm-ioc config_name config_file
-  start-cruise-control [--properties property_file]
+  start-cruise-control
   start-elasticsearch [--port elasticsearch]
   start-kafka-broker [--properties property_file] [--port kafka_port] [--broker_number number]
-  start-phoebus-client [--properties property_file]
+  start-phoebus-client config_name
   start-grafana [--port grafana_port]
   create-alarm-ioc configuration_file config_name output_directory
   convert-alh alh_file output_filename config_name
@@ -48,10 +48,10 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-elasticsearch" "$2" "$3" 
     ;;
   start-cruise-control|d)
-    . "$CLI_WORKDIR/commands/start-cruise-control" "$2" "$3" 
+    . "$CLI_WORKDIR/commands/start-cruise-control" 
     ;;
   start-phoebus-client|d)
-    . "$CLI_WORKDIR/commands/start-phoebus-client" 
+    . "$CLI_WORKDIR/commands/start-phoebus-client" "$2"
     ;;
   start-grafana|d)
     . "$CLI_WORKDIR/commands/start-grafana" 

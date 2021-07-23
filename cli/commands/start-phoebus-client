@@ -5,20 +5,49 @@
 
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-phoebus-client [--properties property_file] "
+  echo "Usage: nalms start-phoebus-client config_name"
   exit 0
 }
 
 
-if [[ -z "$NALMS_CLIENT_PROPERTIES" ]]; then
-  echo "No property file provided for client."
+if [[ -z "$EPICS_CA_ADDR_LIST" ]]; then
+  echo "Channel Access address list not defined."
+  usage
+fi
+
+if [[ -z "$EPICS_CA_REPEATER_PORT" ]]; then
+  echo "Channel Access repeater port not provided."
+  usage
+fi
+
+if [[ -z "$EPICS_CA_SERVER_PORT" ]]; then
+  echo "Channel Access server port not provided."
+  usage
+fi
+
+if [[ -z "$NALMS_ES_HOST" ]]; then
+  echo "Elasticsearch host not provided."
+  usage
+fi
+
+if [[ -z "$NALMS_ES_PORT" ]]; then
+  echo "Elasticsearch port not provided."
+  usage
+fi
+
+if [[ -z "$NALMS_CONFIG_NAME" ]]; then
+  echo "Configuration name not provided."
   usage
 fi
 
 
 docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m 2g \
-  -v $NALMS_CLIENT_PROPERTIES:/opt/phoebus/phoebus.properties \
   -e EPICS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
   -e EPICS_CA_REPEATER_PORT=$EPICS_CA_REPEATER_PORT \
   -e EPICS_CA_SERVER_PORT=$EPICS_CA_SERVER_PORT \
+  -e ES_HOST=$NALMS_ES_HOST \
+  -e ES_PORT=$NALMS_ES_PORT \
+  -e CONFIG_NAME=$CONFIG_NAME \
+  -e KAFKA_HOST=$NALMS_KAFKA_HOST \
+  -e KAFKA_PORT=$NALMS_KAFKA_PORT \
   -d phoebus-client
