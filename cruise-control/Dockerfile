@@ -24,6 +24,8 @@ RUN yum install -y git ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     -o /tmp/cruise-control-ui.tar.gz \
     && tar zxvf /tmp/cruise-control-ui.tar.gz
 
+COPY cruisecontrol.properties /opt/cruise-control/config/cruisecontrol.properties
+
 FROM centos:7 as runtime
 WORKDIR /opt/cruise-control
 
@@ -33,9 +35,11 @@ ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH ${JAVA_HOME}/bin:$PATH
 
 COPY --from=build /opt/cruise-control .
+COPY start-cruise-control.sh /opt/cruise-control
 
 RUN yum -y install ${JAVA_BASE}-${JAVA_VERSION} && \
     yum clean all -y && \
+    chmod +x /opt/cruise-control/start-cruise-control.sh && \
     chmod a+rw -R .
 
-CMD ./kafka-cruise-control-start.sh /opt/cruise-control/config/cruisecontrol.properties
+CMD ./start-cruise-control.sh
