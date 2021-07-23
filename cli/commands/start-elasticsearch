@@ -6,7 +6,7 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-elasticsearch [--port elasticsearch]"
-  echo "Port required, but may be set using the \$NALMS_ELASTICSEARCH_PORT environment variable."
+  echo "Port required, but may be set using the \$NALMS_ES_PORT environment variable."
   exit 0
 }
 
@@ -15,14 +15,14 @@ while test $# -gt 0
 do
     case "$1" in
         --port) 
-          NALMS_ELASTICSEARCH_PORT=$2
+          NALMS_ES_PORT=$2
             ;;
         "")
     esac
     shift
 done
 
-if [[ -z "$NALMS_ELASTICSEARCH_PORT" ]]; then
+if [[ -z "$NALMS_ES_PORT" ]]; then
   echo "No port provided for Elasticsearch."
   usage
 fi
@@ -34,7 +34,7 @@ docker run \
     -e discovery.type=single-node \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
-    -e ES_PORT=9200 \
-    -p "$NALMS_ELASTICSEARCH_PORT:9200" \
+    -e ES_PORT=9200T \
+    -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
     -d elasticsearch

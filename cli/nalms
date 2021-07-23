@@ -12,7 +12,7 @@ NALMS CLI
 Usage: $cli_name [command]
 Commands:
   start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]
-  start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]
+  start-alarm-logger config_name config_file 
   start-alarm-ioc config_name config_file
   start-cruise-control
   start-elasticsearch [--port elasticsearch]
@@ -36,7 +36,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
     ;;
   start-alarm-logger|d)
-    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" "$4" "$5" "$6" "$7"
+    . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" 
     ;;
   start-kafka-broker|d)
     . "$CLI_WORKDIR/commands/start-kafka-broker" "$2" "$3" "$4" "$5" "$6"

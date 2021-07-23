@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 # Author: Jacqueline Garrahan
 #
-# Create tmux sessions and launch alarm services
+# Start alarm logger service
 #
 # Copyright @2021 SLAC National Accelerator Laboratory
-
-EXIT=0
-
 if [ "$1" == "-h" ]; then
   echo "Usage: start-logger config_name config_file"
+  echo "Requires setting \$LOGGING_CONFIG_FILE, \$ALARM_LOGGER_PROPERTIES, \$ALARM_LOGGER_JAR, \$ES_HOST, \$ES_PORT, \$BOOTSTRAP_SERVERS"
   exit 0
 fi
 
@@ -27,10 +25,29 @@ if [[ -z "$ALARM_LOGGER_JAR" ]]; then
   exit 0
 fi
 
+if [[ -z "$ES_HOST" ]]; then
+  echo "Elasticsearch host not defined. Please set \$ES_HOST."
+  exit 0
+fi
 
-export PATH="$JAVA_HOME/bin:$PATH"
+if [[ -z "$ES_PORT" ]]; then
+  echo "Elasticsearch port not defined. Please set \$ES_PORT."
+  exit 0
+fi
+
+if [[ -z "$BOOTSTRAP_SERVERS" ]]; then
+  echo "Bootstrap servers not defined. Please set \$BOOTSTRAP_SERVERS."
+  exit 0
+fi
+
+
 
 CONFIG_NAME=$1
 CONFIG_FILE=$2
+
+sed -i 's/$ES_HOST/'"$ES_HOST/" $ALARM_LOGGER_PROPERTIES
+sed -i 's/$ES_PORT/'"$ES_PORT/" $ALARM_LOGGER_PROPERTIES
+sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" $ALARM_LOGGER_PROPERTIES
+
 
 java -jar $ALARM_LOGGER_JAR -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME -noshell
