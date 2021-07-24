@@ -11,7 +11,7 @@ $cli_name
 NALMS CLI
 Usage: $cli_name [command]
 Commands:
-  start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]
+  start-alarm-server config_name config_file
   start-alarm-logger config_name config_file 
   start-alarm-ioc config_name config_file
   start-cruise-control

@@ -5,7 +5,7 @@
 
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-kafka-broker [--properties property_file] [--port kafka_port] [--broker_number]"
+  echo "Usage: nalms start-kafka-broker [--port kafka_port] [--broker_number]"
   echo "Port and property file required, but may be set using the \$KAFKA_PROPERTIES or \$KAFKA_PORT environment variables."
   exit 0
 }
@@ -16,9 +16,6 @@ BROKER_NUMBER=0
 while test $# -gt 0
 do
     case "$1" in
-        --properties) 
-          NALMS_KAFKA_PROPERTIES=$2
-            ;;
         --port) 
           NALMS_KAFKA_PORT=$2
             ;;
