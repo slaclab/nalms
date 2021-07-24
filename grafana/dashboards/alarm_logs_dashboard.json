@@ -23,7 +23,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "AlarmState",
+      "datasource": "$DATASOURCE_NAME",
       "fieldConfig": {
         "defaults": {
           "color": {},
@@ -137,7 +137,7 @@
       }
     },
     {
-      "datasource": "AlarmState",
+      "datasource": "$DATASOURCE_NAME",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -259,7 +259,7 @@
           "text": "GPP",
           "value": "GPP"
         },
-        "datasource": "AlarmState",
+        "datasource": "$DATASOURCE_NAME",
         "definition": "{\"find\": \"terms\", \"field\": \"pv\"}",
         "description": "Select a PV",
         "error": {
@@ -291,7 +291,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "AlarmLogs",
+  "title": "$DATASOURCE_NAME",
   "uid": "Fd9KpfUGk",
   "version": 4
 }

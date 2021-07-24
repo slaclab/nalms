@@ -57,13 +57,7 @@ show_config() {
 }
 
 
-# Retrieves a dashboard ($1) from the database of dashboards.
-#
-# As we're getting it right from the database, it'll contain an `id`.
-#
-# Given that the ID is potentially different when we import it
-# later, to be make this dashboard importable we make the `id`
-# field NULL.
+# Retrieves a dashboard from the database of dashboards.
 get_dashboard() {
   local dashboard=$1
 
@@ -84,11 +78,6 @@ get_dashboard() {
 
 # lists all the dashboards available.
 #
-# `/api/search` lists all the dashboards and folders
-# that exist under our organization.
-#
-# Here we filter the response (that also contain folders)
-# to gather only the name of the dashboards.
 list_dashboards() {
   curl \
     --silent \
