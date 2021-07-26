@@ -14,7 +14,8 @@ RUN mkdir /var/lib/grafana/dashboards && \
     apk add jq curl &&\
     chmod +x /opt/nalms/start-grafana.sh && \
     chmod +x /opt/nalms/update-dashboards.sh && \
-    chmod +x /opt/nalms/create-datasource-file.sh
+    chmod +x /opt/nalms/create-datasource-file.sh && \
+    grafana-cli plugins install briangann-datatable-panel
 
 ENV DATASOURCE_DIR=/etc/grafana/provisioning/datasources
 ENV DASHBOARD_TEMPLATE=/opt/nalms/alarm_logs_dashboard.json

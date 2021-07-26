@@ -26,7 +26,7 @@ for word in $CONFIG_NAME; do
     echo "    url: http://${ES_HOST}:${ES_PORT}" >> $DATASOURCE_FILE
     echo "    jsonData:" >> $DATASOURCE_FILE
     echo "      esVersion: 60" >> $DATASOURCE_FILE
-    echo "      timeField: \"time\"" >> $DATASOURCE_FILE
+    echo "      timeField: \"message_time\"" >> $DATASOURCE_FILE
     echo "      logMessageField: \"id\"" >> $DATASOURCE_FILE
 
 done
