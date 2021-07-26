@@ -16,6 +16,9 @@ BROKER_NUMBER=0
 while test $# -gt 0
 do
     case "$1" in
+        --properties) 
+          NALMS_KAFKA_PROPERTIES=$2
+            ;;
         --port) 
           NALMS_KAFKA_PORT=$2
             ;;
@@ -46,4 +49,4 @@ docker run -m 8g  \
   -v "${NALMS_KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
   -p "$NALMS_KAFKA_PORT:$NALMS_KAFKA_PORT" \
   --name nalms_kafka_$BROKER_NUMBER \
-  -d kafka
+  -d jgarrahan/nalms-kafka:latest

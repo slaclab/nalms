@@ -32,11 +32,13 @@ if [[ -z "$NALMS_GRAFANA_DATASOURCE_DIR" ]]; then
   usage
 fi
 
-
+            CONFIG_NAME: HeartOfGold
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
 
 docker run \
     -p "$NALMS_GRAFANA_PORT:3000" \
     -v "$NALMS_GRAFANA_DATASOURCE_DIR:/etc/grafana/provisioning/datasources" \
     --name nalms_grafana \
-    -d grafana
+    -d jgarrahan/nalms-grafana:latest
 

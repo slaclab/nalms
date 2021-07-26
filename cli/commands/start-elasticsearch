@@ -37,4 +37,4 @@ docker run \
     -e ES_PORT=9200T \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
-    -d elasticsearch
+    -d jgarrahan/nalms-elasticsearch:latest

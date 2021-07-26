@@ -44,4 +44,4 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e EPICS_CA_ADDR_LIST=$EPICS_PVA_ADDR_LIST \
   -e EPICS_CA_SERVER_PORT=$EPICS_PVA_SERVER_PORT \
   -e EPICS_CA_REPEATER_PORT=$EPICS_PVA_REPEATER_PORT \
-  -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
