@@ -24,6 +24,8 @@ FROM centos/python-38-centos7 as runtime
 COPY cli /opt/nalms/cli
 COPY requirements.txt /opt/nalms/requirements.txt
 COPY scripts /opt/nalms/scripts
+COPY server.properties /opt/nalms/config/alarm_server.properties
+COPY logging.properties /opt/nalms/config/logging.properties
 
 USER root
 

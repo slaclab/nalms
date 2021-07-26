@@ -16,6 +16,8 @@ RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
 
 FROM centos/python-38-centos7 as runtime
 
+COPY logger.properties /opt/nalms/config/alarm_logger.properties
+COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
 USER root
 
@@ -29,7 +31,6 @@ RUN yum install -y git maven ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++\
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     cd /opt/nalms && \
-    mkdir /opt/nalms/config && \
     chmod +x /opt/nalms/cli/cli && \ 
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs

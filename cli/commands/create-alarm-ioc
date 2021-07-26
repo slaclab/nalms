@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Create alarm ioc files for a given configuration_file
+# SLAC specific, for creation of the alarm ioc files for a given configuration
 # Requires nalms-tools to be installed into active python environment
 usage() {
   cli_name=${0##*/}
@@ -31,6 +31,8 @@ else
   OUTPUT_DIR="$3"
 fi
 
+
+# create application
 
 #makeBaseApp.pl -t ioc $CONFIG_NAME
 #makeBaseApp.pl -a rhel6-x86_64 -p $CONFIG_NAME -i -t ioc sioc-nalms-heartofgold

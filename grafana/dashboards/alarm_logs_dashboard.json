@@ -15,71 +15,88 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1621967686949,
+  "id": 2,
+  "iteration": 1627245062536,
   "links": [],
   "panels": [
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "AlarmState",
+      "datasource": "$DATASOURCE_NAME",
       "fieldConfig": {
         "defaults": {
-          "color": {},
-          "custom": {},
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": []
-          },
-          "unit": "short"
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 8,
         "w": 23,
         "x": 0,
         "y": 0
       },
-      "hiddenSeries": false,
-      "id": 6,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
+      "id": 4,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "7.4.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
           "alias": "",
           "bucketAggs": [
             {
+              "field": "message_time",
               "id": "2",
               "settings": {
-                "interval": "auto",
-                "min_doc_count": "0",
-                "trimEdges": "0"
+                "interval": "auto"
               },
               "type": "date_histogram"
             }
@@ -90,164 +107,228 @@
               "type": "count"
             }
           ],
-          "query": "pv:$pv",
+          "query": "_type: alarm_config",
+          "queryType": "randomWalk",
           "refId": "A",
-          "timeField": "time"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Panel Title",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "timeField": "message_time"
         },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "datasource": "AlarmState",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": true
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "message_time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 339
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 21,
-        "w": 23,
-        "x": 0,
-        "y": 6
-      },
-      "id": 2,
-      "options": {
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "7.4.2",
-      "targets": [
         {
           "alias": "",
           "bucketAggs": [
             {
-              "id": "1",
+              "field": "message_time",
+              "id": "2",
               "settings": {
-                "interval": "1000",
-                "min_doc_count": "0"
+                "interval": "auto"
               },
-              "type": "histogram"
+              "type": "date_histogram"
             }
           ],
           "hide": false,
           "metrics": [
             {
               "id": "1",
-              "type": "logs"
+              "type": "count"
             }
           ],
-          "query": "pv:$pv\n",
-          "refId": "A",
-          "timeField": "time"
+          "query": "_type: alarm",
+          "refId": "B",
+          "timeField": "message_time"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Panel Title",
+      "title": "Alarm Events",
+      "type": "timeseries"
+    },
+    {
+      "alignNumbersToRightEnabled": true,
+      "columnAliases": [
+        {
+          "$$hashKey": "object:192",
+          "alias": "path",
+          "name": "config"
+        }
+      ],
+      "columnFiltersEnabled": false,
+      "columnWidthHints": [],
+      "columns": [],
+      "compactRowsEnabled": false,
+      "datasource": "$DATASOURCE_NAME",
+      "datatablePagingType": "simple_numbers",
+      "datatableTheme": "basic_theme",
+      "emptyData": false,
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 14,
+        "w": 23,
+        "x": 0,
+        "y": 8
+      },
+      "hoverEnabled": true,
+      "id": 2,
+      "infoEnabled": true,
+      "lengthChangeEnabled": true,
+      "orderColumnEnabled": true,
+      "pagingTypes": [
+        {
+          "$$hashKey": "object:92",
+          "text": "Page number buttons only",
+          "value": "numbers"
+        },
+        {
+          "$$hashKey": "object:93",
+          "text": "'Previous' and 'Next' buttons only",
+          "value": "simple"
+        },
+        {
+          "$$hashKey": "object:94",
+          "text": "'Previous' and 'Next' buttons, plus page numbers",
+          "value": "simple_numbers"
+        },
+        {
+          "$$hashKey": "object:95",
+          "text": "'First', 'Previous', 'Next' and 'Last' buttons",
+          "value": "full"
+        },
+        {
+          "$$hashKey": "object:96",
+          "text": "'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers",
+          "value": "full_numbers"
+        },
+        {
+          "$$hashKey": "object:97",
+          "text": "'First' and 'Last' buttons, plus page numbers",
+          "value": "first_last_numbers"
+        }
+      ],
+      "panelHeight": 388,
+      "rowNumbersEnabled": false,
+      "rowsPerPage": 10,
+      "scroll": false,
+      "scrollHeight": "default",
+      "searchEnabled": true,
+      "searchHighlightingEnabled": false,
+      "showCellBorders": false,
+      "showHeader": true,
+      "showRowBorders": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "sortByColumns": [
+        {
+          "$$hashKey": "object:30",
+          "columnData": 0,
+          "sortMethod": "desc"
+        }
+      ],
+      "sortByColumnsData": [
+        [
+          0,
+          "desc"
+        ]
+      ],
+      "stripedRowsEnabled": true,
+      "styles": [
+        {
+          "$$hashKey": "object:32",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "$$hashKey": "object:33",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "splitPattern": "/ /",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [],
+          "metrics": [
+            {
+              "id": "1",
+              "settings": {
+                "size": "500"
+              },
+              "type": "raw_data"
+            }
+          ],
+          "query": "",
+          "queryType": "randomWalk",
+          "refId": "A",
+          "timeField": "message_time"
+        }
+      ],
+      "themeOptions": {
+        "dark": "./styles/dark.scss",
+        "light": "./styles/light.scss"
+      },
+      "themes": [
+        {
+          "$$hashKey": "object:67",
+          "disabled": false,
+          "text": "Basic",
+          "value": "basic_theme"
+        },
+        {
+          "$$hashKey": "object:68",
+          "disabled": true,
+          "text": "Bootstrap",
+          "value": "bootstrap_theme"
+        },
+        {
+          "$$hashKey": "object:69",
+          "disabled": true,
+          "text": "Foundation",
+          "value": "foundation_theme"
+        },
+        {
+          "$$hashKey": "object:70",
+          "disabled": true,
+          "text": "ThemeRoller",
+          "value": "themeroller_theme"
+        }
+      ],
+      "title": "Alarm Event Logs",
+      "transform": "table",
       "transformations": [
         {
-          "id": "organize",
+          "id": "filterFieldsByName",
           "options": {
-            "excludeByName": {
-              "_id": true,
-              "_index": true,
-              "_source": true,
-              "_type": true,
-              "message_time": false,
-              "mode": true,
-              "notify": true,
-              "sort": true,
-              "time": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "time": ""
+            "include": {
+              "names": [
+                "message_time",
+                "_type",
+                "config",
+                "current_message",
+                "current_severity",
+                "enabled",
+                "host",
+                "latch",
+                "pv",
+                "user",
+                "value"
+              ]
             }
           }
         }
       ],
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 27
-      },
-      "id": 4,
-      "title": "Row title",
-      "type": "row"
+      "type": "briangann-datatable-panel"
     }
   ],
-  "refresh": false,
-  "schemaVersion": 27,
+  "refresh": "",
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -256,42 +337,35 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "GPP",
-          "value": "GPP"
+          "text": "alarm",
+          "value": "alarm"
         },
-        "datasource": "AlarmState",
-        "definition": "{\"find\": \"terms\", \"field\": \"pv\"}",
-        "description": "Select a PV",
-        "error": {
-          "error": "Bad Gateway",
-          "message": "Elasticsearch error: undefined"
-        },
+        "datasource": "$DATASOURCE_NAME",
+        "definition": "{\"find\": \"terms\", \"field\": \"_type\"}",
+        "description": null,
+        "error": null,
         "hide": 0,
-        "includeAll": true,
-        "label": "pv",
+        "includeAll": false,
+        "label": null,
         "multi": false,
-        "name": "pv",
+        "name": "event_type",
         "options": [],
-        "query": "{\"find\": \"terms\", \"field\": \"pv\"}",
+        "query": "{\"find\": \"terms\", \"field\": \"_type\"}",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "AlarmLogs",
-  "uid": "Fd9KpfUGk",
-  "version": 4
+  "title": "$DATASOURCE_NAME",
+  "uid": "ZDFkpxW7k",
+  "version": 6
 }

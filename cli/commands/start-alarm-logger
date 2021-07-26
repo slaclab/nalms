@@ -5,7 +5,8 @@
 #
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-alarm-logger config_name config_file [--properties logger_properties] [--logging_properties logging_config]"
+  echo "Usage: nalms start-alarm-logger config_name config_file "
+  echo "Requires definition of \$NALMS_ES_HOST, \$NALMS_ES_PORT, \$NALMS_BOOTSTRAP_SERVERS"
   exit 0
 }
 
@@ -25,28 +26,20 @@ else
   CONFIG_FILE="$2"
 fi
 
-# parse optional items
-while test $# -gt 0
-do
-    case "$1" in
-        --properties) 
-          NALMS_ALARM_LOGGER_PROPERTIES=$2
-            ;;
-        --logging_properties) 
-          NALMS_LOGGING_PROPERTIES=$2
-            ;;
-        "")
-    esac
-    shift
-done
 
-if [[ -z "$NALMS_ALARM_LOGGER_PROPERTIES" ]]; then
-  echo "No property file provided for alarm logger."
+
+if [[ -z "$NALMS_ES_HOST" ]]; then
+  echo "Elasticsearch host not provided."
   usage
 fi
 
-if [[ -z "$NALMS_LOGGING_PROPERTIES" ]]; then
-  echo "No property file provided for logging."
+if [[ -z "$NALMS_ES_PORT" ]]; then
+  echo "Elasticsearch port not provided."
+  usage
+fi
+
+if [[ -z "$NALMS_BOOTSTRAP_SERVERS" ]]; then
+  echo "Bootstrap servers not provided."
   usage
 fi
 
@@ -57,7 +50,8 @@ if [ "$1" == "-h" ]; then
 fi
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
-  -v $NALMS_ALARM_LOGGER_PROPERTIES:/opt/nalms/config/alarm_logger.properties \
-  -v $NALMS_LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
+  -e ES_HOST=$NALMS_ES_HOST \
+  -e ES_PORT=$NALMS_ES_PORT \ 
+  -e BOOTSTRAP_SERVERS=$NALMS_BOOTSTRAP_SERVERS \
   --name nalms_logger_$CONFIG_NAME \
   -d phoebus-alarm-logger start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

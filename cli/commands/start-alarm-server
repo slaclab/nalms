@@ -4,7 +4,7 @@
 # Run phoebus-alarm-server image for given configuration
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-alarm-server config_name config_file [--properties server_properties] [--logging_properties logging_config]"
+  echo "Usage: nalms start-alarm-server config_name config_file"
   exit 0
 }
 
@@ -24,30 +24,8 @@ else
   CONFIG_FILE="$2"
 fi
 
-# parse optional items
-while test $# -gt 0
-do
-    case "$1" in
-        --properties) 
-          NALMS_ALARM_SERVER_PROPERTIES=$2
-            ;;
-        --logging_properties) 
-          NALMS_LOGGING_PROPERTIES=$2
-            ;;
-        --kafka_bootstrap) 
-          NALMS_KAFKA_BOOTSTRAP=$2
-            ;;
-        "")
-    esac
-    shift
-done
 
-if [[ -z "$NALMS_ALARM_SERVER_PROPERTIES" ]]; then
-  echo "No property file provided for alarm server."
-  usage
-fi
-
-if [[ -z "$NALMS_LOGGING_PROPERTIES" ]]; then
+if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
   echo "No property file provided for logging."
   usage
 fi
@@ -57,10 +35,13 @@ fi
             ALARM_IOC: "true"
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
-  -v $NALMS_ALARM_SERVER_PROPERTIES:/opt/nalms/config/alarm_server.properties \
-  -v $NALMS_LOGGING_PROPERTIES:/opt/nalms/config/logging.properties \
   --name nalms_logger_$CONFIG_NAME \
   -e ALARM_IOC=true \
   -e KAFKA_BOOTSTRAP=$KAFKA_BOOTSTRAP \
-  -e EPCIS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
+  -e EPICS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
+  -e EPICS_CA_SERVER_PORT=$EPICS_CA_SERVER_PORT \
+  -e EPICS_CA_REPEATER_PORT=$EPICS_CA_REPEATER_PORT \
+  -e EPICS_CA_ADDR_LIST=$EPICS_PVA_ADDR_LIST \
+  -e EPICS_CA_SERVER_PORT=$EPICS_PVA_SERVER_PORT \
+  -e EPICS_CA_REPEATER_PORT=$EPICS_PVA_REPEATER_PORT \
   -d -t phoebus-alarm-server start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
