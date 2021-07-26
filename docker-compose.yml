@@ -1,6 +1,6 @@
 services:
     zookeeper:
-        image: wurstmeister/zookeeper
+        image: jgarrahan/nalms-zookeeper:latest
         ports:
             - "2181:2181"
     kafka:
@@ -16,7 +16,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./kafka/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -39,7 +39,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka1:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19093
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./kafka/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -62,7 +62,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka2:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19094
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./kafka/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -81,13 +81,13 @@ services:
             - kafka
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
-            - "./phoebus-alarm-server/config/alarm_server.properties:/opt/nalms/config/alarm_server.properties"
-            - "./phoebus-alarm-server/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-server HeartOfGold /tmp/nalms/heart_of_gold.xml
         environment:
             KAFKA_BOOTSTRAP: kafka:9092
-            EPICS_CA_ADDR_LIST: alarm-ioc example-ioc
+            EPICS_CA_ADDR_LIST: "alarm-ioc example-ioc"
             ALARM_IOC: "true"
+            EPICS_CA_SERVER_PORT: 5064
+            EPICS_CA_REPEATER_PORT: 5065
     elasticsearch:
         image: jgarrahan/nalms-elasticsearch:latest
         ports:
@@ -99,26 +99,32 @@ services:
             ES_JAVA_OPTS: "-Xms128m -Xmx128m"
             ES_HOST: localhost
             ES_PORT: 9200
+            KAFKA_HOST: kafka
+            KAFKA_PORT: 9092
     grafana:
         image: jgarrahan/nalms-grafana:latest
         ports:
             - '3000:3000'
         links:
             - elasticsearch
-        volumes:
-            - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+        environment: 
+            CONFIG_NAME: HeartOfGold
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
     phoebus-alarm-logger:
-        image: jgarrahan/nalms-phoebus-alarm-logger
+        image: jgarrahan/nalms-phoebus-alarm-logger:latest
         links:
             - elasticsearch
         depends_on:
             - elasticsearch
             - kafka
             - phoebus-alarm-server
+        environment:
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
+            BOOTSTRAP_SERVERS: kafka:9092,kafka1:9092,kafka2:9092
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
-            - "./phoebus-alarm-logger/config/alarm_logger.properties:/opt/nalms/config/alarm_logger.properties"
-            - "./phoebus-alarm-logger/config/logging.properties:/opt/nalms/config/logging.properties"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
         image: jgarrahan/nalms-example-ioc:latest
@@ -134,18 +140,23 @@ services:
         image: jgarrahan/nalms-cruise-control:latest
         ports: 
             - "9090:9090"
-        volumes:
-            - "./cruise-control/cruisecontrol.properties:/opt/cruise-control/config/cruisecontrol.properties"
+        environment:
+            BOOTSTRAP_SERVERS: kafka:9092,kafka1:9092,kafka2:9092
+            ZOOKEEPER_CONNECT: zookeeper:2181
         links: 
             - kafka
             - zookeeper
     phoebus-client:
-        image: jgarrahan/nalms-phoebus-client:latest
+        image: nalms-phoebus-client
         environment:
-            - DISPLAY=host.docker.internal:0
+            DISPLAY: host.docker.internal:0
+            ES_HOST: elasticsearch
+            ES_PORT: 9200
+            CONFIG_NAME: HeartOfGold
+            KAFKA_HOST: kafka
+            KAFKA_PORT: 9092
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix
-            - ./phoebus-client/phoebus.properties:/opt/phoebus/phoebus.properties
         depends_on:
             - kafka
             - elasticsearch

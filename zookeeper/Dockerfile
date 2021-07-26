@@ -13,10 +13,6 @@ RUN  yum install -y wget openssh-server ${JAVA_BASE}-${JAVA_VERSION} && \
     wget -q https://downloads.apache.org/zookeeper/KEYS && \
     wget -q https://downloads.apache.org/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}.tar.gz.asc && \
     wget -q https://downloads.apache.org/zookeeper/zookeeper-${ZOOKEEPER_VERSION}/apache-zookeeper-${ZOOKEEPER_VERSION}.tar.gz.sha512 && \
-    RUN echo 'root:jgarrahan' | chpasswd && \
-    mkdir /var/run/sshd && \
-    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
 
 #Verify download
 RUN gpg --import KEYS && \
