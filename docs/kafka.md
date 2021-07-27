@@ -40,7 +40,7 @@ Temp
 
 ```
 
-The Kafka configuration for the PV would be represented by the key `config:/Temp/KLYS/KLYS:LI23:11/KLYS:LI23:11:DL_WG`. Associated values are JSON representations of the associated values. Representations for alarm tree leaves and nodes are outlined below. Undefined elements are omitted in practice.
+The Kafka configuration message for the PV would be keyed by the string `config:/Temp/KLYS/KLYS:LI23:11/KLYS:LI23:11:DL_WG`. Associated values are JSON representations of the associated values. Representations for alarm tree leaves and nodes are outlined below. Undefined elements are omitted in practice.
 
 ### Alarm leaf configuration
 

@@ -27,6 +27,8 @@ $ bash cli/nalms generate-kafka-certs domain password
 ```
 This utility might be decomposed further into truststore/keystore/key passwords. The appropriate keystore will then be mounted to the docker volume at `/opt/kafka/ssl`. Keys for each broker will need to be added to the respective trust stores of each broker node.Documentation on SSL for Kafka may be found [here](https://kafka.apache.org/documentation/#security_ssl).
 
+Instructions for configuring the Kafka truststore may be found [here](https://docs.confluent.io/platform/current/kafka/authentication_ssl.html)
+
 # Phoebus
 
 The Phoebus alarm server and logger to not accomodate SSL/TLS out of the box and will require development. The workflow that must be changed to accomodate SSL on the Phoebus side can be found in the following file: 
