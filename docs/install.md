@@ -1,99 +1,46 @@
 # Installation
 
-These installation documents have been written only for RHEL7 deployments. This same system can be configured for other deployments; however, the source materials should be consulted for installation details. The Dockerfiles inside this repository should serve as a guide for these deployments. 
+The NALMS system has been written for deployment as a set of Docker images, allowing for the distribution of services across network hosts configurable via environment variables and mounted volumes. In the case that containers aren't favorable, the Dockerfiles inside this repository should serve as a guide for these deployments and component source materials should be consulted for installation details.
 
-Requirements
-- Kafka
-- Elasticsearch
-- tmux
-- Cruise Control
+The current NALMS iteration consists of the following Dockerhub hosted containers:
 
 
+### jgarrahan/nalms-zookeeper
+* Zookeeper 3.5.9
+
+### jgarrahan/nalms-kafka
+* Kafka 2.7.0 configured with cruise-control metrics reporter 
+* SSL configurable (see [networking](networking.md))
+
+### jgarrahan/nalms-phoebus-alarm-server
+* Phoebus alarm server (built from HEAD of main branch)
+* Python script for monitoring Kafka topics updating [alarm IOC](epics_integration.md) with bypasses and acknowledgments
+
+### jgarrahan/nalms-phoebus-alarm-logger
+* Phoebus alarm logger (built from HEAD of main branch)
+
+### jgarrahan/nalms-elasticsearch
+* Elasticsearch service (6.8.16)
+* Script for templating of Alarm indices
+
+### jgarrahan/nalms-grafana
+* Grafana service (7.3.0-beta1)
+* Template Grafana dashboard for any configuration
+* Can be launched with multiple configurations as a comma separated list
+* Automatic generation of elasticsearch datasources based on network configs and configuration names
+
+### jgarrahan/nalms-cruise-control
+* LinkendIn's Cruise Control monitor for Kafka clusters (built from HEAD of branch migrate_to_kafka_2_5, which is compatible with Kafka 2.7.0) 
+* Cruise Control web UI
+
+### jgarrahan/nalms-phoebus-client
+* CS-Studio's Phoebus client tool built for use with only alarm services
+
+## Download Images
+Images may be downloaded from Dockerhub on a machine with Docker installed using the command (nalms-kafka here for example):
 ```
-$ git clone nalms
+$ docker pull jgarrahan/nalms-kafka:latest
 ```
-
-## Environment variables
-
-The installation depends on properly configured environment variables for EPICS specifications and configuration paths. The following variables must be defined during the execution of `install.sh`.
-
-| Variable                 | Description                                                   |
-|--------------------------|---------------------------------------------------------------|
-| NALMS_HOME               | Path to NALMS installation                                    |
-| KAKFA_HOME               | Path to Kafka installation                                    |
-| EPICS_CA_AUTO_ADDR_LIST  | Enable network interface introspection                        |
-| EPICS_CA_ADDR_LIST       | Destination addresses for CA client name resolution requests  |
-| EPICS_CA_REPEATER_PORT   | UDP port for server beacon initialization                     |
-| EPICS_CA_SERVER_PORT     | Port number for server                                        |
-| ZOOKEEPER_HOST           | Zookeeper host and port number                                |
-| NALMS_LOG_PATH           | Path for java logging                                         |
-| JAVA_HOME                | File system path of JDK installation                          |
-| NALMS_ENV                | dev/prod                                                      |
-| KAFKA_BOOTSTRAP          | Address of Kakfa bootstrap node                               |
-| ELASTICSEARCH_HOME       | Path to Elasticsearch installation                            |
-| ELASTICSEARCH_LOG_DIR    | Path to the Elasticsearch log directory                       |
-| ELASTICSEARCH_DATA_DIR   | Path to the ELasticsearch data directory                      |
-| KAFKA_PROPERTIES         | Path to the Kafka properties file                             |
-| ZOOKEEPER_PROPERTIES     | Path to the Zookeeper properties file                         |
-
-
-Details of the scripts relevant to developers are listed below:
-
-## Build
-
-The build script creates all configuration artifacts and stores them in the `/tmp/nalms` directory. The build script may be used to build a subset of services by specifying via `--elasticsearch`, `--kafka`, `--zookeeper`.
-
-
-```
-$ sudo -E bash scripts/build.sh
-``` 
-
-## Install
-
-Installation handles the creation of appropriate roles, builds and deploys relevant systemd files. The install script may be used to build a subset of services by specifying via `--elasticsearch`, `--kafka`, `--zookeeper`.
-
-
-```
-sudo -E bash install.sh
-``` 
-
-
-### Elasticsearch
-
-Because elasticsearch should not be run as root, a designated user is created during the installation `elasticsearch`.
-Permissions to the elasticsearch log and data directories are assigned to this newly created user when the installation is executed. 
-
-### Phoebus Alarm Logger and Alarm Server
-
-The Phoebus alarm tools may be downloaded from latest release, or built locally with OpenJDK >= 11 and maven using the following:
-
-```
-$ git clone https://github.com/ControlSystemStudio/phoebus.git
-$ cd phoebus
-$ mvn install -pl services/alarm-server -am
-$ mvn install -pl services/alarm-logger -am
-```
-
-Once installed, the `ALARM_SERVER_JAR` and `ALARM_LOGGER_JAR` environment variables should be set to point to the files in `phoebus/services/alarm-server/target/` and `phoebus/services/alarm-logger/target/`, respectively. 
-
-
-## Kafka
-
-The Kafka binaries can be downloaded from the official Kafka site [here](https://kafka.apache.org/downloads). In order to use Cruise Control with Kafka, the built jar for the metrics reporter must be moved into the `libs` directory inside the top Kafka folder.
-
-```
-$ git clone https://github.com/linkedin/cruise-control.git
-$ cd cruise-control
-$ git checkout migrate_to_kafka_2_5
-$ ./gradlew jar :cruise-control:jar 
-$ cp cruise-control-metrics-reporter/build/libs/* $KAFKA_HOME/libs/
-```
-
-## Cruise Control
-Cruise Control must be built alongside its UI:
-
-```
-$ curl -L https://github.com/linkedin/cruise-control-ui/releases/download/v0.1.0/cruise-control-ui.tar.gz -o /tmp/cruise-control-ui.tar.gz 
-$ tar zxvf /tmp/cruise-control-ui.tar.gz
-```
+## Deploy
+After pulling the latest image, it is recommended to use the [CLI](cli.md) for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described [here](configuration.md).
 

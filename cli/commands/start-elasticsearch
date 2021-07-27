@@ -34,7 +34,7 @@ docker run \
     -e discovery.type=single-node \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
-    -e ES_PORT=9200T \
+    -e ES_PORT=9200 \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
-    -d elasticsearch
+    -d jgarrahan/nalms-elasticsearch:latest

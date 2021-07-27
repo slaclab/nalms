@@ -8,6 +8,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 USER root
 
 COPY pom.xml /opt/nalms/pom.xml
+COPY client.properties /opt/nalms/client.properties
 
 # install phoebus
 RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \

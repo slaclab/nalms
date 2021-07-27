@@ -50,4 +50,5 @@ docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m
   -e CONFIG_NAME=$CONFIG_NAME \
   -e KAFKA_HOST=$NALMS_KAFKA_HOST \
   -e KAFKA_PORT=$NALMS_KAFKA_PORT \
-  -d phoebus-client
+  --name nalms-phoebus-client \
+  -d jgarrahan/nalms-phoebus-client:latest

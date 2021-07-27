@@ -4,11 +4,13 @@ NALMS is an alarm system application designed for availability, integrability, a
 
 # Docker
 
-This repository is packaged with tools for Docker based deployment. There are several reasons containerization is an advantageous:
+This repository is packaged with tools for Docker based deployment. There are several reasons containerization is an advantageous:  
+
 * The Kafka brokers may be straighforwardly deployed and the cluster scaled. Configurations are therefore transferable and port exposures may be configured directly on the Docker deployment.
 * Contained applications may run in parallel, facilitating blue/green deployment workflows. 
 
 This docker application consists of the following containers:
+
 * Zookeeper
 * Kafka
 * Phoebus Alarm Server
@@ -19,15 +21,11 @@ This docker application consists of the following containers:
 * Cruise Control
 * Alarm IOC
 
-To run, build each of the respective images in the subdirectories (examples/heart_of_gold for the IOC) with the appropriate labels. Then, run:
-
+Docker-compose may be used to run a packaged example with all components.
 ```
 $ docker-compose up
 ```
 
-Once running, the cruise control dashboard is available at http://localhost:9090, and the grafana alarm log dashboard is available at http://localhost:3000. To access the alarm log dashboard, log in using the grafana default accounts, username: admin, password: admin. 
+Once running, the cruise control dashboard is available at http://localhost:9090, and the grafana alarm log dashboard is available at http://localhost:3000. To access the alarm log dashboard, log in using the grafana default accounts, username: admin, password: admin. The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. 
 
 Operations on the IOC can be performed by running caputs/cagets after attaching to the running container. 
-
-
-The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. 

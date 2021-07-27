@@ -54,4 +54,4 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ES_PORT=$NALMS_ES_PORT \ 
   -e BOOTSTRAP_SERVERS=$NALMS_BOOTSTRAP_SERVERS \
   --name nalms_logger_$CONFIG_NAME \
-  -d phoebus-alarm-logger start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
