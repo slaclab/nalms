@@ -1,11 +1,9 @@
 # Converting from ALH
 
-The ALH -> Phoebus Python (>=3.7) conversion tool is handled by a package currently defined in the `phoebus-alarm-services/tools` directory; however, long-term development goals (modularity) warrant the conversion into a full python package. 
-
-These tools may be install within this repository...
+The ALH -> Phoebus Python (>=3.7) conversion tool is handled by a package currently defined in the `nalms-tools` directory. 
 
 ```
-$ cd phoebus-alarm-services
+$ cd nalms-tools
 $ pip install -e .
 ```
 

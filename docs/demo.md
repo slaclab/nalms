@@ -35,7 +35,7 @@ Set up Kafka cluster (from repo root):
 ```
 $ cd - 
 $ bash cli/nalms start-zookeeper 
-$ bash cli/nalms start-kafka-broker
+$ bash cli/nalms start-kafka-broker --broker 0
 ```
 
 Start cruise-control:
@@ -45,7 +45,7 @@ $ bash cli/nalms start-cruise-control
 Navigate to [http://localhost:9090](http://localhost:9090) to view the Cruise Control interface and monitors of the Kafka cluster. 
 
 
-Start the Phoebus alarm server: (Note: launch requires the absolute path for docker volume mount)
+Start the Phoebus alarm server: (Note: launch requires the absolute path of the configuration file for docker volume mount)
 
 
 ```
@@ -66,7 +66,7 @@ $ bash cli/nalms start-alarm-logger Demo $(pwd)/examples/demo/demo.xml
 
 Launch the Phoebus client:
 ```
-$ bash cli/nalms start-phoebus-client
+$ bash cli/nalms start-phoebus-client Demo
 ```
 
 Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. 
