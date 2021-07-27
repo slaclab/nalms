@@ -10,10 +10,11 @@ nav:
       - Kafka: kafka.md
       - Tools: tools.md
   - Configuration: configuration.md
-  - Epics Integration: epics_integration.md
+  - EPICS Integration: epics_integration.md
   - Development: development.md
   - Networking: networking.md
   - Demo: demo.md
+  - CLI: cli.md
 
 theme:
   name: 'material'
