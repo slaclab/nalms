@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # Author: Jacqueline Garrahan
-# Run elasticsearch instance
+# Run grafana instance
 
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-grafana [--port grafana_port]"
-  echo "Port required, but may be set using the \$GRAFANA_PORT environment variable."
+  echo "Usage: nalms start-grafana [--port grafana_port] [--config config_name]"
+  echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_CONFIGURATIONS, \$NALMS_ES_HOST, \$NALMS_ES_PORT"
   exit 0
 }
 
@@ -16,6 +16,9 @@ do
     case "$1" in
         --port) 
           NALMS_GRAFANA_PORT=$2
+            ;;
+        --config) 
+          NALMS_CONFIGURATIONS=$2
             ;;
         "")
     esac
@@ -27,18 +30,27 @@ if [[ -z "$NALMS_GRAFANA_PORT" ]]; then
   usage
 fi
 
-if [[ -z "$NALMS_GRAFANA_DATASOURCE_DIR" ]]; then
-  echo "No datasource provided for Grafana."
+if [[ -z "$NALMS_CONFIGURATIONS" ]]; then
+  echo "No configurations provided to launch Grafana."
   usage
 fi
 
-            CONFIG_NAME: HeartOfGold
-            ES_HOST: elasticsearch
-            ES_PORT: 9200
+if [[ -z "$NALMS_ES_HOST" ]]; then
+  echo "Elasticsearch host not defined."
+  usage
+fi
+
+
+if [[ -z "$NALMS_ES_PORT" ]]; then
+  echo "Elasticsearch port not defined."
+  usage
+fi
 
 docker run \
     -p "$NALMS_GRAFANA_PORT:3000" \
-    -v "$NALMS_GRAFANA_DATASOURCE_DIR:/etc/grafana/provisioning/datasources" \
+    -e ES_HOST=$NALMS_ES_HOST \
+    -e ES_PORT=$NALMS_ES_PORT \
+    -e CONFIG_NAME=$NALMS_CONFIGURATIONS \
     --name nalms_grafana \
     -d jgarrahan/nalms-grafana:latest
 

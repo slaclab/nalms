@@ -6,7 +6,7 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-zookeeper [--port zookeeper_port]"
-  echo "Port required, but may be set using the \$ZOOKEEPER_PORT environment variable."
+  echo "Port required, but may be set using the \$NALMS_ZOOKEEPER_PORT environment variable."
   exit 0
 }
 
@@ -29,4 +29,4 @@ if [[ -z "$NALMS_ZOOKEEPER_PORT" ]]; then
 fi
 
 
-docker run -p "$NALMS_ZOOKEEPER_PORT:2181" --name nalms_zookeeper -d wurstmeister/zookeeper
+docker run -p "$NALMS_ZOOKEEPER_PORT:2181" --name nalms_zookeeper -d jgarrahan/nalms-zookeeper
