@@ -5,7 +5,7 @@
 
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-kafka-broker [--port kafka_port] [--broker_number]"
+  echo "Usage: nalms start-kafka-broker [--port kafka_port] [--broker broker_number]"
   echo "Port and property file required, but may be set using the \$KAFKA_PROPERTIES or \$KAFKA_PORT environment variables."
   exit 0
 }
@@ -36,6 +36,11 @@ if [[ -z "$NALMS_KAFKA_PROPERTIES" ]]; then
 fi
 
 if [[ -z "$NALMS_KAFKA_PORT" ]]; then
+  echo "No port provided for Kafka server."
+  usage
+fi
+
+if [[ -z "$BROKER_NUMBER" ]]; then
   echo "No port provided for Kafka server."
   usage
 fi

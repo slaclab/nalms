@@ -9,6 +9,8 @@ usage() {
   exit 0
 }
 
+NALMS_CONFIG_NAME=$1
+
 
 if [[ -z "$EPICS_CA_ADDR_LIST" ]]; then
   echo "Channel Access address list not defined."
@@ -47,8 +49,8 @@ docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m
   -e EPICS_CA_SERVER_PORT=$EPICS_CA_SERVER_PORT \
   -e ES_HOST=$NALMS_ES_HOST \
   -e ES_PORT=$NALMS_ES_PORT \
-  -e CONFIG_NAME=$CONFIG_NAME \
+  -e CONFIG_NAME=$NALMS_CONFIG_NAME \
   -e KAFKA_HOST=$NALMS_KAFKA_HOST \
   -e KAFKA_PORT=$NALMS_KAFKA_PORT \
-  --name nalms-phoebus-client \
+  --name nalms-zookeeper \
   -d jgarrahan/nalms-phoebus-client:latest

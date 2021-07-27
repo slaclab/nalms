@@ -38,7 +38,7 @@ if [[ -z "$NALMS_ES_PORT" ]]; then
   usage
 fi
 
-if [[ -z "$NALMS_BOOTSTRAP_SERVERS" ]]; then
+if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
   echo "Bootstrap servers not provided."
   usage
 fi
@@ -51,7 +51,7 @@ fi
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ES_HOST=$NALMS_ES_HOST \
-  -e ES_PORT=$NALMS_ES_PORT \ 
-  -e BOOTSTRAP_SERVERS=$NALMS_BOOTSTRAP_SERVERS \
+  -e ES_PORT=$NALMS_ES_PORT \
+  -e BOOTSTRAP_SERVERS=$NALMS_KAFKA_BOOTSTRAP \
   --name nalms_logger_$CONFIG_NAME \
   -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
