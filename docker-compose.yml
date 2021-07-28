@@ -147,7 +147,7 @@ services:
             - kafka
             - zookeeper
     phoebus-client:
-        image: nalms-phoebus-client
+        image: jgarrahan/nalms-phoebus-client:latest
         environment:
             DISPLAY: host.docker.internal:0
             ES_HOST: elasticsearch
