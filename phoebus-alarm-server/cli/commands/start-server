@@ -44,7 +44,7 @@ sed -i 's/$EPICS_CA_SERVER_PORT/'"$EPICS_CA_SERVER_PORT/" $ALARM_SERVER_PROPERTI
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
-if [[ ! "$ALARM_IOC" = true ]]; then
+if [[ "$ALARM_IOC" = true ]]; then
   python /opt/nalms/scripts/update_ioc.py $CONFIG_NAME $KAFKA_BOOTSTRAP &
 fi
 

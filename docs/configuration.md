@@ -20,10 +20,8 @@ PV tags accept specifications for enabling, latching, annunciating, description,
 | description              | Text displayed in the alarm table when the alarm is triggered                             |
 | delay                    | Alarm will be triggered if the PV remains in alarm for at least this time                 |
 | enabled                  | If false, ignore the value of this PV                                                     | 
-| latching                 | Alarms will latch to the highest severity until the alarm is acknowledged and cleared.    |
-|                          | If false, alarm may recover without requiring acknowledgment                              |
-| count                    | If the trigger PV exhibits a not-OK alarm severity for more than ‘count’ times within the |
-|                          | alarm delay, recognize the alarm                                                          |
+| latching                 | Alarms will latch to the highest severity until the alarm is acknowledged and cleared. If false, alarm may recover without requiring acknowledgment  |
+| count                    | If the trigger PV exhibits a not-OK alarm severity for more than ‘count’ times within the alarm delay, recognize the alarm      |
 | filter                   | An optional expression that can enable the alarm based on other PVs.                      |
 
 ![Components](img/server_sequence.png)
