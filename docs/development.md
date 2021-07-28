@@ -8,6 +8,8 @@ $ mkdocs serve
 
 A GitHub action workflow has been configured such that the docs are automatically created on merge to the `slaclab/nalms` `main` branch.
 
+## Docker images
+Significant simplifications might be made to these docker images (moving to more modern OS etc.); however, I've tried to replicate the RHEL 7 design requirement as closely as possible to demonstrate the installation outlined in the design document. 
 
 ## DockerHub deployment
 
