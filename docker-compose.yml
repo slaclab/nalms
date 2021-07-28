@@ -1,3 +1,4 @@
+version: "3.0"
 services:
     zookeeper:
         image: jgarrahan/nalms-zookeeper:latest
@@ -22,7 +23,6 @@ services:
         deploy:
             resources:
                 limits:
-                    cpus: 0.50
                     memory: 8G
                 reservations:
                     memory: 8G
@@ -45,7 +45,6 @@ services:
         deploy:
             resources:
                 limits:
-                    cpus: 0.50
                     memory: 8G
                 reservations:
                     memory: 8G
@@ -68,7 +67,6 @@ services:
         deploy:
             resources:
                 limits:
-                    cpus: 0.50
                     memory: 8G
                 reservations:
                     memory: 8G
@@ -128,7 +126,6 @@ services:
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
         image: jgarrahan/nalms-example-ioc:latest
-        image: heart_of_gold
         ports:
             - "5065:5065/tcp"
             - "5064:5064/tcp"
@@ -165,16 +162,16 @@ services:
             resources:
                 limits:
                     memory: 4g
-    alarm-ioc:
-        image: alarm-ioc
-        environment:
-            CONFIG_NAME: HeartOfGold
-            EPICS_CA_SERVER_PORT: 5064
-            EPICS_CA_REPEATER_PORT: 5065
-        volumes:
-            - "./examples/heart_of_gold/alarm-ioc:/opt/nalms/ioc"
-        ports:
-            - "5067:5065/tcp"
-            - "5066:5064/tcp"
-            - "5067:5065/udp"
-            - "5066:5064/udp"
+    #alarm-ioc:
+    #    image: alarm-ioc
+    #    environment:
+    #        CONFIG_NAME: HeartOfGold
+    #        EPICS_CA_SERVER_PORT: 5064
+    #        EPICS_CA_REPEATER_PORT: 5065
+    #    volumes:
+    #        - "./examples/heart_of_gold/alarm-ioc:/opt/nalms/ioc"
+    #    ports:
+    #        - "5067:5065/tcp"
+    #        - "5066:5064/tcp"
+    #        - "5067:5065/udp"
+    #        - "5066:5064/udp"
