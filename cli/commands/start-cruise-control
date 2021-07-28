@@ -38,7 +38,7 @@ fi
 
 
 docker run \
-    -e BOOTSTRAP_SERVERS=$NALMS_BOOTSTRAP_SERVERS \
+    -e BOOTSTRAP_SERVERS=$NALMS_KAFKA_BOOTSTRAP \
     -e ZOOKEEPER_CONNECT=$NALMS_ZOOKEEPER_HOST:$NALMS_ZOOKEEPER_PORT \
     --name nalms_cruise_control \
     -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest

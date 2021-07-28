@@ -8,6 +8,7 @@ nav:
   - Components:
       - components.md
       - Kafka: kafka.md
+      - Phoebus Alarm Tools: phoebus.md
       - Tools: tools.md
   - Configuration: configuration.md
   - EPICS Integration: epics_integration.md

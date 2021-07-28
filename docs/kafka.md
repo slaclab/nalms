@@ -8,9 +8,9 @@ Kafka brokers are synchronized by a Zookeeper node. This Zookeeper node is respo
 
 The latest Kafka version as of writing (2.7.0) will be used out of the box, with configuration options tailored to frequent log compaction for state maintenance. The release of [Kafka Improvement Proposal 500](https://cwiki.apache.org/confluence/display/KAFKA/KIP-500%3A+Replace+ZooKeeper+with+a+Self-Managed+Metadata+Quorum) at some point in 2021 warrants version reconsideration, as the new deprecation of zookeeper will allow the removal of the dedicated server and move to a self managed quorum model.
 
-The NALMS production Kafka cluster consists of three nodes, topic deletion enabled, with compaction cleanup policy for state messages and deletion for configuration and commands and frequent cleanup operations (max lag 1s. A development cluster consists of only a single node, hosted locally. A full description of configuration options is provided in the Apache Kafka [documentation](https://kafka.apache.org/documentation/#brokerconfigs).
+The NALMS production Kafka cluster consists of three nodes, topic deletion enabled, with compaction cleanup policy for state messages and deletion for configuration and commands and frequent cleanup operations (max lag 1s). A development cluster consists of only a single node, hosted locally. A full description of configuration options is provided in the Apache Kafka [documentation](https://kafka.apache.org/documentation/#brokerconfigs).
 
-Each broker will be configured with a keystore and truststore for SSL authentication and encryption. 
+Each broker may be configured with a keystore and truststore for [SSL](networking.md) authentication and encryption. 
 
 ## Kafka messages
 
@@ -43,6 +43,7 @@ Temp
 The Kafka configuration message for the PV would be keyed by the string `config:/Temp/KLYS/KLYS:LI23:11/KLYS:LI23:11:DL_WG`. Associated values are JSON representations of the associated values. Representations for alarm tree leaves and nodes are outlined below. Undefined elements are omitted in practice.
 
 ### Alarm leaf configuration
+
 
 ```json
 {

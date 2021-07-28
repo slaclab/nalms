@@ -25,7 +25,7 @@ Commands:
   list-configurations
   launch-editor
   generate-kafka-certs domain password
-  convert-alh
+  convert-alh alh_file output_filename config_name
   *         Help
 "
   exit 0
@@ -54,7 +54,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/start-phoebus-client" "$2"
     ;;
   start-grafana|d)
-    . "$CLI_WORKDIR/commands/start-grafana" 
+    . "$CLI_WORKDIR/commands/start-grafana" "$2" "$3" "$4" "$5"
     ;;
   create-alarm-ioc|d)
     . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" 

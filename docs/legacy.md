@@ -1,11 +1,9 @@
 # Converting from ALH
 
-The ALH -> Phoebus Python (>=3.7) conversion tool is handled by a package currently defined in the `phoebus-alarm-services/tools` directory; however, long-term development goals (modularity) warrant the conversion into a full python package. 
-
-These tools may be install within this repository...
+The ALH -> Phoebus Python (>=3.7) conversion tool is handled by a package currently defined in the `nalms-tools` directory. 
 
 ```
-$ cd phoebus-alarm-services
+$ cd nalms-tools
 $ pip install -e .
 ```
 
@@ -17,4 +15,4 @@ $ convert-alh config_name input_filename output_filename
 
 Several features of the ALH cannot be translated to Phoebus configurations and are deprecated in NALMS. These are the ALIAS, ACKPV, SEVRCOMMAND, STATCOMMAND, amd BEEPSEVERITY ALH configuration entries. The conversion script will print any failures to STDOUT.
 
-At present, ALH inclusions will parsedd and reserialized into a single Phoebus XML configuration file. Future CS-Studio development with include the ability to accomodate file inclusions within the tree structure such that nested files may be similarly structured.
+At present, ALH inclusions will parsed and reserialized into a single Phoebus XML configuration file. Future CS-Studio development with include the ability to accomodate file inclusions within the tree structure such that nested files may be similarly structured.

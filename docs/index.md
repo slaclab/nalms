@@ -19,7 +19,6 @@ This docker application consists of the following containers:
 * Grafana
 * An Example IOC
 * Cruise Control
-* Alarm IOC
 
 Docker-compose may be used to run a packaged example with all components.
 ```
