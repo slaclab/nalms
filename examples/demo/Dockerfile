@@ -15,7 +15,9 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 RUN mkdir /opt/EPICS 
 
 # general
-RUN yum install -y git ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ supervisor make gcc perl &&\
+RUN yum update -y && \
+    yum install -y epel-release && \
+    yum install -y git ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ supervisor make gcc perl &&\
     yum groupinstall -y 'Development Tools' && \
     # install EPICS
     cd /opt/EPICS && \
@@ -26,4 +28,4 @@ RUN yum install -y git ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ supervisor
 # flash the neighbours
 EXPOSE 5064 5065
 
-CMD ["/opt/app-root/bin/supervisord"]
+CMD supervisord -c /etc/supervisor/supervisord.conf
