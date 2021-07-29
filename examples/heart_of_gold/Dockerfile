@@ -1,4 +1,4 @@
-FROM centos/python-38-centos7
+FROM centos:7
 
 USER root
 
@@ -7,6 +7,7 @@ ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH ${JAVA_HOME}/bin:$PATH
 ENV EPICS_BASE /opt/EPICS/epics-base
+ENV EPICS_BASE_VERSION R7.0.3.1
 ENV PATH /opt/EPICS/epics-base/bin/linux-x86_64:$PATH
 COPY heart_of_gold.db /var/ioc/heart_of_gold.db
 COPY supervisord.conf /etc/supervisor/supervisord.conf
@@ -14,11 +15,11 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 RUN mkdir /opt/EPICS 
 
 # general
-RUN yum install -y git ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ &&\
-    easy_install supervisor && \
+RUN yum install -y git ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ supervisor make gcc perl &&\
+    yum groupinstall -y 'Development Tools' && \
     # install EPICS
     cd /opt/EPICS && \
-    git clone --recursive https://github.com/epics-base/epics-base.git && \
+    git clone --recursive --branch $EPICS_BASE_VERSION https://github.com/epics-base/epics-base.git && \
     cd epics-base && \
     make
 
