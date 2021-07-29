@@ -82,7 +82,7 @@ services:
         command: start-server HeartOfGold /tmp/nalms/heart_of_gold.xml
         environment:
             KAFKA_BOOTSTRAP: kafka:9092
-            EPICS_CA_ADDR_LIST: "alarm-ioc example-ioc"
+            EPICS_CA_ADDR_LIST: "example-ioc"
             ALARM_IOC: "true"
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
@@ -127,10 +127,10 @@ services:
     example-ioc:
         image: jgarrahan/nalms-example-ioc:latest
         ports:
-            - "5065:5065/tcp"
-            - "5064:5064/tcp"
-            - "5065:5065/udp"
-            - "5064:5064/udp"
+            - "5075:5065/tcp"
+            - "5074:5064/tcp"
+            - "5075:5065/udp"
+            - "5074:5064/udp"
         environment:
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
