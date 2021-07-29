@@ -9,13 +9,13 @@ USER root
 
 # install phoebus
 RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
-    cd /opt && \
+    cd /tmp && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
     mvn install -pl services/alarm-logger -am -DskipTests && \
     mkdir /opt/phoebus-build && \
-    mv /opt/phoebus/services/alarm-logger/target/service-alarm-logger-*.jar /opt/phoebus-build/service-alarm-logger.jar && \
-    rm -r /opt/phoebus && \
+    mv /tmp/phoebus/services/alarm-logger/target/service-alarm-logger-*.jar /opt/phoebus-build/service-alarm-logger.jar && \
+    rm -r /tmp/phoebus && \
     yum remove -y ${JAVA_BASE}-devel-${JAVA_VERSION} maven git
 
 
@@ -44,7 +44,7 @@ COPY --from=build /opt/phoebus-build /opt/phoebus
 
 # set environment
 ENV ALARM_LOGGER_PROPERTIES /opt/nalms/config/alarm_logger.properties
-ENV ALARM_LOGGER_JAR /opt/phoebus/service-alarm-logger-*.jar
+ENV ALARM_LOGGER_JAR /opt/phoebus/service-alarm-logger.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 
 # prepare to use commands

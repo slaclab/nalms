@@ -1,3 +1,7 @@
+# config file version
+apiVersion: 1
+
+providers:
 - name: 'dashboards'
   org_id: 1
   updateIntervalSeconds: 30
