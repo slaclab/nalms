@@ -45,7 +45,7 @@ CONFIG_NAME=$1
 CONFIG_FILE=$2
 
 if [[ "$ALARM_IOC" = true ]]; then
-  python /opt/nalms/scripts/update_ioc.py $CONFIG_NAME $KAFKA_BOOTSTRAP &
+  python3 /opt/nalms/scripts/update_ioc.py $CONFIG_NAME $KAFKA_BOOTSTRAP &
 fi
 
 if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
