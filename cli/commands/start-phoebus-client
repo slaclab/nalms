@@ -11,19 +11,13 @@ usage() {
 
 NALMS_CONFIG_NAME=$1
 
-
-if [[ -z "$EPICS_CA_ADDR_LIST" ]]; then
-  echo "Channel Access address list not defined."
+if [[ -z "$NALMS_TOP" ]]; then
+  echo "NALMS_TOP must be defined."
   usage
 fi
 
-if [[ -z "$EPICS_CA_REPEATER_PORT" ]]; then
-  echo "Channel Access repeater port not provided."
-  usage
-fi
-
-if [[ -z "$EPICS_CA_SERVER_PORT" ]]; then
-  echo "Channel Access server port not provided."
+if [[ -z "$NALMS_CLIENT_JAR" ]]; then
+  echo "NALMS_CLIENT_JAR must be defined."
   usage
 fi
 
@@ -37,20 +31,32 @@ if [[ -z "$NALMS_ES_PORT" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_KAFKA_HOST" ]]; then
+  echo "Kafka host not provided."
+  usage
+fi
+
+if [[ -z "$NALMS_KAFKA_PORT" ]]; then
+  echo "Kafka port not provided."
+  usage
+fi
+
 if [[ -z "$NALMS_CONFIG_NAME" ]]; then
   echo "Configuration name not provided."
   usage
 fi
 
+mkdir /tmp/nalms
+PROPERTY_FILE=/tmp/nalms/client_${NALMS_CONFIG_NAME}.properties
+cp $NALMS_TOP/phoebus-client/client.properties $PROPERTY_FILE
 
-docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m 2g \
-  -e EPICS_CA_ADDR_LIST=$EPICS_CA_ADDR_LIST \
-  -e EPICS_CA_REPEATER_PORT=$EPICS_CA_REPEATER_PORT \
-  -e EPICS_CA_SERVER_PORT=$EPICS_CA_SERVER_PORT \
-  -e ES_HOST=$NALMS_ES_HOST \
-  -e ES_PORT=$NALMS_ES_PORT \
-  -e CONFIG_NAME=$NALMS_CONFIG_NAME \
-  -e KAFKA_HOST=$NALMS_KAFKA_HOST \
-  -e KAFKA_PORT=$NALMS_KAFKA_PORT \
-  --name nalms-zookeeper \
-  -d jgarrahan/nalms-phoebus-client:latest
+ES_INDEX=val=$(echo "$NALMS_CONFIG_NAME" | tr '[:upper:]' '[:lower:]')
+
+sed -i 's/$CONFIG_NAME/'"$NALMS_CONFIG_NAME/" $PROPERTY_FILE
+sed -i 's/$KAFKA_HOST/'"$NALMS_KAFKA_HOST/" $PROPERTY_FILE
+sed -i 's/$KAFKA_PORT/'"$NALMS_KAFKA_PORT/" $PROPERTY_FILE
+sed -i 's/$ES_HOST/'"$NALMS_ES_PORT/" $PROPERTY_FILE
+sed -i 's/$ES_PORT/'"$NALMS_ES_PORT/" $PROPERTY_FILE
+sed -i 's/$ES_INDEX/'"$ES_INDEX*/" $PROPERTY_FILE
+
+java -jar $NALMS_CLIENT_JAR -settings $PROPERTY_FILE
