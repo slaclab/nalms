@@ -46,7 +46,7 @@ if [[ -z "$NALMS_CONFIG_NAME" ]]; then
   usage
 fi
 
-mkdir /tmp/nalms
+mkdir -p /tmp/nalms
 PROPERTY_FILE=/tmp/nalms/client_${NALMS_CONFIG_NAME}.properties
 cp $NALMS_HOME/phoebus-client/client.properties $PROPERTY_FILE
 
