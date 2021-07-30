@@ -55,8 +55,7 @@ RUN yum install -y wget ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ && \
     tar xvfz /tmp/kafka_2.13-2.8.0.tgz -C /opt && \
     rm /tmp/kafka_2.13-2.8.0.tgz && \
     ln -s /opt/kafka_2.13-2.8.0 ${KAFKA_HOME} && \
-    rm -r /tmp/* && \
-    yum remove -y python36-setuptools
+    rm -r /tmp/* 
 
 COPY --from=build /opt/phoebus-build /opt/phoebus
 

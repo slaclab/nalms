@@ -50,7 +50,7 @@ fi
 
 if java -jar $ALARM_SERVER_JAR -settings $ALARM_SERVER_PROPERTIES -config $CONFIG_NAME -import $CONFIG_FILE; then
 
-  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -noshell
+  java -jar $ALARM_SERVER_JAR -config $CONFIG_NAME -settings $ALARM_SERVER_PROPERTIES -noshell -logging $LOGGING_CONFIG_FILE
 
 else
     echo "Unable to import configuration."

@@ -11,6 +11,38 @@ A GitHub action workflow has been configured such that the docs are automaticall
 ## Docker images
 Significant simplifications might be made to these docker images (moving to more modern OS etc.); however, I've tried to replicate the RHEL 7 design requirement as closely as possible to demonstrate the installation outlined in the design document. 
 
+### Useful commands:
+To see all running and stopped containers
+
+```
+$ sudo docker container ls -a
+```
+
+The current installation of Docker on rhel... requires sudo for use
+
+
+to get the id of a running container:
+
+```
+$ sudo docker container ls
+```
+
+To get memory, CPU use:
+
+```
+sudo docker container stats ${CONTAINER_ID}
+```
+
+Container information, including networking info,  is available using:
+```
+$ sudo docker container inspect${CONTAINER_ID}
+```
+
+To attach to a running container:
+```
+$ sudo docker container exec -it fdc6ce9ce655 /bin/bash
+```
+
 ## DockerHub deployment
 
 At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on pushes to the main slaclab/master branch. This ought to be changed to use a designated SLAC account and use proper tagged releases.
@@ -18,3 +50,23 @@ At this current iteration, all Dockerhub images are hosted on my (Jacqueline Gar
 ## Ongoing projects
 
 An attempt has been made to document development needs using Github projects [here](https://github.com/slaclab/nalms/projects).
+
+## Helpful debugging
+
+### Phoebus Alarm Server
+
+In the event of problematic IOC connectivity, it may be worthwhile to connect to the Phoebus Alarm Server docker container using:
+
+```
+$ sudo docker container exec -it fdc6ce9ce655 /bin/bash
+```
+
+and edit the logging options in $LOGGING_CONFIG_FILE. 
+
+```ini
+org.phoebus.applications.alarm.level = INFO
+com.cosylab.epics.caj.level = FINE # handles connectivity
+org.phoebus.framework.rdb.level = WARNING
+org.phoebus.pv.level = FINE
+org.apache.kafka.level = SEVERE
+```
