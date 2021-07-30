@@ -15,6 +15,8 @@ In order to abstract the deployment process and interact with the Dockerized app
 | NALMS_ZOOKEEPER_HOST            | Zookeeper network host address                                |
 | NALMS_KAFKA_HOST                | Kafka broker network host address                             |
 | NALMS_CONFIGURATIONS            | Comma separated list of configurations for launching Grafana  |
+| NALMS_HOME                      | Path to NALMS repository                                      |
+| NALMS_CLIENT_JAR                | Path to NALMS client jar file                                 |
 
 ## convert-alh
 

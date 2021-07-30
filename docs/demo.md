@@ -1,6 +1,11 @@
 # Demo
 This demo is intended for running on SLAC's RHEL7 dev server. NALMS uses named Docker containers and so this demo cannot be run if the existing demo containers are running. The commands below are run using the existing RHEL7 docker installation, therefore requiring sudo. In the future, this installation should be changed for user use other than root. 
 
+Additionally, given that $NALMS_HOME is defined (in afs: $PACKAGE_TOP/nalms/current), all `bash cli/nalms` may be used directly by modifying the path:
+```
+$ export PATH=$NALMS_HOME/cli:$PATH
+```
+
 During this demo, we set up all services using the package CLI and the Docker images. 
 
 First, set the HOST_IP environment variable:

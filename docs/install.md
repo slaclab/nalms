@@ -33,14 +33,49 @@ The current NALMS iteration consists of the following Dockerhub hosted container
 * LinkendIn's Cruise Control monitor for Kafka clusters (built from HEAD of branch migrate_to_kafka_2_5, which is compatible with Kafka 2.7.0) 
 * Cruise Control web UI
 
-### jgarrahan/nalms-phoebus-client
-* CS-Studio's Phoebus client tool built for use with only alarm services
-
 ## Download Images
 Images may be downloaded from Dockerhub on a machine with Docker installed using the command (nalms-kafka here for example):
 ```
 $ docker pull jgarrahan/nalms-kafka:latest
 ```
+
+## Client installation
+
+At present, we will build the client from the HEAD of the main branch of the Phoebus client hosted on Github.
+
+
+
+Requirements:
+* OpenJDK 11.0.2
+* Maven == 3.6.0
+* Git == 1.8.3.1
+
+### Installation: 
+1. Set `$JAVA_HOME`, `$MAVEN_HOME`, and `$NALMS_HOME`. Then update the path:
+```
+$ export PATH=$JAVA_HOME/bin:$PATH
+$ export PATH=$MAVEN_HOME/bin:$PATH
+```
+Note: In afs, JAVA_HOME=${PACKAGE_TOP}/java/jdk-11.0.2, MAVEN_HOME=${PACKAGE_TOP}/maven/3.6.0, and NALMS_TOP=${PACKAGE_TOP}/nalms/current.
+
+3. `cd` into installation directory
+4. Get Phoebus repository
+```
+$ git clone https://github.com/ControlSystemStudio/phoebus.git
+$ cd phoebus 
+```
+5. Now replace the existing product pom file with that packaged by NALMS:
+``` 
+$ rm phoebus-product/pom.xml
+$ mv $NALMS_HOME/phoebus-client/pom.xml phoebus-product/pom.xml 
+```
+6. Install the Phoebus client:
+```
+$ mvn install -pl phoebus-product -am
+```
+
+Define $NALMS_CLIENT_JAR in appropriate environment file.
+
 ## Deploy
 After pulling the latest image, it is recommended to use the [CLI](cli.md) for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described [here](configuration.md).
 
@@ -207,25 +242,7 @@ The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for intern
 
 ### Configuration
 
-Like the alarm server and logger, the client also accepts a properties file that defines networking. 
-
-### Docker
-
-The Phoebus Client must be configured with a DISPLAY variable for X forwarding and mounted X11 volumes. Additionally, the client requires the definition of both EPICS, Elasticsearch, and Kafka networking variables.  The Docker run command for the packaged example is given below:
-
-```
-$ docker run -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix -m 2g \
-  -e EPICS_CA_ADDR_LIST=${HOST_IP} \
-  -e EPICS_CA_SERVER_PORT=5064 \
-  -e EPICS_CA_REPEATER_PORT=5065 \
-  -e ES_HOST=${HOST_IP} \
-  -e ES_PORT=9200 \
-  -e CONFIG_NAME=Demo \
-  -e KAFKA_HOST=${HOST_IP} \
-  -e KAFKA_PORT=19092 \
-  --name nalms-phoebus-client \
-  -d jgarrahan/nalms-phoebus-client:latest
-```
+Like the alarm server and logger, the client also accepts a properties file that defines networking: [here](https://control-system-studio.readthedocs.io/en/latest/preference_properties.html).
 
 ## Grafana
 

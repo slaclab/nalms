@@ -11,8 +11,8 @@ usage() {
 
 NALMS_CONFIG_NAME=$1
 
-if [[ -z "$NALMS_TOP" ]]; then
-  echo "NALMS_TOP must be defined."
+if [[ -z "$NALMS_HOME" ]]; then
+  echo "NALMS_HOME must be defined."
   usage
 fi
 
@@ -48,7 +48,7 @@ fi
 
 mkdir /tmp/nalms
 PROPERTY_FILE=/tmp/nalms/client_${NALMS_CONFIG_NAME}.properties
-cp $NALMS_TOP/phoebus-client/client.properties $PROPERTY_FILE
+cp $NALMS_HOME/phoebus-client/client.properties $PROPERTY_FILE
 
 ES_INDEX=val=$(echo "$NALMS_CONFIG_NAME" | tr '[:upper:]' '[:lower:]')
 
