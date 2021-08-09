@@ -1,10 +1,12 @@
 # Demo
 This demo is intended for running on SLAC's RHEL7 dev server. NALMS uses named Docker containers and so this demo cannot be run if the existing demo containers are running. The commands below are run using the existing RHEL7 docker installation, therefore requiring sudo. In the future, this installation should be changed for user use other than root. 
 
-Additionally, given that $NALMS_HOME is defined (in afs: $PACKAGE_TOP/nalms/current), all `bash cli/nalms` may be used directly by modifying the path:
+Additionally, given that $NALMS_HOME is defined (in afs: $PACKAGE_TOP/nalms/current), the command line tool `bash ${NALMS_HOME}/cli/nalms` may be used directly by modifying the path:
 ```
 $ export PATH=$NALMS_HOME/cli:$PATH
 ```
+
+For client use: $NALMS_CLIENT_JAR must be defined as well as $NALMS_HOME. The client launch script creates a templated configuration file for the client from a template provided in $NALMS_HOME. 
 
 During this demo, we set up all services using the package CLI and the Docker images. 
 
@@ -32,13 +34,13 @@ Set up Kafka cluster (from repo root):
 
 ```
 $ cd - 
-$ sudo -E bash cli/nalms start-zookeeper 
-$ sudo -E bash cli/nalms start-kafka-broker --broker 0
+$ sudo -E bash nalms start-zookeeper 
+$ sudo -E bash nalms start-kafka-broker --broker 0
 ```
 
 Start cruise-control:
 ```
-$ sudo -E bash cli/nalms start-cruise-control
+$ sudo -E bash nalms start-cruise-control
 ```
 Navigate to [http://localhost:9090](http://localhost:9090) to view the Cruise Control interface and monitors of the Kafka cluster. 
 
@@ -47,25 +49,25 @@ Start the Phoebus alarm server: (Note: launch requires the absolute path of the 
 
 
 ```
-$ sudo -E bash cli/nalms start-alarm-server Demo $(pwd)/examples/demo/demo.xml
+$ sudo -E nalms start-alarm-server Demo $(pwd)/examples/demo/demo.xml
 ```
 
 
 Next, start the Elasticsearch service: 
 ```
-$ sudo -E bash cli/nalms start-elasticsearch
+$ sudo -E nalms start-elasticsearch
 ```
 
 Wait at least a minute before starting elasticsearch. The templates for the indices must be created before starting. Start the Phoebus alarm logger:
 ```
-$ sudo -E bash cli/nalms start-alarm-logger Demo $(pwd)/examples/demo/demo.xml
+$ sudo -E nalms start-alarm-logger Demo $(pwd)/examples/demo/demo.xml
 ```
 
 Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. 
 
 Launch the Grafana instance:
 ```
-$ sudo -E bash cli/nalms start-grafana --config Demo
+$ sudo -E nalms start-grafana --config Demo
 ```
 
 Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Enter user=admin, password=admin into the login. Select AlarmLogs from the available dashboards.
@@ -73,7 +75,7 @@ Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). E
 
 Launch the Phoebus client:
 ```
-$ sudo -E bash cli/nalms start-phoebus-client Demo
+$ sudo -E nalms start-phoebus-client Demo
 ```
 
 
