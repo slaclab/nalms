@@ -1,13 +1,14 @@
 name: Publish Phoebus Alarm Server Docker Image
 
 on:
-  push:
+  release:
     branches:
       - main
+      - setup
 
 jobs:
   push_to_registry:
-    if: ${{ github.repository == 'slaclab/nalms' }}
+   # if: ${{ github.repository == 'slaclab/nalms' }}
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +32,5 @@ jobs:
         with:
           context: ./phoebus-alarm-server
           push: true
-          tags: jgarrahan/nalms-phoebus-alarm-server:latest
-# once versioning implemented
-#          tags: ${{ steps.meta.outputs.tags }}
-#          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: jgarrahan/nalms-phoebus-alarm-server
