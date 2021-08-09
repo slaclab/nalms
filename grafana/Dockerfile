@@ -21,6 +21,10 @@ ENV DATASOURCE_DIR=/etc/grafana/provisioning/datasources
 ENV DASHBOARD_TEMPLATE=/opt/nalms/alarm_logs_dashboard.json
 ENV DASHBOARD_DIR=/var/lib/grafana/dashboards
 ENV DASHBOARDS_DIRECTORY=/var/lib/grafana/dashboards
+ENV GF_AUTH_DISABLE_LOGIN_FORM "true"
+ENV GF_AUTH_ANONYMOUS_ENABLED "true"
+ENV GF_AUTH_ANONYMOUS_ORG_ROLE "Admin"
+
 
 ENTRYPOINT []
 CMD /opt/nalms/start-grafana.sh
