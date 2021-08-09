@@ -33,5 +33,4 @@ jobs:
         with:
           context: ./phoebus-alarm-server
           push: true
-          tags: ${{ github.event.release.tag_name }}
-          labels: jgarrahan/nalms-phoebus-alarm-server
+          tags: jgarrahan/nalms-phoebus-alarm-server:${{ github.event.release.tag_name }}
