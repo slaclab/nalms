@@ -7,11 +7,7 @@ on:
 jobs:
   build:
     if: ${{ github.repository == 'slaclab/nalms' }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.7]
+    runs-on: ubuntu-latest
     name:  Build docs
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +16,7 @@ jobs:
           auto-activate-base: true
           activate-environment: true
           conda-build-version: 3.18.11
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.7
           channels: anaconda,conda-forge
           channel-priority: flexible
       - name: Build package
