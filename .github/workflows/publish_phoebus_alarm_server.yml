@@ -2,6 +2,7 @@ name: Publish Phoebus Alarm Server Docker Image
 
 on:
   release:
+    types: [published]
     branches:
       - main
       - setup
@@ -32,5 +33,5 @@ jobs:
         with:
           context: ./phoebus-alarm-server
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ github.event.release.tag_name }}
           labels: jgarrahan/nalms-phoebus-alarm-server
