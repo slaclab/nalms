@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-export CLI_WORKDIR=$(cd $(dirname $0) && pwd)
+export CLI_WORKDIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CLI_WORKDIR/common"
 
 
