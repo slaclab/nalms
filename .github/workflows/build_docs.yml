@@ -9,14 +9,17 @@ jobs:
     if: ${{ github.repository == 'slaclab/nalms' }}
     runs-on: ubuntu-latest
     name:  Build docs
+    strategy:
+      matrix:
+        python-version: [3.7]
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-activate-base: true
           activate-environment: true
-          conda-build-version: 3.18.11
           python-version: 3.7
+          conda-build-version: 3.18.11
           channels: anaconda,conda-forge
           channel-priority: flexible
       - name: Build package
