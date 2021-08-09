@@ -8,18 +8,11 @@ $ export PATH=$NALMS_HOME/cli:$PATH
 
 For client use: $NALMS_CLIENT_JAR must be defined as well as $NALMS_HOME. The client launch script creates a templated configuration file for the client from a template provided in $NALMS_HOME. 
 
-During this demo, we set up all services using the package CLI and the Docker images. 
+During this demo, we set up all services using the package CLI and the Docker images. On aird-b50-srv01, this can be sourced using: 
 
-First, set the HOST_IP environment variable:
-
-```
-$ export HOST_IP={HOST ADDRESS (em1)}
-```
-
-Source the demo environment:
 
 ```
-$ source examples/demo/demo.env
+$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/dev.env
 ```
 
 Start the demo ioc:
@@ -33,7 +26,6 @@ Exit the tmux window using: `Ctr + b + d`
 Set up Kafka cluster (from repo root): 
 
 ```
-$ cd - 
 $ sudo -E bash nalms start-zookeeper 
 $ sudo -E bash nalms start-kafka-broker --broker 0
 ```
@@ -49,7 +41,7 @@ Start the Phoebus alarm server: (Note: launch requires the absolute path of the 
 
 
 ```
-$ sudo -E nalms start-alarm-server Demo $(pwd)/examples/demo/demo.xml
+$ sudo -E nalms start-alarm-server Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
 
@@ -60,7 +52,7 @@ $ sudo -E nalms start-elasticsearch
 
 Wait at least a minute before starting elasticsearch. The templates for the indices must be created before starting. Start the Phoebus alarm logger:
 ```
-$ sudo -E nalms start-alarm-logger Demo $(pwd)/examples/demo/demo.xml
+$ sudo -E nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
 Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. 

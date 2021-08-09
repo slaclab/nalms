@@ -1,11 +1,11 @@
 version: "3.0"
 services:
     zookeeper:
-        image: jgarrahan/nalms-zookeeper:v0.1
+        image: jgarrahan/nalms-zookeeper:v0.2
         ports:
             - "2181:2181"
     kafka:
-        image: jgarrahan/nalms-kafka:v0.1
+        image: jgarrahan/nalms-kafka:v0.2
         depends_on: 
             - zookeeper
         ports:
@@ -27,7 +27,7 @@ services:
                 reservations:
                     memory: 8G
     kafka1:
-        image: jgarrahan/nalms-kafka:v0.1
+        image: jgarrahan/nalms-kafka:v0.2
         depends_on: 
             - zookeeper
         ports:
@@ -49,7 +49,7 @@ services:
                 reservations:
                     memory: 8G
     kafka2:
-        image: jgarrahan/nalms-kafka:v0.1
+        image: jgarrahan/nalms-kafka:v0.2
         depends_on: 
             - zookeeper
         ports:
@@ -71,7 +71,7 @@ services:
                 reservations:
                     memory: 8G
     phoebus-alarm-server:
-        image: jgarrahan/nalms-phoebus-alarm-server:v0.1
+        image: jgarrahan/nalms-phoebus-alarm-server:v0.2
         links:
             - kafka
             - example-ioc
@@ -87,7 +87,7 @@ services:
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
     elasticsearch:
-        image: jgarrahan/nalms-elasticsearch:v0.1
+        image: jgarrahan/nalms-elasticsearch:v0.2
         ports:
             - "9200:9200"
         environment:
@@ -100,7 +100,7 @@ services:
             KAFKA_HOST: kafka
             KAFKA_PORT: 9092
     grafana:
-        image: jgarrahan/nalms-grafana:v0.1
+        image: jgarrahan/nalms-grafana:v0.2
         ports:
             - '3000:3000'
         links:
@@ -110,7 +110,7 @@ services:
             ES_HOST: elasticsearch
             ES_PORT: 9200
     phoebus-alarm-logger:
-        image: jgarrahan/nalms-phoebus-alarm-logger:v0.1
+        image: jgarrahan/nalms-phoebus-alarm-logger:v0.2
         links:
             - elasticsearch
         depends_on:
@@ -125,7 +125,7 @@ services:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
-        image: jgarrahan/nalms-example-ioc:v0.1
+        image: jgarrahan/nalms-example-ioc:v0.2
         ports:
             - "5075:5065/tcp"
             - "5074:5064/tcp"
@@ -135,7 +135,7 @@ services:
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
     cruise-control:
-        image: jgarrahan/nalms-cruise-control:v0.1
+        image: jgarrahan/nalms-cruise-control:v0.2
         ports: 
             - "9090:9090"
         environment:
@@ -144,21 +144,3 @@ services:
         links: 
             - kafka
             - zookeeper
-    phoebus-client:
-        image: jgarrahan/nalms-phoebus-client:v0.1
-        environment:
-            DISPLAY: host.docker.internal:0
-            ES_HOST: elasticsearch
-            ES_PORT: 9200
-            CONFIG_NAME: HeartOfGold
-            KAFKA_HOST: kafka
-            KAFKA_PORT: 9092
-        volumes:
-            - /tmp/.X11-unix:/tmp/.X11-unix
-        depends_on:
-            - kafka
-            - elasticsearch
-        deploy:
-            resources:
-                limits:
-                    memory: 4g

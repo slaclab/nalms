@@ -274,6 +274,9 @@ The Grafana dashboards are then reachable at localhost:3000 in browser.
 
 The `cruise-control/cruisecontrol.properties` file dictates the behavior of the cruise control server, allowing definition of relevant thresholds and networking nodes. The `jgarrahan/nalms-cruise-control` image performs interpolation on this file in order to pass the relevant environment variables. 
 
+See wiki:
+https://github.com/linkedin/cruise-control/wiki
+
 
 #### Docker
 
