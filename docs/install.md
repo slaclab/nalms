@@ -79,7 +79,7 @@ Define $NALMS_CLIENT_JAR in appropriate environment file.
 ## Deploy
 After pulling the latest image, it is recommended to use the [CLI](cli.md) for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described [here](configuration.md).
 
-# Configuration
+## Configuration
 
 This sections includes an attempt to address configuration items, giving some insight to the service configuration within the Dockerized components and their Docker arguments.
 
@@ -87,9 +87,9 @@ An attempt has been made to sufficiently abstract scripts for deployments based 
 
 Below, each component is outline with respect to Docker configuration variables and configuration file structure. For a full resource of available configurations, the source documentation will be linked. 
 
-## Elasticsearch
+### Elasticsearch
 
-### Configuration
+#### Configuration
 
 The Elasticsearch configuration consists of three main files:
 
@@ -101,7 +101,7 @@ A reference for elasticsearch configuration files can be found [here](https://ww
 
 In order for the Elasticsearch fields to be properly formatted, a template matching the topic scheme must be posted to the server. These may be versioned and are automatically applied to newly created indices. The initial script for templating NALMS topics is hosted in `elasticsearch/scripts/create_alarm_template.sh`. This template has been taken from the Phoebus source [examples](https://github.com/ControlSystemStudio/phoebus/blob/master/app/alarm/examples/create_alarm_topics.sh).
 
-### Docker 
+#### Docker 
 The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  `single-node` deployment is used. Java options may be specifified using the `ES_JAVA_OPTS` variable. 
 
 The following Docker run command will lauch an Elasticsearch node reachable on host machine port 9200.
@@ -118,21 +118,21 @@ docker run \
     --name nalms_elasticsearch \
     -d jgarrahan/nalms-elasticsearch:latest
 ```
-## Zookeeper
+### Zookeeper
 
-### Configuration
+#### Configuration
 At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable.
 
-### Docker
+#### Docker
 The following command will run Zookeeper accessible on the host machine at port 2181:
 
 ```
 docker run -p "2181:2181" --name nalms_zookeeper -d jgarrahan/nalms-zookeeper
 ```
 
-## Kafka
+### Kafka
 
-### Configuration
+#### Configuration
 This file is used to configure general properties of a Kafka broker including replication settings and communications protocols. Listeners are defined with respect to configured protocols and binding ports. Advertised listeners are configured with respect to configured protocol and exposed ports. 
 
 The `replication.factor` must be appropriately modified based off of the number of nodes in the deployment. A single broker deployment would require `replication.factor` set to 1. A cluster deployment can accomodate a larger replication factor across the cluster and this file must be modified for the purpose. 
@@ -148,7 +148,7 @@ Certain configurations options may be defined on the topic level. In `phoebus-al
 
 There are many other settings pertaining to the optimization of the cluster and must be determined by traffic demands. A full catalog of available configurations may be found in the documentation, [here](https://kafka.apache.org/documentation/).
 
-### Docker
+#### Docker
 
 The Kafka broker images require the definition of Kafka networking variables, `KAFKA_ADVERTISED_LISTENERS`, `KAFKA_LISTENER_SECURITY_PROTOCOL_MAP`, `KAFKA_LISTENERS`, `ZOOKEEPER_CONNECT` and must be provided a numeric broker ID. The image must be provisioned with an 8g memory allocation. Additional optimizations may be performed using the Docker image [configurations](https://docs.docker.com/config/containers/resource_constraints/). A configuration file must be mounted to `/opt/kafka/server.properties` for the image, with properly formatted networking and replication numbers. An example server configuration is given in `examples/demo/config/server.properties`.
 
@@ -170,9 +170,9 @@ docker run -m 8g  \
 Instructions on configuring the Docker image with SSL are given in [networking](networking.md).
 
 
-## Phoebus Alarm Server
+### Phoebus Alarm Server
 
-### Configuration
+#### Configuration
 
 The Phoebus alarm server configuration properties file defines the EPICS configuration and Elasticsearch host configuration. A full preference list can be found in the CS-Studio [documentation](https://control-system-studio.readthedocs.io/en/latest/preference_properties.html).
 
@@ -191,7 +191,7 @@ org.phoebus.pv.ca/auto_addr_list=no
 org.phoebus.applications.alarm/server=kafka:19092
 ```
 
-### Docker
+###3 Docker
 
 The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs. The Docker run command for the packaged example is given below:
 
@@ -208,9 +208,9 @@ $ docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
 
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
 
-## Phoebus Alarm Logger
+### Phoebus Alarm Logger
 
-### Configuration
+#### Configuration
 
 The alarm logger properties file requires the definition of Elasticsearch and Kafka networking environment variables. The templated file used by the image is hosted at `phoebus-alarm-logger/logger.properties`.  
 
@@ -224,7 +224,7 @@ bootstrap.servers=localhost:9092
 ```
 Additionally, logging for the logger is configurable and defined in `phoebus-alarm-server/logger.properties`.  
 
-### Docker
+#### Docker
 
 The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option and the definition of Elasticsearch networking variables. The Docker run command for the packaged example is given below:
 
@@ -238,21 +238,21 @@ docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
 ```
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
 
-## Phoebus Client
+### Phoebus Client
 
-### Configuration
+#### Configuration
 
 Like the alarm server and logger, the client also accepts a properties file that defines networking: [here](https://control-system-studio.readthedocs.io/en/latest/preference_properties.html).
 
-## Grafana
+### Grafana
 
-### Configuration
+#### Configuration
 
 Grafana datasources and dashboards may be programatically provisioned as outlined [here](https://grafana.com/docs/grafana/latest/administration/provisioning/). Elasticsearch datasources define an index and networking variables. 
 
 For the purpose of NALMS, the Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations using templates. The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.json` and the datsource template is generated from the `grafana/scripts/create-datasource-file.sh` bash script executed on startup.
 
-### Docker
+#### Docker
 
 The Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations. The Docker run command for the packaged example is given below:
 
@@ -268,9 +268,9 @@ docker run \
 
 The Grafana dashboards are then reachable at localhost:3000 in browser.
 
-## Cruise Control
+### Cruise Control
 
-### Configuration
+#### Configuration
 
 The `cruise-control/cruisecontrol.properties` file dictates the behavior of the cruise control server, allowing definition of relevant thresholds and networking nodes. The `jgarrahan/nalms-cruise-control` image performs interpolation on this file in order to pass the relevant environment variables. 
 
@@ -278,7 +278,7 @@ See wiki:
 https://github.com/linkedin/cruise-control/wiki
 
 
-### Docker
+#### Docker
 
 
 The Cruise Control Image requires definition of bootstrap servers and Zookeeper addresses.  The Docker run command for the packaged example is given below:
