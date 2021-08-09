@@ -8,18 +8,11 @@ $ export PATH=$NALMS_HOME/cli:$PATH
 
 For client use: $NALMS_CLIENT_JAR must be defined as well as $NALMS_HOME. The client launch script creates a templated configuration file for the client from a template provided in $NALMS_HOME. 
 
-During this demo, we set up all services using the package CLI and the Docker images. 
+During this demo, we set up all services using the package CLI and the Docker images. On aird-b50-srv01, this can be sourced using: 
 
-First, set the HOST_IP environment variable:
-
-```
-$ export HOST_IP={HOST ADDRESS (em1)}
-```
-
-Source the demo environment:
 
 ```
-$ source examples/demo/demo.env
+$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/dev.env
 ```
 
 Start the demo ioc:
