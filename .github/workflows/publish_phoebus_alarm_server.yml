@@ -9,7 +9,7 @@ on:
 
 jobs:
   push_to_registry:
-   # if: ${{ github.repository == 'slaclab/nalms' }}
+    if: ${{ github.repository == 'slaclab/nalms' }}
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
