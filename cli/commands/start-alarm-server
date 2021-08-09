@@ -32,7 +32,7 @@ fi
 
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   --name nalms_server_$CONFIG_NAME \
-  -e ALARM_IOC=true \
+  -e ALARM_IOC=false \
   -e KAFKA_BOOTSTRAP="${NALMS_KAFKA_BOOTSTRAP}" \
   -e EPICS_CA_ADDR_LIST="${EPICS_CA_ADDR_LIST}" \
   -e EPICS_CA_SERVER_PORT="${EPICS_CA_SERVER_PORT}" \
