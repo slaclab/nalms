@@ -23,7 +23,6 @@ jobs:
           auto-activate-base: true
           activate-environment: true
           python-version: ${{ matrix.python-version }}
-          conda-build-version: 3.18.11
           channels: anaconda,conda-forge
           channel-priority: flexible
       - name: Build package
