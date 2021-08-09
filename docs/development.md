@@ -45,7 +45,7 @@ $ sudo docker container exec -it fdc6ce9ce655 /bin/bash
 
 ## DockerHub deployment
 
-At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on pushes to the main slaclab/master branch. This ought to be changed to use a designated SLAC account and use proper tagged releases.
+At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on tagged releases to the main slaclab/master branch. This ought to be changed to use a designated SLAC account.
 
 ## Ongoing projects
 
