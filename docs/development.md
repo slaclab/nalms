@@ -45,7 +45,7 @@ $ sudo docker container exec -it fdc6ce9ce655 /bin/bash
 
 ## DockerHub deployment
 
-At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on pushes to the main slaclab/master branch. This ought to be changed to use a designated SLAC account and use proper tagged releases.
+At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on tagged releases to the main slaclab/master branch. This ought to be changed to use a designated SLAC account.
 
 ## Ongoing projects
 
@@ -70,3 +70,12 @@ org.phoebus.framework.rdb.level = WARNING
 org.phoebus.pv.level = FINE
 org.apache.kafka.level = SEVERE
 ```
+
+
+## Grafana template
+In order to use the Grafana dashboard with a scaling number of configurations, a json template is located in `grafana/dashboards/alarm_logs_dashboard.json`. The script `grafana/scripts/start-grafana.sh` performs an interpolation of template strings in order to create the appropriate datasources and dashboards.
+
+For further development of the dashboard, the template must be changed using a local Grafana instance. Steps for updating are:
+* Copy json representation
+* Remove id from the json representation
+* Replace datasource and configuration name entries from json representation

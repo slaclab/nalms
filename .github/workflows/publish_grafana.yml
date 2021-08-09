@@ -1,7 +1,8 @@
 name: Publish Grafana Docker Image
 
 on:
-  push:
+  release:
+    types: [published]
     branches:
       - main
 
@@ -19,19 +20,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: my-docker-hub-namespace/my-docker-hub-repository
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: ./grafana
           push: true
-          tags: jgarrahan/nalms-grafana:latest
-# once versioning implemented
-#          tags: ${{ steps.meta.outputs.tags }}
-#          labels: ${{ steps.meta.outputs.labels }}
+          tags: jgarrahan/nalms-grafana:${{ github.event.release.tag_name }}, jgarrahan/nalms-grafana:latest
