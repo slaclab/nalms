@@ -5,11 +5,10 @@ on:
     types: [published]
     branches:
       - main
-      - setup
 
 jobs:
   push_to_registry:
-  #  if: ${{ github.repository == 'slaclab/nalms' }}
+    if: ${{ github.repository == 'slaclab/nalms' }}
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -27,4 +26,4 @@ jobs:
         with:
           context: ./elasticsearch
           push: true
-          tags: jgarrahan/nalms-elasticsearch:${{ github.event.release.tag_name }}, jgarrahan/elasticsearch:latest
+          tags: jgarrahan/nalms-elasticsearch:${{ github.event.release.tag_name }}, jgarrahan/nalms-elasticsearch:latest
