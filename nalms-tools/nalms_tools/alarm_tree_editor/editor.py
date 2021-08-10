@@ -67,6 +67,7 @@ class AlarmTreeItem(QObject):
         is_group=False,
         alarm_filter=None,
         alarm_configuration=None,
+        guidance=None
     ):
         # type: (str, QObject, str, str, bool, bool, bool, int, int, bool, str, str)
 
@@ -80,7 +81,8 @@ class AlarmTreeItem(QObject):
         self._channels = []
         self.severity = None
         self.status = None
-
+        
+        self.guidance = guidance
         self.description = description
         self.enabled = enabled
         self.latching = latching
@@ -90,7 +92,6 @@ class AlarmTreeItem(QObject):
         self.annunciating = annunciating
         self.alarm_filter = alarm_filter
         self.is_group = is_group
-        self.tickets = "CATER: 1029"
 
         if hasattr(self, "channels"):
             self.destroyed.connect(partial(widget_destroyed, self.channels))
@@ -848,11 +849,6 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
 
         menu.addAction(self.value_action)
 
-        self.ticket_action = QAction(item.tickets, self)
-        self.ticket_action.setEnabled(False)
-
-        menu.addAction(self.ticket_action)
-
         self.acknowledge_action = QAction("Acknowledge", self)
         self.acknowledge_action.triggered.connect(
             partial(self._acknowledge_at_index, index)
@@ -949,12 +945,15 @@ class PhoebusConfigTool:
 
             elif child.tag == "filter":
                 data["alarm_filter"] = child.text
+            
+            elif child.tag == "guidance":
+                data["guidance"] = child.text
 
             elif child.tag == "command":
-                pass  # TODO
+                pass  # unused at present
 
             elif child.tag == "automated_action":
-                pass  # TODO
+                pass  # unused at present
 
         return data
 
@@ -1041,6 +1040,10 @@ class PhoebusConfigTool:
         if alarm_tree_item.alarm_filter:
             alarm_filter = ET.SubElement(elem, "filter")
             alarm_filter.text = alarm_tree_item.alarm_filter
+
+        if alarm_tree_item.guidance:
+            alarm_guidance = ET.SubElement(elem, "guidance")
+            alarm_guidance.text = alarm_tree_item.guidance
 
     def _handle_group_add(self, group, parent):
         group_comp = ET.SubElement(parent, "component", name=group.label)
@@ -1158,52 +1161,61 @@ class AlarmTreeEditorDisplay(Display):
 
         # add label
         self.label_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("LABEL"), 1, 0)
+        self.property_view_layout.addWidget(QLabel("NAME"), 1, 0)
         self.property_view_layout.addWidget(self.label_edit, 1, 1, 1, 3)
+
+
+        # add guidance
+        self.guidance_edit = QLineEdit()
+        self.property_view_layout.addWidget(QLabel("GUIDANCE"), 3, 0)
+        self.property_view_layout.addWidget(self.guidance_edit, 3, 1, 1, 3)
+
 
         # add description
         self.description_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("DESCRIPTION"), 2, 0)
+        self.description_label = QLabel("DESCRIPTION")
+        self.property_view_layout.addWidget(self.description_label, 2, 0)
         self.property_view_layout.addWidget(self.description_edit, 2, 1, 1, 3)
 
         # add delay
         self.delay_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("DELAY"), 3, 0)
-        self.property_view_layout.addWidget(self.delay_edit, 3, 1, 1, 3)
+        self.delay_label = QLabel("DELAY")
+        self.property_view_layout.addWidget(self.delay_label, 4, 0)
+        self.property_view_layout.addWidget(self.delay_edit, 4, 1, 1, 3)
         self.delay_edit.setValidator(QIntValidator())
 
         # add count
         self.count_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("COUNT"), 4, 0)
-        self.property_view_layout.addWidget(self.count_edit, 4, 1, 1, 3)
+        self.count_label = QLabel("COUNT")
+        self.property_view_layout.addWidget(self.count_label, 5, 0)
+        self.property_view_layout.addWidget(self.count_edit, 5, 1, 1, 3)
         self.count_edit.setValidator(QIntValidator())
 
         # add filter/force pv
         self.filter_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("ENABLING FILTER"), 5, 0)
-        self.property_view_layout.addWidget(self.filter_edit, 5, 1, 1, 3)
+        self.filter_label = QLabel("ENABLING FILTER")
+        self.property_view_layout.addWidget(self.filter_label, 6, 0)
+        self.property_view_layout.addWidget(self.filter_edit, 6, 1, 1, 3)
 
         # enabled, latching, annunciating
         self.enabled_check = QCheckBox("ENABLED")
         self.annunciating_check = QCheckBox("ANNUNCIATING")
         self.latching_check = QCheckBox("LATCHING")
-        self.property_view_layout.addWidget(self.enabled_check, 6, 0)
-        self.property_view_layout.addWidget(self.annunciating_check, 6, 1)
-        self.property_view_layout.addWidget(self.latching_check, 6, 2)
+        self.property_view_layout.addWidget(self.enabled_check, 7, 0)
+        self.property_view_layout.addWidget(self.annunciating_check, 7, 1)
+        self.property_view_layout.addWidget(self.latching_check, 7, 2)
         spacer = QSpacerItem(40, 200, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.property_view_layout.addItem(spacer, 6, 0)
+        self.property_view_layout.addItem(spacer, 7, 0)
 
         # create save button
         self.button_box = QDialogButtonBox(self)
         self.button_box.setOrientation(Qt.Horizontal)
         self.button_box.addButton("Save Properties", QDialogButtonBox.AcceptRole)
 
-        self.property_view_layout.addWidget(self.button_box, 7, 2)
-
+        self.property_view_layout.addWidget(self.button_box, 8, 2)
         self.property_layout.addLayout(self.property_view_layout)
 
-        # TODO: command, automated actions tables
         self.main_layout.addLayout(self.property_layout, 0, 1)
 
         self.setWindowTitle("Alarm Tree Editor")
@@ -1246,8 +1258,13 @@ class AlarmTreeEditorDisplay(Display):
             annunciating=self.annunciating_check.isChecked(),
             latching=self.latching_check.isChecked(),
             alarm_filter=self.filter_edit.text(),
+            guidance=self.guidance_edit.text(),
             role=Qt.EditRole,
         )
+
+    def set_property_layout(self):
+        print(self.property_view_layout)
+        print(dir(self.property_view_layout))
 
     @Slot()
     def handle_selection(self):
@@ -1261,22 +1278,54 @@ class AlarmTreeEditorDisplay(Display):
         self.delay_edit.setText(item.delay)
         self.count_edit.setText(item.count)
         self.filter_edit.setText(item.alarm_filter)
+        self.guidance_edit.setText(item.guidance)
 
         if item.is_group:
+            self.set_property_layout()
             self.description_edit.setEnabled(False)
+            self.description_edit.setVisible(False)
+            self.description_label.setVisible(False)
+
             self.count_edit.setEnabled(False)
+            self.count_edit.setVisible(False)
+            self.count_label.setVisible(False)
+
             self.delay_edit.setEnabled(False)
+            self.delay_edit.setVisible(False)
+            self.delay_label.setVisible(False)
+
             self.latching_check.setEnabled(False)
+            self.latching_check.setVisible(False)
+
             self.annunciating_check.setEnabled(False)
+            self.annunciating_check.setVisible(False)
+
             self.filter_edit.setEnabled(False)
+            self.filter_edit.setVisible(False)
+            self.filter_label.setVisible(False)
 
         else:
             self.description_edit.setEnabled(True)
+            self.description_edit.setVisible(True)
+            self.description_label.setVisible(True)
+
             self.count_edit.setEnabled(True)
+            self.count_edit.setVisible(True)
+            self.count_label.setVisible(True)
+
             self.delay_edit.setEnabled(True)
+            self.delay_edit.setVisible(True)
+            self.delay_label.setVisible(True)
+
             self.latching_check.setEnabled(True)
+            self.latching_check.setVisible(True)
+
             self.annunciating_check.setEnabled(True)
+            self.annunciating_check.setVisible(True)
+
             self.filter_edit.setEnabled(True)
+            self.filter_edit.setVisible(True)
+            self.filter_label.setVisible(True)
 
             if item.enabled:
                 self.enabled_check.setChecked(True)
@@ -1310,12 +1359,28 @@ class AlarmTreeEditorDisplay(Display):
             self.enabled_check.setChecked(False)
 
         if item.is_group:
+            self.set_property_layout()
             self.description_edit.setEnabled(False)
+            self.description_edit.setVisible(False)
+            self.description_label.setVisible(False)
+
             self.count_edit.setEnabled(False)
+            self.count_edit.setVisible(False)
+            self.count_label.setVisible(False)
+
             self.delay_edit.setEnabled(False)
+            self.delay_edit.setVisible(False)
+            self.delay_label.setVisible(False)
+
             self.latching_check.setEnabled(False)
+            self.latching_check.setVisible(False)
+
             self.annunciating_check.setEnabled(False)
+            self.annunciating_check.setVisible(False)
+
             self.filter_edit.setEnabled(False)
+            self.filter_edit.setVisible(False)
+            self.filter_label.setVisible(False)
 
         else:
             self.description_edit.setEnabled(True)
