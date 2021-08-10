@@ -24,6 +24,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./phoebus-alarm-server
+          context: ./cruise-control
           push: true
           tags: jgarrahan/nalms-cruise-control:${{ github.event.release.tag_name }}, jgarrahan/nalms-cruise-control:latest
