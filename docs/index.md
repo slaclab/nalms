@@ -25,7 +25,7 @@ Docker-compose may be used to run a packaged example with all components.
 $ docker-compose up
 ```
 
-Once running, the cruise control dashboard is available at http://localhost:9090, and the grafana alarm log dashboard is available at http://localhost:3000. To access the alarm log dashboard, log in using the grafana default accounts, username: admin, password: admin. The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. 
+Once running, the cruise control dashboard is available at http://localhost:9090, and the grafana alarm log dashboard is available at http://localhost:3000. The alarm logger may need to be restarted if using docker compose, due to a slight delay in the alarm server startup. 
 
 Operations on the IOC for this demo can be performed by running caputs/cagets after attaching to the running container. 
 
