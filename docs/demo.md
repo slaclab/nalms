@@ -127,6 +127,18 @@ $ nalms start-phoebus-client Demo
 ```
 
 
+To inspect the Docker containers run:
+```
+$ docker ps # to list container ids
+$ docker stats {CONTAINER_ID}
+```
+
+
+
+
+
+## Cleanup
+
 All containers may be stopped using the ids listed with:
 
 ```
