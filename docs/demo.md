@@ -1,5 +1,50 @@
 # Demo
-This demo is intended for running on SLAC's RHEL7 dev server. NALMS uses named Docker containers and so this demo cannot be run if the existing demo containers are running. The commands below are run using the existing RHEL7 docker installation, therefore requiring sudo. In the future, this installation should be changed for user use other than root. 
+
+The following PV tree will be used for the demo:
+
+
+![Components](img/demo_structure.png)
+
+
+We represent this tree with the configuration file in `examples/demo/demo.xml`.
+
+```yaml
+<?xml version='1.0' encoding='utf8'?>
+<config name="Demo">
+    <component name="GROUP1">
+        <pv name="DEMO:PV1">
+            <enabled>true</enabled>
+            <filter>DEMO:PV2 > 10</filter>
+        </pv>
+        <pv name="DEMO:PV2">
+            <enabled>true</enabled>
+        </pv>
+        <pv name="DEMO:PV3">
+            <enabled>true</enabled>
+        </pv>
+    </component>
+    <component name="GROUP2">
+        <component name="GROUP3">
+            <pv name="DEMO:PV4">
+                <enabled>true</enabled>
+            </pv>
+            <pv name="DEMO:PV5">
+                <enabled>true</enabled>
+            </pv>
+        </component>
+        <pv name="DEMO:PV6">
+            <enabled>true</enabled>
+        </pv>
+        <pv name="DEMO:PV7">
+            <enabled>true</enabled>
+        </pv>
+    </component>
+</config>
+```
+
+Notice that `DEMO:PV1` has an enabling filter based on the value of `DEMO:PV2`. This results in a disabled `DEMO:PV1` for values of `DEMO:PV2` less than or equal to ten.
+
+This demo is intended for running on SLAC's RHEL7 dev server; however, this same demo can be executed on machines provided that an apropriate environment is sourced. NALMS uses named Docker containers and so this demo cannot be run if the existing demo containers are running. The commands below are run using the existing RHEL7 docker installation. Users must be added to the docker group in order to interact with the containers. 
 
 Additionally, given that $NALMS_HOME is defined (in afs: $PACKAGE_TOP/nalms/current), the command line tool `bash ${NALMS_HOME}/cli/nalms` may be used directly by modifying the path:
 ```
@@ -7,6 +52,17 @@ $ export PATH=$NALMS_HOME/cli:$PATH
 ```
 
 For client use: $NALMS_CLIENT_JAR must be defined as well as $NALMS_HOME. The client launch script creates a templated configuration file for the client from a template provided in $NALMS_HOME. 
+
+## If running...
+If the service containers have already been deployed, you can access cruise control at: http://localhost:9090, the Grafana instance at: http://localhost:3000, and launch the client using:
+
+
+```
+$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/dev.env
+$ nalms start-phoebus-client Demo
+```
+
+## From scratch
 
 During this demo, we set up all services using the package CLI and the Docker images. On aird-b50-srv01, this can be sourced using: 
 
@@ -26,13 +82,13 @@ Exit the tmux window using: `Ctr + b + d`
 Set up Kafka cluster (from repo root): 
 
 ```
-$ sudo -E bash nalms start-zookeeper 
-$ sudo -E bash nalms start-kafka-broker --broker 0
+$ bash nalms start-zookeeper 
+$ bash nalms start-kafka-broker --broker 0
 ```
 
 Start cruise-control:
 ```
-$ sudo -E bash nalms start-cruise-control
+$ bash nalms start-cruise-control
 ```
 Navigate to [http://localhost:9090](http://localhost:9090) to view the Cruise Control interface and monitors of the Kafka cluster. 
 
@@ -41,25 +97,25 @@ Start the Phoebus alarm server: (Note: launch requires the absolute path of the 
 
 
 ```
-$ sudo -E nalms start-alarm-server Demo ${NALMS_HOME}/examples/demo/demo.xml
+$ nalms start-alarm-server Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
 
 Next, start the Elasticsearch service: 
 ```
-$ sudo -E nalms start-elasticsearch
+$ nalms start-elasticsearch
 ```
 
 Wait at least a minute before starting elasticsearch. The templates for the indices must be created before starting. Start the Phoebus alarm logger:
 ```
-$ sudo -E nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
+$ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
 Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. 
 
 Launch the Grafana instance:
 ```
-$ sudo -E nalms start-grafana --config Demo
+$ nalms start-grafana --config Demo
 ```
 
 Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Enter user=admin, password=admin into the login. Select AlarmLogs from the available dashboards.
@@ -67,20 +123,32 @@ Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). E
 
 Launch the Phoebus client:
 ```
-$ sudo -E nalms start-phoebus-client Demo
+$ nalms start-phoebus-client Demo
 ```
 
+
+To inspect the Docker containers run:
+```
+$ docker ps # to list container ids
+$ docker stats {CONTAINER_ID}
+```
+
+
+
+
+
+## Cleanup
 
 All containers may be stopped using the ids listed with:
 
 ```
-$ sudo docker ps
-$ sudo docker stop {containter_id}
+$ docker ps
+$ docker stop {containter_id}
 ```
 
 Remove lingering containers...
 ```
- $ sudo docker container rm
+ $ docker container rm {container_id}
 ```
 
 You can access and exit the demo ioc by attaching to the tmux session:
