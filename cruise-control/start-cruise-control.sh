@@ -24,7 +24,7 @@ if [[ -z "$BOOTSTRAP_SERVERS" ]]; then
 fi
 
 
-sed -i 's/$ZOOKEEPER_CONNECT/'"$ZOOKEEPER_CONNECT/" /opt/cruise-control/config/cruisecontrol.properties
-sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" /opt/cruise-control/config/cruisecontrol.properties
+sed -i 's/$ZOOKEEPER_CONNECT/'"$ZOOKEEPER_CONNECT/" $CRUISE_CONTROL_PROPERTIES
+sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" $CRUISE_CONTROL_PROPERTIES
 
-./kafka-cruise-control-start.sh /opt/cruise-control/config/cruisecontrol.properties
+./kafka-cruise-control-start.sh $CRUISE_CONTROL_PROPERTIES
