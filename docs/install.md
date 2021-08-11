@@ -280,13 +280,14 @@ https://github.com/linkedin/cruise-control-ui/wiki/Single-Kafka-Cluster
 
 #### Docker
 
-In order to run this image, you must mount a cruisecontrol.properties file to `/opt/cruise-control/config/cruisecontrol.properties`. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables.  The Docker run command for the packaged example is given below:
 
+In order to run this image, you must mount a cruisecontrol.properties to a path specified with the $CRUISE_CONTROL_PROPERTIES env variable. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables. The Docker run command for the packaged example is given below:
 
 docker run \
     -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
     -e ZOOKEEPER_CONNECT="${NALMS_ZOOKEEPER_HOST}:${NALMS_ZOOKEEPER_PORT}" \
-    -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties"
+    -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
+    -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
     -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest
 
