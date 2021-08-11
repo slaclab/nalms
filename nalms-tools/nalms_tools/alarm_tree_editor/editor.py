@@ -1,8 +1,9 @@
 import os
 import json
-import sys
-import importlib.util
 import time
+from functools import partial
+from xml.dom import minidom
+import xml.etree.ElementTree as ET
 
 from kafka import KafkaConsumer
 from qtpy.QtWidgets import (
@@ -40,10 +41,8 @@ from qtpy.QtCore import (
 )
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
-import xml.etree.ElementTree as ET
 from nalms_tools import alh_conversion
 from pydm.widgets.base import widget_destroyed
-from functools import partial
 from pydm.widgets.base import PyDMWritableWidget
 from pydm import Display
 
@@ -319,6 +318,7 @@ class AlarmTreeModel(QAbstractItemModel):
         self._root_item = AlarmTreeItem(self._tree.config_name)
         self._nodes.append(self._root_item)
 
+
     def clear(self):
         self._nodes = []
         self._root_item = None
@@ -492,6 +492,7 @@ class AlarmTreeModel(QAbstractItemModel):
         enabled=None,
         annunciating=None,
         alarm_filter=None,
+        guidance=None,
     ):
         # type: (QModelIndex, Qt.ItemDataRole, str, str, str, int, int, bool, bool, bool, str)
         if role != Qt.EditRole:
@@ -525,6 +526,9 @@ class AlarmTreeModel(QAbstractItemModel):
 
         if alarm_filter:
             item.alarm_filter = alarm_filter
+        
+        if guidance:
+            item.guidance = guidance
 
         self.dataChanged.emit(index, index)
 
@@ -893,7 +897,6 @@ class PhoebusConfigTool:
     def _clear(self):
         self._tree = None
         self._root = None
-        self._nodes = []
 
     def parse_config(self, filename):
         """
@@ -979,7 +982,8 @@ class PhoebusConfigTool:
         self._build_config(root_node)
 
         with open(filename, "wb") as f:
-            file_str = ET.tostring(self._tree, encoding="utf8")
+            file_str = minidom.parseString(ET.tostring(self._tree, encoding="utf8")).toprettyxml(indent="   ")
+
             f.write(file_str)
 
     def _build_config(self, root_node):
@@ -1262,10 +1266,6 @@ class AlarmTreeEditorDisplay(Display):
             role=Qt.EditRole,
         )
 
-    def set_property_layout(self):
-        print(self.property_view_layout)
-        print(dir(self.property_view_layout))
-
     @Slot()
     def handle_selection(self):
         self.remove_button.setEnabled(self.tree_view.selectionModel().hasSelection())
@@ -1281,7 +1281,6 @@ class AlarmTreeEditorDisplay(Display):
         self.guidance_edit.setText(item.guidance)
 
         if item.is_group:
-            self.set_property_layout()
             self.description_edit.setEnabled(False)
             self.description_edit.setVisible(False)
             self.description_label.setVisible(False)
@@ -1359,7 +1358,6 @@ class AlarmTreeEditorDisplay(Display):
             self.enabled_check.setChecked(False)
 
         if item.is_group:
-            self.set_property_layout()
             self.description_edit.setEnabled(False)
             self.description_edit.setVisible(False)
             self.description_label.setVisible(False)
@@ -1384,11 +1382,26 @@ class AlarmTreeEditorDisplay(Display):
 
         else:
             self.description_edit.setEnabled(True)
+            self.description_edit.setVisible(True)
+            self.description_label.setVisible(True)
+
             self.count_edit.setEnabled(True)
+            self.count_edit.setVisible(True)
+            self.count_label.setVisible(True)
+
             self.delay_edit.setEnabled(True)
+            self.delay_edit.setVisible(True)
+            self.delay_label.setVisible(True)
+
             self.latching_check.setEnabled(True)
+            self.latching_check.setVisible(True)
+
             self.annunciating_check.setEnabled(True)
+            self.annunciating_check.setVisible(True)
+
             self.filter_edit.setEnabled(True)
+            self.filter_edit.setVisible(True)
+            self.filter_label.setVisible(True)
 
             if item.latching:
                 self.latching_check.setChecked(True)
