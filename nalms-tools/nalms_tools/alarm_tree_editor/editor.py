@@ -8,8 +8,10 @@ import xml.etree.ElementTree as ET
 from kafka import KafkaConsumer
 from qtpy.QtWidgets import (
     QDialog,
+    QWidget,
     QVBoxLayout,
     QHBoxLayout,
+    QStackedLayout,
     QTreeView,
     QCheckBox,
     QAbstractItemView,
@@ -1072,7 +1074,7 @@ class AlarmTreeEditorDisplay(Display):
         self.app = QApplication.instance()
 
         # set up the ui
-        self.setup_ui()
+        self.setup_ui2()
 
         # allow add and remove row
         self.add_button.clicked.connect(self.insertChild)
@@ -1103,7 +1105,8 @@ class AlarmTreeEditorDisplay(Display):
 
         self.config_tool = PhoebusConfigTool()
 
-    def setup_ui(self):
+
+    def setup_ui2(self):
         self.main_layout = QGridLayout()
         self.setLayout(self.main_layout)
 
@@ -1153,75 +1156,122 @@ class AlarmTreeEditorDisplay(Display):
         # add the tree view to the window
         self.main_layout.addLayout(self.tree_view_layout, 0, 0)
 
-        # crate property view
+        
         self.property_layout = QVBoxLayout()
-        self.property_label_layout = QHBoxLayout()
-        self.property_label_layout.addWidget(QLabel("Alarm Properties"))
-        self.property_layout.addLayout(self.property_label_layout)
+        self.property_layout.addWidget(QLabel("Alarm Properties"))
 
-        self.property_view_layout = QGridLayout()
+        # crate property view
+        self.property_data_layout = QStackedLayout()
+        self.property_layout.addLayout(self.property_data_layout)
+
+
+        # create group widget
+        self.property_widget_group = QWidget()
+        self.property_widget_group.setWindowTitle("group")
+
+        self.property_view_layout_group = QGridLayout()
+
 
         # add label
-        self.label_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("NAME"), 1, 0)
-        self.property_view_layout.addWidget(self.label_edit, 1, 1, 1, 3)
-
+        self.label_edit_group = QLineEdit()
+        self.label_label_group =QLabel("NAME")
 
         # add guidance
-        self.guidance_edit = QLineEdit()
-        self.property_view_layout.addWidget(QLabel("GUIDANCE"), 3, 0)
-        self.property_view_layout.addWidget(self.guidance_edit, 3, 1, 1, 3)
+        self.guidance_edit_group = QLineEdit()
+        self.guidance_label_group = QLabel("GUIDANCE")
+
+        self.property_view_layout_group.addWidget(self.label_label_group, 1, 0)
+        self.property_view_layout_group.addWidget(self.label_edit_group, 1, 1)
+
+        self.property_view_layout_group.addWidget(self.guidance_label_group, 2, 0)
+        self.property_view_layout_group.addWidget(self.guidance_edit_group, 2, 1)
+
+        spacer = QSpacerItem(40, 200, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.property_view_layout_group.addItem(spacer, 3, 0)
+        self.property_view_layout_group.addItem(spacer, 4, 0)
+        self.property_view_layout_group.addItem(spacer, 5, 0)
+        self.property_view_layout_group.addItem(spacer, 6, 0)
+        self.property_view_layout_group.addItem(spacer, 7, 0)
+        self.property_view_layout_group.addItem(spacer, 8, 0)
+
+
+        # create pv widget
+        self.property_widget_pv = QWidget()
+        self.property_widget_pv.setWindowTitle("pv")
+
+        self.property_view_layout_pv = QGridLayout()
+
+        # add label
+        self.label_edit_pv = QLineEdit()
+        self.label_label_pv =QLabel("NAME")
+
+        # add guidance
+        self.guidance_edit_pv = QLineEdit()
+        self.guidance_label_pv = QLabel("GUIDANCE")
+
+        self.property_view_layout_pv.addWidget(self.label_label_pv, 1, 0)
+        self.property_view_layout_pv.addWidget(self.label_edit_pv, 1, 1, 1, 3)
+
+        self.property_view_layout_pv.addWidget(self.guidance_label_pv, 2, 0)
+        self.property_view_layout_pv.addWidget(self.guidance_edit_pv, 2, 1, 1, 3)
 
 
         # add description
         self.description_edit = QLineEdit()
         self.description_label = QLabel("DESCRIPTION")
-        self.property_view_layout.addWidget(self.description_label, 2, 0)
-        self.property_view_layout.addWidget(self.description_edit, 2, 1, 1, 3)
+        self.property_view_layout_pv.addWidget(self.description_label, 3, 0)
+        self.property_view_layout_pv.addWidget(self.description_edit, 3, 1, 1, 3)
 
         # add delay
         self.delay_edit = QLineEdit()
         self.delay_label = QLabel("DELAY")
-        self.property_view_layout.addWidget(self.delay_label, 4, 0)
-        self.property_view_layout.addWidget(self.delay_edit, 4, 1, 1, 3)
+        self.property_view_layout_pv.addWidget(self.delay_label, 4, 0)
+        self.property_view_layout_pv.addWidget(self.delay_edit, 4, 1, 1, 3)
         self.delay_edit.setValidator(QIntValidator())
 
         # add count
         self.count_edit = QLineEdit()
         self.count_label = QLabel("COUNT")
-        self.property_view_layout.addWidget(self.count_label, 5, 0)
-        self.property_view_layout.addWidget(self.count_edit, 5, 1, 1, 3)
+        self.property_view_layout_pv.addWidget(self.count_label, 5, 0)
+        self.property_view_layout_pv.addWidget(self.count_edit, 5, 1, 1, 3)
         self.count_edit.setValidator(QIntValidator())
 
         # add filter/force pv
         self.filter_edit = QLineEdit()
         self.filter_label = QLabel("ENABLING FILTER")
-        self.property_view_layout.addWidget(self.filter_label, 6, 0)
-        self.property_view_layout.addWidget(self.filter_edit, 6, 1, 1, 3)
+        self.property_view_layout_pv.addWidget(self.filter_label, 6, 0)
+        self.property_view_layout_pv.addWidget(self.filter_edit, 6, 1, 1, 3)
 
         # enabled, latching, annunciating
         self.enabled_check = QCheckBox("ENABLED")
         self.annunciating_check = QCheckBox("ANNUNCIATING")
         self.latching_check = QCheckBox("LATCHING")
-        self.property_view_layout.addWidget(self.enabled_check, 7, 0)
-        self.property_view_layout.addWidget(self.annunciating_check, 7, 1)
-        self.property_view_layout.addWidget(self.latching_check, 7, 2)
-        spacer = QSpacerItem(40, 200, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.property_view_layout_pv.addWidget(self.enabled_check, 7, 0)
+        self.property_view_layout_pv.addWidget(self.annunciating_check, 7, 1)
+        self.property_view_layout_pv.addWidget(self.latching_check, 7, 2)
 
-        self.property_view_layout.addItem(spacer, 7, 0)
+        self.property_view_layout_pv.addItem(spacer, 8, 0)
 
         # create save button
         self.button_box = QDialogButtonBox(self)
         self.button_box.setOrientation(Qt.Horizontal)
         self.button_box.addButton("Save Properties", QDialogButtonBox.AcceptRole)
 
-        self.property_view_layout.addWidget(self.button_box, 8, 2)
-        self.property_layout.addLayout(self.property_view_layout)
+        self.property_layout.addWidget(self.button_box)
+       # self.property_layout.addLayout(self.property_view_layout)
+
+        self.property_widget_pv.setLayout(self.property_view_layout_pv)
+        self.property_widget_group.setLayout(self.property_view_layout_group)
+
+        self.property_data_layout.addWidget(self.property_widget_pv)
+        self.property_data_layout.addWidget(self.property_widget_group)
 
         self.main_layout.addLayout(self.property_layout, 0, 1)
 
         self.setWindowTitle("Alarm Tree Editor")
         self.tree_view.expandAll()
+
 
     def minimumSizeHint(self):
         # This is the default recommended size
@@ -1250,9 +1300,17 @@ class AlarmTreeEditorDisplay(Display):
     @Slot()
     def save_property_changes(self):
         index = self.tree_view.selectionModel().currentIndex()
+        item = self.tree_view.model().getItem(index) 
+        if item.is_group:
+            guidance = self.guidance_edit_group.text()
+            label = self.label_edit_group.text()
+        else: 
+            guidance = self.guidance_edit_pv.text()
+            label = self.label_edit_pv.text()
+
         self.tree_view.model().set_data(
             index,
-            label=self.label_edit.text(),
+            label=label,
             description=self.description_edit.text(),
             delay=self.delay_edit.text(),
             count=self.count_edit.text(),
@@ -1260,7 +1318,7 @@ class AlarmTreeEditorDisplay(Display):
             annunciating=self.annunciating_check.isChecked(),
             latching=self.latching_check.isChecked(),
             alarm_filter=self.filter_edit.text(),
-            guidance=self.guidance_edit.text(),
+            guidance=guidance,
             role=Qt.EditRole,
         )
 
@@ -1271,14 +1329,15 @@ class AlarmTreeEditorDisplay(Display):
         index = self.tree_view.selectionModel().currentIndex()
         item = self.tree_view.model().getItem(index)
 
-        self.description_edit.setText(item.description)
-        self.label_edit.setText(item.label)
-        self.delay_edit.setText(item.delay)
-        self.count_edit.setText(item.count)
-        self.filter_edit.setText(item.alarm_filter)
-        self.guidance_edit.setText(item.guidance)
+        if item.is_group:
+            self.guidance_edit_group.setText(item.guidance)
+            self.label_edit_group.setText(item.label)
+        else: 
+            self.guidance_edit_pv.setText(item.guidance)
+            self.label_edit_pv.setText(item.label)
 
         if item.is_group:
+            self.property_data_layout.setCurrentWidget(self.property_widget_group)
             self.description_edit.setEnabled(False)
             self.description_edit.setVisible(False)
             self.description_label.setVisible(False)
@@ -1302,6 +1361,7 @@ class AlarmTreeEditorDisplay(Display):
             self.filter_label.setVisible(False)
 
         else:
+            self.property_data_layout.setCurrentWidget(self.property_widget_pv)
             self.description_edit.setEnabled(True)
             self.description_edit.setVisible(True)
             self.description_label.setVisible(True)
@@ -1344,18 +1404,16 @@ class AlarmTreeEditorDisplay(Display):
         index = self.tree_view.selectionModel().currentIndex()
         item = self.tree_view.model().getItem(index)
 
-        self.description_edit.setText(item.description)
-        self.label_edit.setText(item.label)
+        if item.is_group:
+            self.guidance_edit_group.setText(item.guidance)
+            self.label_edit_group.setText(item.label)
+        else: 
+            self.guidance_edit_pv.setText(item.guidance)
+            self.label_edit_pv.setText(item.label)
 
-        self.delay_edit.setText(item.delay)
-        self.count_edit.setText(item.count)
-
-        if item.enabled:
-            self.enabled_check.setChecked(True)
-        else:
-            self.enabled_check.setChecked(False)
 
         if item.is_group:
+            self.property_data_layout.setCurrentWidget(self.property_widget_group)
             self.description_edit.setEnabled(False)
             self.description_edit.setVisible(False)
             self.description_label.setVisible(False)
@@ -1379,6 +1437,15 @@ class AlarmTreeEditorDisplay(Display):
             self.filter_label.setVisible(False)
 
         else:
+            self.delay_edit.setText(item.delay)
+            self.count_edit.setText(item.count)
+
+            if item.enabled:
+                self.enabled_check.setChecked(True)
+            else:
+                self.enabled_check.setChecked(False)
+
+            self.property_data_layout.setCurrentWidget(self.property_widget_pv)
             self.description_edit.setEnabled(True)
             self.description_edit.setVisible(True)
             self.description_label.setVisible(True)
