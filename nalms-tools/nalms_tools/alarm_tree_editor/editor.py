@@ -978,12 +978,10 @@ class PhoebusConfigTool:
                 self._handle_pv_parse(child, group_idx)
 
     def save_configuration(self, root_node, filename):
-        # disregard root and create new
         self._build_config(root_node)
 
-        with open(filename, "wb") as f:
+        with open(filename, "w") as f:
             file_str = minidom.parseString(ET.tostring(self._tree, encoding="utf8")).toprettyxml(indent="   ")
-
             f.write(file_str)
 
     def _build_config(self, root_node):
