@@ -39,7 +39,7 @@ from qtpy.QtCore import (
     Property,
     QAbstractItemModel,
     QSize,
-    QMimeData
+    QMimeData,
 )
 from qtpy.QtGui import QBrush, QColor, QIntValidator
 
@@ -49,8 +49,11 @@ from pydm.widgets.base import PyDMWritableWidget
 from pydm import Display
 
 
-
 class AlarmTreeItem(QObject):
+    """
+    Alarm tree items hold all data for an entry in the configuration heirarchy
+    """
+
     data_changed = Signal()
     send_value_signal = Signal(bool)
 
@@ -68,7 +71,7 @@ class AlarmTreeItem(QObject):
         is_group=False,
         alarm_filter=None,
         alarm_configuration=None,
-        guidance=None
+        guidance=None,
     ):
         # type: (str, QObject, str, str, bool, bool, bool, int, int, bool, str, str)
 
@@ -82,7 +85,7 @@ class AlarmTreeItem(QObject):
         self._channels = []
         self.severity = None
         self.status = None
-        
+
         self.guidance = guidance
         self.description = description
         self.enabled = enabled
@@ -320,7 +323,6 @@ class AlarmTreeModel(QAbstractItemModel):
         self._root_item = AlarmTreeItem(self._tree.config_name)
         self._nodes.append(self._root_item)
 
-
     def clear(self):
         self._nodes = []
         self._root_item = None
@@ -528,7 +530,7 @@ class AlarmTreeModel(QAbstractItemModel):
 
         if alarm_filter:
             item.alarm_filter = alarm_filter
-        
+
         if guidance:
             item.guidance = guidance
 
@@ -831,7 +833,7 @@ class PyDMAlarmTree(QTreeView, PyDMWritableWidget):
         self.setDragDropOverwriteMode(False)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
-      #  self.setHeaderHidden(True)
+        #  self.setHeaderHidden(True)
         self.setColumnWidth(0, 160)
         self.setColumnWidth(1, 160)
         self.setColumnWidth(2, 160)
@@ -950,7 +952,7 @@ class PhoebusConfigTool:
 
             elif child.tag == "filter":
                 data["alarm_filter"] = child.text
-            
+
             elif child.tag == "guidance":
                 data["guidance"] = child.text
 
@@ -983,7 +985,9 @@ class PhoebusConfigTool:
         self._build_config(root_node)
 
         with open(filename, "w") as f:
-            file_str = minidom.parseString(ET.tostring(self._tree, encoding="utf8")).toprettyxml(indent="   ")
+            file_str = minidom.parseString(
+                ET.tostring(self._tree, encoding="utf8")
+            ).toprettyxml(indent="   ")
             f.write(file_str)
 
     def _build_config(self, root_node):
@@ -1070,7 +1074,6 @@ class AlarmTreeEditorDisplay(Display):
     def __init__(self, parent=None):
         super(AlarmTreeEditorDisplay, self).__init__(parent=parent)
 
-
         self.app = QApplication.instance()
 
         # set up the ui
@@ -1104,7 +1107,6 @@ class AlarmTreeEditorDisplay(Display):
         self.resize(800, 600)
 
         self.config_tool = PhoebusConfigTool()
-
 
     def setup_ui2(self):
         self.main_layout = QGridLayout()
@@ -1156,7 +1158,6 @@ class AlarmTreeEditorDisplay(Display):
         # add the tree view to the window
         self.main_layout.addLayout(self.tree_view_layout, 0, 0)
 
-        
         self.property_layout = QVBoxLayout()
         self.property_layout.addWidget(QLabel("Alarm Properties"))
 
@@ -1164,17 +1165,15 @@ class AlarmTreeEditorDisplay(Display):
         self.property_data_layout = QStackedLayout()
         self.property_layout.addLayout(self.property_data_layout)
 
-
         # create group widget
         self.property_widget_group = QWidget()
         self.property_widget_group.setWindowTitle("group")
 
         self.property_view_layout_group = QGridLayout()
 
-
         # add label
         self.label_edit_group = QLineEdit()
-        self.label_label_group =QLabel("NAME")
+        self.label_label_group = QLabel("NAME")
 
         # add guidance
         self.guidance_edit_group = QLineEdit()
@@ -1195,7 +1194,6 @@ class AlarmTreeEditorDisplay(Display):
         self.property_view_layout_group.addItem(spacer, 7, 0)
         self.property_view_layout_group.addItem(spacer, 8, 0)
 
-
         # create pv widget
         self.property_widget_pv = QWidget()
         self.property_widget_pv.setWindowTitle("pv")
@@ -1204,7 +1202,7 @@ class AlarmTreeEditorDisplay(Display):
 
         # add label
         self.label_edit_pv = QLineEdit()
-        self.label_label_pv =QLabel("NAME")
+        self.label_label_pv = QLabel("NAME")
 
         # add guidance
         self.guidance_edit_pv = QLineEdit()
@@ -1215,7 +1213,6 @@ class AlarmTreeEditorDisplay(Display):
 
         self.property_view_layout_pv.addWidget(self.guidance_label_pv, 2, 0)
         self.property_view_layout_pv.addWidget(self.guidance_edit_pv, 2, 1, 1, 3)
-
 
         # add description
         self.description_edit = QLineEdit()
@@ -1259,7 +1256,7 @@ class AlarmTreeEditorDisplay(Display):
         self.button_box.addButton("Save Properties", QDialogButtonBox.AcceptRole)
 
         self.property_layout.addWidget(self.button_box)
-       # self.property_layout.addLayout(self.property_view_layout)
+        # self.property_layout.addLayout(self.property_view_layout)
 
         self.property_widget_pv.setLayout(self.property_view_layout_pv)
         self.property_widget_group.setLayout(self.property_view_layout_group)
@@ -1271,7 +1268,6 @@ class AlarmTreeEditorDisplay(Display):
 
         self.setWindowTitle("Alarm Tree Editor")
         self.tree_view.expandAll()
-
 
     def minimumSizeHint(self):
         # This is the default recommended size
@@ -1300,11 +1296,11 @@ class AlarmTreeEditorDisplay(Display):
     @Slot()
     def save_property_changes(self):
         index = self.tree_view.selectionModel().currentIndex()
-        item = self.tree_view.model().getItem(index) 
+        item = self.tree_view.model().getItem(index)
         if item.is_group:
             guidance = self.guidance_edit_group.text()
             label = self.label_edit_group.text()
-        else: 
+        else:
             guidance = self.guidance_edit_pv.text()
             label = self.label_edit_pv.text()
 
@@ -1332,7 +1328,7 @@ class AlarmTreeEditorDisplay(Display):
         if item.is_group:
             self.guidance_edit_group.setText(item.guidance)
             self.label_edit_group.setText(item.label)
-        else: 
+        else:
             self.guidance_edit_pv.setText(item.guidance)
             self.label_edit_pv.setText(item.label)
 
@@ -1407,10 +1403,9 @@ class AlarmTreeEditorDisplay(Display):
         if item.is_group:
             self.guidance_edit_group.setText(item.guidance)
             self.label_edit_group.setText(item.label)
-        else: 
+        else:
             self.guidance_edit_pv.setText(item.guidance)
             self.label_edit_pv.setText(item.label)
-
 
         if item.is_group:
             self.property_data_layout.setCurrentWidget(self.property_widget_group)
@@ -1603,4 +1598,3 @@ class LegacyWindow(QDialog):
     def ui_filepath(self):
         # No UI file is being used
         return None
-
