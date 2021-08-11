@@ -45,9 +45,9 @@ fi
 CONFIG_NAME=$1
 CONFIG_FILE=$2
 
-sed -i 's/$ES_HOST/'"$ES_HOST/" $ALARM_LOGGER_PROPERTIES
-sed -i 's/$ES_PORT/'"$ES_PORT/" $ALARM_LOGGER_PROPERTIES
-sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" $ALARM_LOGGER_PROPERTIES
+sed 's/$ES_HOST/'"$ES_HOST/" $ALARM_LOGGER_PROPERTIES > /tmp/logger.properties
+sed -i 's/$ES_PORT/'"$ES_PORT/" /tmp/logger.properties
+sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" /tmp/logger.properties
 
 
-java -jar $ALARM_LOGGER_JAR -properties $ALARM_LOGGER_PROPERTIES -topics $CONFIG_NAME -noshell
+java -jar $ALARM_LOGGER_JAR -properties /tmp/logger.properties -topics $CONFIG_NAME -noshell

@@ -226,15 +226,17 @@ Additionally, logging for the logger is configurable and defined in `phoebus-ala
 
 #### Docker
 
-The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option and the definition of Elasticsearch networking variables. The Docker run command for the packaged example is given below:
+The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option. The image supports the interpolation of networking variables $NALMS_ES_HOST, $NALMS_ES_PORT, and $NALMS_KAFKA_BOOTSTRAP in this file. The Docker run command for the packaged example is given below:
 
 ```
-docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
-  -e ES_HOST=${HOST_IP} \
-  -e ES_PORT=9200 \ 
-  -e BOOTSTRAP_SERVERS=${HOST_IP}:19092 \
-  --name nalms_logger_Demo \
-  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger Demo /tmp/nalms/Demo.xml
+$ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  -e ES_HOST="${NALMS_ES_HOST}" \
+  -e ES_PORT="${NALMS_ES_PORT}" \
+  -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
+  -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
+  -v "${ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
+  --name nalms_logger_$CONFIG_NAME \
+  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
 
