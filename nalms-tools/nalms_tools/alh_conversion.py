@@ -7,6 +7,7 @@ This script is intended for the conversion of alhConfig files to phoebus alarm s
 See configuration file description for alh here: https://epics.anl.gov/EpicsDocumentation/ExtensionsManuals/AlarmHandler/alhUserGuide-1.2.35/ALHUserGuide.html#pgfId_689941
 """
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import os
 import copy
 import fileinput
@@ -677,8 +678,10 @@ class XMLBuilder:
 
         """
 
-        with open(output_filename, "wb") as f:
-            file_str = ET.tostring(self._configuration, encoding="utf8")
+        with open(output_filename, "w") as f:
+            file_str = minidom.parseString(
+                ET.tostring(self._configuration, encoding="utf8")
+            ).toprettyxml(indent="   ")
             f.write(file_str)
 
     def _handle_children(self, node: Node, parent_group: str = None) -> None:
