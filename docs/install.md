@@ -276,18 +276,18 @@ The `cruise-control/cruisecontrol.properties` file dictates the behavior of the 
 
 See wiki:
 https://github.com/linkedin/cruise-control/wiki
-
+https://github.com/linkedin/cruise-control-ui/wiki/Single-Kafka-Cluster
 
 #### Docker
 
 In order to run this image, you must mount a cruisecontrol.properties file to `/opt/cruise-control/config/cruisecontrol.properties`. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables.  The Docker run command for the packaged example is given below:
 
-```
+
 docker run \
-    -e BOOTSTRAP_SERVERS=${HOST_IP}:5064 \
-    -e ZOOKEEPER_CONNECT=${HOST_IP}:2181 \
+    -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
+    -e ZOOKEEPER_CONNECT="${NALMS_ZOOKEEPER_HOST}:${NALMS_ZOOKEEPER_PORT}" \
+    -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties"
     --name nalms_cruise_control \
-    -p "9090:9090" -d jgarrahan/nalms-cruise-control:latest
-```
+    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest
 
 The Cruise Control UI is then available in browser at localhost:9090.

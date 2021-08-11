@@ -23,8 +23,8 @@ if [[ -z "$BOOTSTRAP_SERVERS" ]]; then
   usage
 fi
 
+# if launching using interpolation, perform substitution
+sed 's/$ZOOKEEPER_CONNECT/'"$ZOOKEEPER_CONNECT/" $CRUISE_CONTROL_PROPERTIES > /tmp/cruisecontrol.properties
+sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" /tmp/cruisecontrol.properties
 
-sed -i 's/$ZOOKEEPER_CONNECT/'"$ZOOKEEPER_CONNECT/" $CRUISE_CONTROL_PROPERTIES
-sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" $CRUISE_CONTROL_PROPERTIES
-
-./kafka-cruise-control-start.sh $CRUISE_CONTROL_PROPERTIES
+./kafka-cruise-control-start.sh /tmp/cruisecontrol.properties

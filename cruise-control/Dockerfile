@@ -24,7 +24,6 @@ RUN yum install -y git ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     -o /tmp/cruise-control-ui.tar.gz \
     && tar zxvf /tmp/cruise-control-ui.tar.gz
 
-COPY cruisecontrol.properties /opt/cruise-control/config/cruisecontrol.properties
 
 FROM centos:7 as runtime
 WORKDIR /opt/cruise-control
@@ -33,8 +32,10 @@ ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH ${JAVA_HOME}/bin:$PATH
+ENV CRUISE_CONTROL_PROPERTIES /opt/cruise-control/config/cruisecontrol.properties
 
 COPY --from=build /opt/cruise-control .
+COPY config.csv /opt/cruise-control/cruise-control-ui/dist/static/config.csv
 COPY start-cruise-control.sh /opt/cruise-control
 
 RUN yum -y install ${JAVA_BASE}-${JAVA_VERSION} && \
