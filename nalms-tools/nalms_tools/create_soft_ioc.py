@@ -14,12 +14,13 @@ import string
 from importlib_resources import files
 from shutil import copyfile
 
-TEMPLATE_FILE = files('nalms_tools.files').joinpath('force_pv.template')
+TEMPLATE_FILE = files("nalms_tools.files").joinpath("force_pv.template")
 ALPHABET = string.ascii_uppercase
 
 
-
-def create_force_pvs(filename:str, output_directory:str, force_pv_template:str, config_name:str) -> str:
+def create_force_pvs(
+    filename: str, output_directory: str, force_pv_template: str, config_name: str
+) -> str:
     """Utility function for creating and writing forcepv template given a configuration.
 
     Args:
@@ -56,7 +57,6 @@ def create_force_pvs(filename:str, output_directory:str, force_pv_template:str, 
     return output_filename
 
 
-
 def create_summary_pvs(filename: str, output_directory: str, config_name: str) -> str:
     """Utility function for creating and writing summary db file.
 
@@ -78,40 +78,48 @@ def create_summary_pvs(filename: str, output_directory: str, config_name: str) -
     for group in groups:
         name = group.get("name")
         lines.append(f"record(calc, {name}:STATSUMY) {{\n")
-        lines+= ['field(DESC, "Summary PV")\n', 'field(SCAN, "1 second")\n']
+        lines += ['field(DESC, "Summary PV")\n', 'field(SCAN, "1 second")\n']
 
         child_idx = 0
         for child in group.iterchildren():
             child_name = child.get("name")
             if child.tag == "component":
-                lines.append( f'field(INP{ALPHABET[child_idx]}, "{child_name}:STATSUMY.SEVR NPP MS")\n' )
+                lines.append(
+                    f'field(INP{ALPHABET[child_idx]}, "{child_name}:STATSUMY.SEVR NPP MS")\n'
+                )
 
             elif child.tag == "pv":
-                lines.append( f'field(INP{ALPHABET[child_idx]}, "{child_name}:DP.SEVR NPP MS")\n' )
+                lines.append(
+                    f'field(INP{ALPHABET[child_idx]}, "{child_name}:DP.SEVR NPP MS")\n'
+                )
 
             child_idx += 1
 
-        lines += ['field(CALC, "0")\n', '}\n\n']
+        lines += ['field(CALC, "0")\n', "}\n\n"]
 
     # groups create FP summary
     groups = root.findall(".//component")
     for group in groups:
         name = group.get("name")
         lines.append(f"record(calc, {name}:STATSUMYFP) {{\n")
-        lines+= ['field(DESC, "Summary PV")\n', 'field(SCAN, "1 second")\n']
+        lines += ['field(DESC, "Summary PV")\n', 'field(SCAN, "1 second")\n']
 
         child_idx = 0
         for child in group.iterchildren():
             child_name = child.get("name")
             if child.tag == "component":
-                lines.append( f'field(INP{ALPHABET[child_idx]}, "{child_name}:STATSUMYFP.SEVR NPP MS")\n' )
+                lines.append(
+                    f'field(INP{ALPHABET[child_idx]}, "{child_name}:STATSUMYFP.SEVR NPP MS")\n'
+                )
 
             elif child.tag == "pv":
-                lines.append( f'field(INP{ALPHABET[child_idx]}, "{child_name}FP.SEVR NPP MS")\n' )
+                lines.append(
+                    f'field(INP{ALPHABET[child_idx]}, "{child_name}FP.SEVR NPP MS")\n'
+                )
 
             child_idx += 1
 
-        lines += ['field(CALC, "0")\n', '}\n\n']
+        lines += ['field(CALC, "0")\n', "}\n\n"]
 
     # create substitutions file
     output_filename = f"{output_directory}/NALMS_{config_name}.db"
@@ -122,7 +130,9 @@ def create_summary_pvs(filename: str, output_directory: str, config_name: str) -
     return output_filename
 
 
-def create_soft_ioc(filename: str, template_file: str, output_directory: str, config_name: str) -> None:
+def create_soft_ioc(
+    filename: str, template_file: str, output_directory: str, config_name: str
+) -> None:
     """Create softIoc from a configuration file.
 
     Args:
@@ -133,20 +143,21 @@ def create_soft_ioc(filename: str, template_file: str, output_directory: str, co
 
     """
 
-    templated_filename = create_force_pvs(filename, output_directory, template_file, config_name)
+    templated_filename = create_force_pvs(
+        filename, output_directory, template_file, config_name
+    )
     summary_pv_filename = create_summary_pvs(filename, output_directory, config_name)
-    
+
     # get working directory
     with open(f"{output_directory}/st.cmd", "w") as f:
-        f.write(f"dbLoadRecords(\"{summary_pv_filename}\") \n")
-        f.write(f"dbLoadTemplate(\"{templated_filename}\") \n")
+        f.write(f'dbLoadRecords("{summary_pv_filename}") \n')
+        f.write(f'dbLoadTemplate("{templated_filename}") \n')
         f.write("iocInit \n")
 
     template_base = str(template_file).split("/")[-1]
     copyfile(template_file, f"{output_directory}/{template_base}")
 
     print(f"Created {templated_filename}, {summary_pv_filename}, and st.cmd.")
-
 
 
 def main():
@@ -166,7 +177,10 @@ def main():
         configuration_file = sys.argv[1]
         output_directory = sys.argv[2]
         config_name = sys.argv[3]
-        create_soft_ioc(configuration_file, TEMPLATE_FILE, output_directory, config_name)
+        create_soft_ioc(
+            configuration_file, TEMPLATE_FILE, output_directory, config_name
+        )
+
 
 if __name__ == "__main__":
     main()

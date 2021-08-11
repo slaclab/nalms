@@ -19,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 dirname = os.path.dirname(__file__)
-DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'files/sevrpv.template'))
+DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "files/sevrpv.template")
+)
 
 
 class ForcePV:
@@ -537,7 +539,7 @@ class ALHFileParser:
                 next_line = next(self._line_iterator)
                 if next_line:
 
-                    # check for summary pv entry 
+                    # check for summary pv entry
                     if "Summary PV" in next_line:
                         summary_pvname = next_line.strip("Summary PV:").strip()
                         # track sevrpv
