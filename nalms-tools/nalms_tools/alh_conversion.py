@@ -7,6 +7,7 @@ This script is intended for the conversion of alhConfig files to phoebus alarm s
 See configuration file description for alh here: https://epics.anl.gov/EpicsDocumentation/ExtensionsManuals/AlarmHandler/alhUserGuide-1.2.35/ALHUserGuide.html#pgfId_689941
 """
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import os
 import copy
 import fileinput
@@ -18,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 dirname = os.path.dirname(__file__)
-DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'files/sevrpv.template'))
+DEFAULT_SEVRPV_TEMPLATE = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "files/sevrpv.template")
+)
 
 
 class ForcePV:
@@ -536,7 +539,7 @@ class ALHFileParser:
                 next_line = next(self._line_iterator)
                 if next_line:
 
-                    # check for summary pv entry 
+                    # check for summary pv entry
                     if "Summary PV" in next_line:
                         summary_pvname = next_line.strip("Summary PV:").strip()
                         # track sevrpv
@@ -677,8 +680,10 @@ class XMLBuilder:
 
         """
 
-        with open(output_filename, "wb") as f:
-            file_str = ET.tostring(self._configuration, encoding="utf8")
+        with open(output_filename, "w") as f:
+            file_str = minidom.parseString(
+                ET.tostring(self._configuration, encoding="utf8")
+            ).toprettyxml(indent="   ")
             f.write(file_str)
 
     def _handle_children(self, node: Node, parent_group: str = None) -> None:
