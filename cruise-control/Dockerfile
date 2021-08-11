@@ -10,9 +10,6 @@ COPY gradle.properties /tmp/cruise-control/gradle.properties
 
 WORKDIR /opt
 
-#    && rm gradle.properties \
-#    && cp /tmp/cruise-control/gradle.properties gradle.properties \
-
 RUN yum install -y git ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     git clone https://github.com/linkedin/cruise-control.git \
     && cd cruise-control  \
@@ -32,7 +29,6 @@ ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
 ENV PATH ${JAVA_HOME}/bin:$PATH
-ENV CRUISE_CONTROL_PROPERTIES /opt/cruise-control/config/cruisecontrol.properties
 
 COPY --from=build /opt/cruise-control .
 COPY config.csv /opt/cruise-control/cruise-control-ui/dist/static/config.csv
