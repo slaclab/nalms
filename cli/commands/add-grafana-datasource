@@ -5,7 +5,7 @@
 #
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms add-grafana-datasource config_name(s)"
+  echo "Usage: nalms add-grafana-datasource config_names"
   echo "Accepts comma separated list of config names."
   echo "Requires setting of following environment variables: \$NALMS_GRAFANA_DATASOURCE_FILE,"
   echo "\$NALMS_ES_HOST, \$NALMS_ES_PORT"
