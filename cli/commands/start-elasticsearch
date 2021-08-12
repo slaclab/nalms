@@ -7,6 +7,7 @@ usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-elasticsearch [--port elasticsearch]"
   echo "Port required, but may be set using the \$NALMS_ES_PORT environment variable."
+  echo "\$NALMS_ES_CONFIG must be set."
   exit 0
 }
 
@@ -27,6 +28,11 @@ if [[ -z "$NALMS_ES_PORT" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_ES_CONFIG" ]]; then
+  echo "No configuration file provided for Elasticsearch. Define \$NALMS_ES_CONFIG"
+  usage
+fi
+
 
 docker run \
     -e node.name=node01 \
@@ -35,6 +41,7 @@ docker run \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
     -e ES_PORT=9200 \
+    -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
     -d jgarrahan/nalms-elasticsearch:latest

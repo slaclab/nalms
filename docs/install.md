@@ -102,22 +102,24 @@ A reference for elasticsearch configuration files can be found [here](https://ww
 In order for the Elasticsearch fields to be properly formatted, a template matching the topic scheme must be posted to the server. These may be versioned and are automatically applied to newly created indices. The initial script for templating NALMS topics is hosted in `elasticsearch/scripts/create_alarm_template.sh`. This template has been taken from the Phoebus source [examples](https://github.com/ControlSystemStudio/phoebus/blob/master/app/alarm/examples/create_alarm_topics.sh).
 
 #### Docker 
-The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  `single-node` deployment is used. Java options may be specifified using the `ES_JAVA_OPTS` variable. 
+The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  `single-node` deployment is used. Java options may be specifified using the `ES_JAVA_OPTS` variable. The Elasticsearch docker image also creates the appropriate elasticsearch template for the configuration messages. The configuration files must be mounted to `/usr/share/elasticsearch/config`.
 
 The following Docker run command will lauch an Elasticsearch node reachable on host machine port 9200.
 
 ```
-docker run \
+$ docker run \
     -e node.name=node01 \
     -e cluster.name=es-cluster-7 \
     -e discovery.type=single-node \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
     -e ES_PORT=9200 \
-    -p "9200:9200" \
+    -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
+    -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
     -d jgarrahan/nalms-elasticsearch:latest
 ```
+
 ### Zookeeper
 
 #### Configuration
@@ -126,9 +128,11 @@ At present, Zookeeper is launched using the default settings. For more sophistic
 #### Docker
 The following command will run Zookeeper accessible on the host machine at port 2181:
 
-docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
+```
+$ docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
   -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
   -d jgarrahan/nalms-zookeeper:latest
+```
 
 ### Kafka
 
@@ -155,7 +159,7 @@ The Kafka broker images require the definition of Kafka networking variables, `K
 An example run command for the Kafka docker image is given below:
 
 ```
-docker run -m 8g  \
+$ docker run -m 8g  \
   -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${HOST_IP}:9092,CONNECTIONS_FROM_HOST://${HOST_IP}:19092 \
   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT \
   -e KAFKA_LISTENERS=PLAINTEXT://${HOST_IP}:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092 \
@@ -267,7 +271,8 @@ The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.jso
 
 The Grafana image requires mounting of the dashboards, datasource file, and configuration file. The Docker run command for the packaged example is given below:
 
-docker run \
+```
+$ docker run \
     -p "${NALMS_GRAFANA_PORT}:3000" \
     -v "${NALMS_GRAFANA_DASHBOARD_DIR}:/var/lib/grafana/dashboards" \
     -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
@@ -276,9 +281,9 @@ docker run \
     -e ES_PORT=$NALMS_ES_PORT \
     --name nalms_grafana \
     -d jgarrahan/nalms-grafana:latest
+```
 
-
-The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.
+The datasource file must be mounted to `/etc/grafana/provisioning/datasources/all.yml`, the dashboard directory must be mounted to `/var/lib/grafana/dashboards`, and the configuration must be mounted to `/etc/grafana/provisioning/datasources/all.yml`. The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.
 
 ### Cruise Control
 
@@ -295,12 +300,14 @@ https://github.com/linkedin/cruise-control-ui/wiki/Single-Kafka-Cluster
 
 In order to run this image, you must mount a cruisecontrol.properties to a path specified with the $CRUISE_CONTROL_PROPERTIES env variable. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables. The Docker run command for the packaged example is given below:
 
-docker run \
+```
+$ docker run \
     -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
     -e ZOOKEEPER_CONNECT="${NALMS_ZOOKEEPER_HOST}:${NALMS_ZOOKEEPER_PORT}" \
     -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
     -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
     -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest
+```
 
 The Cruise Control UI is then available in browser at localhost:9090.
