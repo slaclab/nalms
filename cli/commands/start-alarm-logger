@@ -44,6 +44,6 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ES_PORT="${NALMS_ES_PORT}" \
   -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
   -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
-  -v "${ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
+  -v "${NALMS_ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
   --name nalms_logger_$CONFIG_NAME \
   -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
