@@ -34,8 +34,6 @@ if [[ -z "$NALMS_ZOOKEEPER_CONFIG" ]]; then
   usage
 fi
 
-
-
 docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
   -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
   -d jgarrahan/nalms-zookeeper:latest
