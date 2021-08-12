@@ -191,19 +191,26 @@ org.phoebus.pv.ca/auto_addr_list=no
 org.phoebus.applications.alarm/server=kafka:19092
 ```
 
-###3 Docker
+### Docker
 
-The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs. The Docker run command for the packaged example is given below:
+The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs.  The image supports the substitution of networking variables ($KAFKA_BOOTSTRAP and EPICS variables). Alternatively, these can be defined directly in the configuration file.
+
+The Docker run command for the packaged example is given below:
 
 ```
-$ docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
-  --name nalms_server_Demo \
-  -e ALARM_IOC=true \
-  -e KAFKA_BOOTSTRAP=${HOST_IP}:19092 \
-  -e EPICS_CA_ADDR_LIST=$HOST_IP \
-  -e EPICS_CA_SERVER_PORT=5054 \
-  -e EPICS_CA_REPEATER_PORT=5055 \
-  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server Demo /tmp/nalms/demo.xml
+$ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  --name nalms_server_$CONFIG_NAME \
+  -v "${NALMS_ALARM_SERVER_PROPERTIES}:/opt/nalms/config/alarm_server.properties" \
+  -e ALARM_IOC=false \
+  -e KAFKA_BOOTSTRAP="${NALMS_KAFKA_BOOTSTRAP}" \
+  -e EPICS_CA_ADDR_LIST="${EPICS_CA_ADDR_LIST}" \
+  -e EPICS_CA_SERVER_PORT="${EPICS_CA_SERVER_PORT}" \
+  -e EPICS_CA_REPEATER_PORT="${EPICS_CA_REPEATER_PORT}" \
+  -e EPICS_PVA_ADDR_LIST="${EPICS_PVA_ADDR_LIST}" \
+  -e EPICS_PVA_SERVER_PORT="${EPICS_PVA_SERVER_PORT}" \
+  -e EPICS_PVA_REPEATER_PORT="${EPICS_PVA_REPEATER_PORT}" \
+  -e ALARM_SERVER_PROPERTIES="/opt/nalms/config/alarm_server.properties" \
+  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
