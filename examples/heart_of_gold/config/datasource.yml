@@ -1,0 +1,11 @@
+apiVersion: 1
+
+  - name: HeartOfGold
+    type: elasticsearch
+    access: proxy
+    database: "heartofgold_*"
+    url: http://elasticsearch:9200
+    jsonData:
+      esVersion: 60
+      timeField: "message_time"
+      logMessageField: "id"
