@@ -6,7 +6,8 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-grafana [--port grafana_port] [--config config_name]"
-  echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_GRAFANA_DASHBOARD_DIR, \$NALMS_GRAFANA_DATASOURCE_FILE, \$NALMS_GRAFANA_CONFIG"
+  echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_GRAFANA_DASHBOARD_DIR, \$NALMS_GRAFANA_DATASOURCE_FILE, "
+  echo "\$NALMS_DOCKER_ES_VERSION, \$NALMS_GRAFANA_CONFIG"
   exit 0
 }
 
@@ -41,11 +42,16 @@ if [[ -z "$NALMS_GRAFANA_CONFIG" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_DOCKER_ES_VERSION" ]]; then
+  echo "NALMS_DOCKER_ES_VERSION not defined."
+  usage
+fi
+
 docker run \
     -p "${NALMS_GRAFANA_PORT}:3000" \
     -v "${NALMS_GRAFANA_DASHBOARD_DIR}:/var/lib/grafana/dashboards" \
     -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
     -v "${NALMS_GRAFANA_CONFIG}:/etc/grafana/config.ini" \
     --name nalms_grafana \
-    -d jgarrahan/nalms-grafana:latest
+    -d jgarrahan/nalms-grafana:$NALMS_DOCKER_ES_VERSION
 

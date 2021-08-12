@@ -7,7 +7,7 @@ usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-zookeeper [--port zookeeper_port]"
   echo "Port required, but may be set using the \$NALMS_ZOOKEEPER_PORT environment variable."
-  echo "Must set \$ NALMS_ZOOKEEPER_CONFIG"
+  echo "Must set \$ NALMS_ZOOKEEPER_CONFIG, \$NALMS_DOCKER_ZOOKEEPER_VERSION"
   exit 0
 }
 
@@ -34,6 +34,12 @@ if [[ -z "$NALMS_ZOOKEEPER_CONFIG" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_DOCKER_ZOOKEEPER_VERSION" ]]; then
+  echo "No version provided for Zookeeper. Please set \$NALMS_DOCKER_ZOOKEEPER_VERSION"
+  usage
+fi
+
+
 docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
   -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
-  -d jgarrahan/nalms-zookeeper:latest
+  -d jgarrahan/nalms-zookeeper:$NALMS_DOCKER_ZOOKEEPER_VERSION

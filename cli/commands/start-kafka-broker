@@ -7,6 +7,7 @@ usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-kafka-broker [--port kafka_port] [--broker broker_number]"
   echo "Port and property file required, but may be set using the \$KAFKA_PROPERTIES or \$KAFKA_PORT environment variables."
+  echo "Requires setting \$NALMS_KAFKA_PROPERTIES and \$NALMS_DOCKER_KAFKA_VERSION"
   exit 0
 }
 
@@ -45,6 +46,11 @@ if [[ -z "$BROKER_NUMBER" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_DOCKER_KAFKA_VERSION" ]]; then
+  echo "No version provided for Kafka docker."
+  usage
+fi
+
 
 docker run -m 8g  \
   -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9091,CONNECTIONS_FROM_HOST://$NALMS_KAFKA_HOST:$NALMS_KAFKA_PORT \
@@ -55,4 +61,4 @@ docker run -m 8g  \
   -v "${NALMS_KAFKA_PROPERTIES}:/opt/kafka/server.properties" \
   -p "$NALMS_KAFKA_PORT:$NALMS_KAFKA_PORT" \
   --name nalms_kafka_$BROKER_NUMBER \
-  -d jgarrahan/nalms-kafka:latest
+  -d jgarrahan/nalms-kafka:$NALMS_DOCKER_KAFKA_VERSION
