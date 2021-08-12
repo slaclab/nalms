@@ -24,7 +24,7 @@ The current NALMS iteration consists of the following Dockerhub hosted container
 * Script for templating of Alarm indices
 
 ### jgarrahan/nalms-grafana
-* Grafana service (7.3.0-beta1)
+* Grafana service (7.5.3)
 * Template Grafana dashboard for any configuration
 * Can be launched with multiple configurations as a comma separated list
 * Automatic generation of elasticsearch datasources based on network configs and configuration names
@@ -259,23 +259,26 @@ Like the alarm server and logger, the client also accepts a properties file that
 
 Grafana datasources and dashboards may be programatically provisioned as outlined [here](https://grafana.com/docs/grafana/latest/administration/provisioning/). Elasticsearch datasources define an index and networking variables. 
 
-For the purpose of NALMS, the Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations using templates. The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.json` and the datsource template is generated from the `grafana/scripts/create-datasource-file.sh` bash script executed on startup.
+General Grafana configuration is described [here](https://grafana.com/docs/grafana/v7.5/administration/configuration/).
+
+The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.json` and a configuration dashboard can be created using the `cli/nalms build-grafana-dashboard config-name` command. The datasource may be added to an existing datasource file using the  `cli/nalms add-grafana-datasource config-name` command or manually created.
 
 #### Docker
 
-The Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations. The Docker run command for the packaged example is given below:
+The Grafana image requires mounting of the dashboards, datasource file, and configuration file. The Docker run command for the packaged example is given below:
 
-```
 docker run \
-    -p "3000:3000" \
-    -e ES_HOST=${HOST_IP} \
-    -e ES_PORT=5064 \
-    -e CONFIG_NAME=Demo \
+    -p "${NALMS_GRAFANA_PORT}:3000" \
+    -v "${NALMS_GRAFANA_DASHBOARD_DIR}:/var/lib/grafana/dashboards" \
+    -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
+    -v "${NALMS_GRAFANA_CONFIG}:/etc/grafana/config.ini" \
+    -e ES_HOST=$NALMS_ES_HOST \
+    -e ES_PORT=$NALMS_ES_PORT \
     --name nalms_grafana \
     -d jgarrahan/nalms-grafana:latest
-```
 
-The Grafana dashboards are then reachable at localhost:3000 in browser.
+
+The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.
 
 ### Cruise Control
 
