@@ -24,7 +24,7 @@ The current NALMS iteration consists of the following Dockerhub hosted container
 * Script for templating of Alarm indices
 
 ### jgarrahan/nalms-grafana
-* Grafana service (7.3.0-beta1)
+* Grafana service (7.5.3)
 * Template Grafana dashboard for any configuration
 * Can be launched with multiple configurations as a comma separated list
 * Automatic generation of elasticsearch datasources based on network configs and configuration names
@@ -102,32 +102,36 @@ A reference for elasticsearch configuration files can be found [here](https://ww
 In order for the Elasticsearch fields to be properly formatted, a template matching the topic scheme must be posted to the server. These may be versioned and are automatically applied to newly created indices. The initial script for templating NALMS topics is hosted in `elasticsearch/scripts/create_alarm_template.sh`. This template has been taken from the Phoebus source [examples](https://github.com/ControlSystemStudio/phoebus/blob/master/app/alarm/examples/create_alarm_topics.sh).
 
 #### Docker 
-The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  `single-node` deployment is used. Java options may be specifified using the `ES_JAVA_OPTS` variable. 
+The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  `single-node` deployment is used. Java options may be specifified using the `ES_JAVA_OPTS` variable. The Elasticsearch docker image also creates the appropriate elasticsearch template for the configuration messages. The configuration files must be mounted to `/usr/share/elasticsearch/config`.
 
 The following Docker run command will lauch an Elasticsearch node reachable on host machine port 9200.
 
 ```
-docker run \
+$ docker run \
     -e node.name=node01 \
     -e cluster.name=es-cluster-7 \
     -e discovery.type=single-node \
     -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
     -e ES_HOST=localhost \
     -e ES_PORT=9200 \
-    -p "9200:9200" \
+    -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
+    -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
     -d jgarrahan/nalms-elasticsearch:latest
 ```
+
 ### Zookeeper
 
 #### Configuration
-At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable.
+At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable. The configuration file is mounted to the Zookeeper container at runtime. A description of the zookeeper configuration may be found [here](https://zookeeper.apache.org/doc/r3.5.9/zookeeperAdmin.html).
 
 #### Docker
 The following command will run Zookeeper accessible on the host machine at port 2181:
 
 ```
-docker run -p "2181:2181" --name nalms_zookeeper -d jgarrahan/nalms-zookeeper
+$ docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
+  -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
+  -d jgarrahan/nalms-zookeeper:latest
 ```
 
 ### Kafka
@@ -155,7 +159,7 @@ The Kafka broker images require the definition of Kafka networking variables, `K
 An example run command for the Kafka docker image is given below:
 
 ```
-docker run -m 8g  \
+$ docker run -m 8g  \
   -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${HOST_IP}:9092,CONNECTIONS_FROM_HOST://${HOST_IP}:19092 \
   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT \
   -e KAFKA_LISTENERS=PLAINTEXT://${HOST_IP}:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092 \
@@ -191,19 +195,26 @@ org.phoebus.pv.ca/auto_addr_list=no
 org.phoebus.applications.alarm/server=kafka:19092
 ```
 
-###3 Docker
+### Docker
 
-The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs. The Docker run command for the packaged example is given below:
+The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs.  The image supports the substitution of networking variables ($KAFKA_BOOTSTRAP and EPICS variables). Alternatively, these can be defined directly in the configuration file.
+
+The Docker run command for the packaged example is given below:
 
 ```
-$ docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
-  --name nalms_server_Demo \
-  -e ALARM_IOC=true \
-  -e KAFKA_BOOTSTRAP=${HOST_IP}:19092 \
-  -e EPICS_CA_ADDR_LIST=$HOST_IP \
-  -e EPICS_CA_SERVER_PORT=5054 \
-  -e EPICS_CA_REPEATER_PORT=5055 \
-  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server Demo /tmp/nalms/demo.xml
+$ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  --name nalms_server_$CONFIG_NAME \
+  -v "${NALMS_ALARM_SERVER_PROPERTIES}:/opt/nalms/config/alarm_server.properties" \
+  -e ALARM_IOC=false \
+  -e KAFKA_BOOTSTRAP="${NALMS_KAFKA_BOOTSTRAP}" \
+  -e EPICS_CA_ADDR_LIST="${EPICS_CA_ADDR_LIST}" \
+  -e EPICS_CA_SERVER_PORT="${EPICS_CA_SERVER_PORT}" \
+  -e EPICS_CA_REPEATER_PORT="${EPICS_CA_REPEATER_PORT}" \
+  -e EPICS_PVA_ADDR_LIST="${EPICS_PVA_ADDR_LIST}" \
+  -e EPICS_PVA_SERVER_PORT="${EPICS_PVA_SERVER_PORT}" \
+  -e EPICS_PVA_REPEATER_PORT="${EPICS_PVA_REPEATER_PORT}" \
+  -e ALARM_SERVER_PROPERTIES="/opt/nalms/config/alarm_server.properties" \
+  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
@@ -226,15 +237,17 @@ Additionally, logging for the logger is configurable and defined in `phoebus-ala
 
 #### Docker
 
-The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option and the definition of Elasticsearch networking variables. The Docker run command for the packaged example is given below:
+The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option. The image supports the interpolation of networking variables $NALMS_ES_HOST, $NALMS_ES_PORT, and $NALMS_KAFKA_BOOTSTRAP in this file. The Docker run command for the packaged example is given below:
 
 ```
-docker run -v /full/path/to/examples/demo/demo.xml:/tmp/nalms/Demo.xml \
-  -e ES_HOST=${HOST_IP} \
-  -e ES_PORT=9200 \ 
-  -e BOOTSTRAP_SERVERS=${HOST_IP}:19092 \
-  --name nalms_logger_Demo \
-  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger Demo /tmp/nalms/Demo.xml
+$ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
+  -e ES_HOST="${NALMS_ES_HOST}" \
+  -e ES_PORT="${NALMS_ES_PORT}" \
+  -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
+  -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
+  -v "${ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
+  --name nalms_logger_$CONFIG_NAME \
+  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
 
@@ -250,23 +263,27 @@ Like the alarm server and logger, the client also accepts a properties file that
 
 Grafana datasources and dashboards may be programatically provisioned as outlined [here](https://grafana.com/docs/grafana/latest/administration/provisioning/). Elasticsearch datasources define an index and networking variables. 
 
-For the purpose of NALMS, the Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations using templates. The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.json` and the datsource template is generated from the `grafana/scripts/create-datasource-file.sh` bash script executed on startup.
+General Grafana configuration is described [here](https://grafana.com/docs/grafana/v7.5/administration/configuration/).
+
+The dashboard template is hosted at `grafana/dashboards/alarm_logs_dashboard.json` and a configuration dashboard can be created using the `cli/nalms build-grafana-dashboard config-name` command. The datasource may be added to an existing datasource file using the  `cli/nalms add-grafana-datasource config-name` command or manually created.
 
 #### Docker
 
-The Grafana image automatically generates the provisioned dashboards and datasources depending on configured Elasticsearch network settings and provided configurations. The Docker run command for the packaged example is given below:
+The Grafana image requires mounting of the dashboards, datasource file, and configuration file. The Docker run command for the packaged example is given below:
 
 ```
-docker run \
-    -p "3000:3000" \
-    -e ES_HOST=${HOST_IP} \
-    -e ES_PORT=5064 \
-    -e CONFIG_NAME=Demo \
+$ docker run \
+    -p "${NALMS_GRAFANA_PORT}:3000" \
+    -v "${NALMS_GRAFANA_DASHBOARD_DIR}:/var/lib/grafana/dashboards" \
+    -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
+    -v "${NALMS_GRAFANA_CONFIG}:/etc/grafana/config.ini" \
+    -e ES_HOST=$NALMS_ES_HOST \
+    -e ES_PORT=$NALMS_ES_PORT \
     --name nalms_grafana \
     -d jgarrahan/nalms-grafana:latest
 ```
 
-The Grafana dashboards are then reachable at localhost:3000 in browser.
+The datasource file must be mounted to `/etc/grafana/provisioning/datasources/all.yml`, the dashboard directory must be mounted to `/var/lib/grafana/dashboards`, and the configuration must be mounted to `/etc/grafana/provisioning/datasources/all.yml`. The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.
 
 ### Cruise Control
 
@@ -276,19 +293,21 @@ The `cruise-control/cruisecontrol.properties` file dictates the behavior of the 
 
 See wiki:
 https://github.com/linkedin/cruise-control/wiki
-
+https://github.com/linkedin/cruise-control-ui/wiki/Single-Kafka-Cluster
 
 #### Docker
 
 
-The Cruise Control Image requires definition of bootstrap servers and Zookeeper addresses.  The Docker run command for the packaged example is given below:
+In order to run this image, you must mount a cruisecontrol.properties to a path specified with the $CRUISE_CONTROL_PROPERTIES env variable. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables. The Docker run command for the packaged example is given below:
 
 ```
-docker run \
-    -e BOOTSTRAP_SERVERS=${HOST_IP}:5064 \
-    -e ZOOKEEPER_CONNECT=${HOST_IP}:2181 \
+$ docker run \
+    -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
+    -e ZOOKEEPER_CONNECT="${NALMS_ZOOKEEPER_HOST}:${NALMS_ZOOKEEPER_PORT}" \
+    -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
+    -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
-    -p "9090:9090" -d jgarrahan/nalms-cruise-control:latest
+    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest
 ```
 
 The Cruise Control UI is then available in browser at localhost:9090.

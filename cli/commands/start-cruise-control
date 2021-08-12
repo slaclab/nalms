@@ -6,27 +6,12 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-cruise-control"
-  echo "Requires definition of \$NALMS_BOOTSTRAP_SERVERS, \$NALMS_ZOOKEEPER_HOST, \$NALMS_ZOOKEEPER_PORT \$NALMS_CRUISE_CONTROL_PORT"
+  echo "Requires definition of \$NALMS_CRUISE_CONTROL_PORT, \$NALMS_CRUISE_CONTROL_PROPERTIES"
+  echo "Optionally requires \$NALMS_BOOTSTRAP_SERVERS, \$NALMS_ZOOKEEPER_HOST if not defined in file and using environment substitution"
   exit 0
 }
 
 if [[ "$1" == "-h" ]]; then
-  usage
-fi
-
-
-if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
-  echo "No bootstrap servers defined for cruise control."
-  usage
-fi
-
-if [[ -z "$NALMS_ZOOKEEPER_HOST" ]]; then
-  echo "No zookeeper host defined for cruise control."
-  usage
-fi
-
-if [[ -z "$NALMS_ZOOKEEPER_PORT" ]]; then
-  echo "No zookeeper host defined for cruise control."
   usage
 fi
 
@@ -37,8 +22,16 @@ if [[ -z "$NALMS_CRUISE_CONTROL_PORT" ]]; then
 fi
 
 
+if [[ -z "$NALMS_CRUISE_CONTROL_PROPERTIES" ]]; then
+  echo "No cruise control properties file defined ."
+  usage
+fi
+
+
 docker run \
-    -e BOOTSTRAP_SERVERS=$NALMS_KAFKA_BOOTSTRAP \
-    -e ZOOKEEPER_CONNECT=$NALMS_ZOOKEEPER_HOST:$NALMS_ZOOKEEPER_PORT \
+    -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
+    -e ZOOKEEPER_CONNECT="${NALMS_ZOOKEEPER_HOST}:${NALMS_ZOOKEEPER_PORT}" \
+    -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
+    -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
     -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest

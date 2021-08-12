@@ -1,11 +1,15 @@
 version: "3.0"
 services:
     zookeeper:
-        image: jgarrahan/nalms-zookeeper:v0.3
+        image: jgarrahan/nalms-zookeeper:v0.4
         ports:
             - "2181:2181"
+        environment:
+            ZOOKEEPER_CONFIG: /tmp/zoo.cfg
+        volumes:
+            - "./examples/demo/config/zoo.cfg:/tmp/zoo.cfg"
     kafka:
-        image: jgarrahan/nalms-kafka:v0.3
+        image: jgarrahan/nalms-kafka:v0.4
         depends_on: 
             - zookeeper
         ports:
@@ -27,7 +31,7 @@ services:
                 reservations:
                     memory: 8G
     kafka1:
-        image: jgarrahan/nalms-kafka:v0.3
+        image: jgarrahan/nalms-kafka:v0.4
         depends_on: 
             - zookeeper
         ports:
@@ -49,7 +53,7 @@ services:
                 reservations:
                     memory: 8G
     kafka2:
-        image: jgarrahan/nalms-kafka:v0.3
+        image: jgarrahan/nalms-kafka:v0.4
         depends_on: 
             - zookeeper
         ports:
@@ -71,7 +75,7 @@ services:
                 reservations:
                     memory: 8G
     phoebus-alarm-server:
-        image: jgarrahan/nalms-phoebus-alarm-server:v0.3
+        image: jgarrahan/nalms-phoebus-alarm-server:v0.4
         links:
             - kafka
             - example-ioc
@@ -79,6 +83,7 @@ services:
             - kafka
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
+            - "./examples/heart_of_gold/config/alarm_server.properties:/opt/nalms/config/alarm_server.properties"
         command: start-server HeartOfGold /tmp/nalms/heart_of_gold.xml
         environment:
             KAFKA_BOOTSTRAP: kafka:9092
@@ -86,10 +91,13 @@ services:
             ALARM_IOC: "false"
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
+            ALARM_SERVER_PROPERTIES: "/opt/nalms/config/alarm_server.properties"
     elasticsearch:
-        image: jgarrahan/nalms-elasticsearch:v0.3
+        image: jgarrahan/nalms-elasticsearch:v0.4
         ports:
             - "9200:9200"
+        volumes:
+            - "./exampes/heart_of_gold/config/elasticsearch:/usr/share/elasticsearch/config"
         environment:
             node.name: node01
             cluster.name: es-cluster-7
@@ -100,17 +108,21 @@ services:
             KAFKA_HOST: kafka
             KAFKA_PORT: 9092
     grafana:
-        image: jgarrahan/nalms-grafana:v0.3
+        image: jgarrahan/nalms-grafana:v0.4
         ports:
             - '3000:3000'
         links:
             - elasticsearch
+        volumes:
+            - "./examples/heart_of_gold/config/dashboards:/var/lib/grafana/dashboards"
+            - "./examples/heart_of_gold/config/datasource.yml:/etc/grafana/provisioning/datasources/all.yml"
+            - "./examples/heart_of_gold/config/grafana.ini:/etc/grafana/config.ini"
         environment: 
             CONFIG_NAME: HeartOfGold
             ES_HOST: elasticsearch
             ES_PORT: 9200
     phoebus-alarm-logger:
-        image: jgarrahan/nalms-phoebus-alarm-logger:v0.3
+        image: jgarrahan/nalms-phoebus-alarm-logger:v0.4
         links:
             - elasticsearch
         depends_on:
@@ -121,11 +133,13 @@ services:
             ES_HOST: elasticsearch
             ES_PORT: 9200
             BOOTSTRAP_SERVERS: kafka:9092,kafka1:9092,kafka2:9092
+            ALARM_LOGGER_PROPERTIES: /opt/nalms/config/alarm_logger.properties
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
+            - "./examples/heart_of_gold/config/logger.properties:/opt/nalms/config/alarm_logger.properties"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
-        image: jgarrahan/nalms-example-ioc:v0.3
+        image: jgarrahan/nalms-example-ioc:v0.4
         ports:
             - "5075:5065/tcp"
             - "5074:5064/tcp"
@@ -135,12 +149,15 @@ services:
             EPICS_CA_SERVER_PORT: 5064
             EPICS_CA_REPEATER_PORT: 5065
     cruise-control:
-        image: jgarrahan/nalms-cruise-control:v0.3
+        image: jgarrahan/nalms-cruise-control:v0.4
         ports: 
             - "9090:9090"
         environment:
             BOOTSTRAP_SERVERS: kafka:9092,kafka1:9092,kafka2:9092
             ZOOKEEPER_CONNECT: zookeeper:2181
+            CRUISE_CONTROL_PROPERTIES: /opt/cruise-control/config/cruisecontrol.properties
+        volumes:
+            - "./examples/heart_of_gold/config/cruisecontrol.properties:/opt/cruise-control/config/cruisecontrol.properties"
         links: 
             - kafka
             - zookeeper

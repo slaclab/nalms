@@ -30,8 +30,14 @@ if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
   usage
 fi
 
+if [[ -z "$NALMS_ALARM_SERVER_PROPERTIES" ]]; then
+  echo "No Kafka bootstrap provided."
+  usage
+fi
+
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   --name nalms_server_$CONFIG_NAME \
+  -v "${NALMS_ALARM_SERVER_PROPERTIES}:/opt/nalms/config/alarm_server.properties" \
   -e ALARM_IOC=false \
   -e KAFKA_BOOTSTRAP="${NALMS_KAFKA_BOOTSTRAP}" \
   -e EPICS_CA_ADDR_LIST="${EPICS_CA_ADDR_LIST}" \
@@ -40,4 +46,5 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e EPICS_PVA_ADDR_LIST="${EPICS_PVA_ADDR_LIST}" \
   -e EPICS_PVA_SERVER_PORT="${EPICS_PVA_SERVER_PORT}" \
   -e EPICS_PVA_REPEATER_PORT="${EPICS_PVA_REPEATER_PORT}" \
+  -e ALARM_SERVER_PROPERTIES="/opt/nalms/config/alarm_server.properties" \
   -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

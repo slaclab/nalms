@@ -21,7 +21,6 @@ RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
 
 FROM centos:7 as runtime
 
-COPY logger.properties /opt/nalms/config/alarm_logger.properties
 COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
 USER root
@@ -43,7 +42,6 @@ RUN yum install -y ${JAVA_BASE}-${JAVA_VERSION} \
 COPY --from=build /opt/phoebus-build /opt/phoebus
 
 # set environment
-ENV ALARM_LOGGER_PROPERTIES /opt/nalms/config/alarm_logger.properties
 ENV ALARM_LOGGER_JAR /opt/phoebus/service-alarm-logger.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 

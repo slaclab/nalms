@@ -25,7 +25,6 @@ FROM centos:7 as runtime
 COPY cli /opt/nalms/cli
 COPY requirements.txt /opt/nalms/requirements.txt
 COPY scripts /opt/nalms/scripts
-COPY server.properties /opt/nalms/config/alarm_server.properties
 COPY logging.properties /opt/nalms/config/logging.properties
 
 USER root
@@ -60,7 +59,6 @@ RUN yum install -y wget ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ && \
 COPY --from=build /opt/phoebus-build /opt/phoebus
 
 # set environment
-ENV ALARM_SERVER_PROPERTIES /opt/nalms/config/alarm_server.properties
 ENV ALARM_SERVER_JAR /opt/phoebus/service-alarm-server.jar
 ENV LOGGING_CONFIG_FILE /opt/nalms/config/logging.properties
 

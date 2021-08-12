@@ -17,6 +17,14 @@ In order to abstract the deployment process and interact with the Dockerized app
 | NALMS_CONFIGURATIONS            | Comma separated list of configurations for launching Grafana  |
 | NALMS_HOME                      | Path to NALMS repository                                      |
 | NALMS_CLIENT_JAR                | Path to NALMS client jar file                                 |
+| NALMS_ALARM_SERVER_PROPERTIES   | Path to alarm server properties file                          |
+| NALMS_ALARM_LOGGER_PROPERTIES   | Path to alarm logger properties file                          |
+| NALMS_CRUISE_CONTROL_PROPERTIES | Path to cruise control properties file                        |
+| NALMS_GRAFANA_DASHBOARD_DIR     | Path to Grafana dashboard directory                           |
+| NALMS_GRAFANA_CONFIG            | Path to Grafana configuration file                            |
+| NALMS_GRAFANA_DATASOURCE_FILE   | Path to Grafana datasource file                               |
+| NALMS_ZOOKEEPER_CONFIG          | Path to Zookeeper configuration file                          |
+| NALMS_ES_CONFIG                 | Path to elasticsearch configuration file                      |
 
 ## convert-alh
 
@@ -104,4 +112,16 @@ $ bash cli/nalms start-phoebus-client
 Start Zookeeper, creating image named `nalms_zookeeper`.
 ```
 $ bash cli/nalms start-zookeeper
+```
+
+## add-grafana-datasource 
+Add a Grafana datasource for a configuration(s).
+```
+$ bash cli/nalms add-grafana-datasource config_names
+```
+
+## build-grafana-dashboard
+Build a Grafana dashboard for a configuration
+```
+$ bash cli/nalms build-grafana-dashboard config_name
 ```

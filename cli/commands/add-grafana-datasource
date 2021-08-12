@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Create datasource directory for a Kafka configuration
+#
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms add-grafana-datasource config_names"
+  echo "Accepts comma separated list of config names."
+  echo "Requires setting of following environment variables: \$NALMS_GRAFANA_DATASOURCE_FILE,"
+  echo "\$NALMS_ES_HOST, \$NALMS_ES_PORT"
+  exit 0
+}
+
+if [[ -z "${NALMS_GRAFANA_DATASOURCE_FILE}" ]]; then
+  echo "\$NALMS_GRAFANA_DATASOURCE_FILE is not set."
+  exit 0
+fi
+
+if [[ -z "${NALMS_ES_HOST}" ]]; then
+  echo "\$NALMS_ES_HOST is not set."
+  exit 0
+fi
+
+if [[ -z "${NALMS_ES_PORT}" ]]; then
+  echo "\$NALMS_ES_PORT is not set."
+  exit 0
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_NAME="$1"
+fi
+
+export IFS=","
+
+# convert to lowercase for index
+CONFIG=$(echo "$CONFIG_NAME" | tr '[:upper:]' '[:lower:]')
+
+for word in $CONFIG_NAME; do
+    # convert to lowercase for index
+    CONFIG=$(echo "$word" | tr '[:upper:]' '[:lower:]')
+    echo "" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "  - name: ${word}" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "    type: elasticsearch" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "    access: proxy" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "    database: \"${CONFIG}_*\"" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "    url: http://${NALMS_ES_HOST}:${NALMS_ES_PORT}" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "    jsonData:" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "      esVersion: 60" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "      timeField: \"message_time\"" >> $NALMS_GRAFANA_DATASOURCE_FILE
+    echo "      logMessageField: \"id\"" >> $NALMS_GRAFANA_DATASOURCE_FILE
+done
+
+echo "Completed writing file."

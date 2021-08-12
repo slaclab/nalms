@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Author: Jacqueline Garrahan
+# Create dashboard for a Kafka configuration
+#
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms build-grafana-dashboard config_name"
+  echo "Accepts comma separated list of config names."
+  echo "Requires setting of following environment variables: \$NALMS_GRAFANA_DASHBOARD_DIR, \$NALMS_HOME"
+  exit 0
+}
+
+if [[ -z "${NALMS_GRAFANA_DATASOURCE_DIR}" ]]; then
+  echo "\$NALMS_GRAFANA_DATASOURCE_DIR is not set."
+  exit 0
+fi
+
+if [[ -z "${NALMS_HOME}" ]]; then
+  echo "\$NALMS_HOME is not set."
+  exit 0
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  CONFIG_NAME="$1"
+fi
+
+DASHBOARD_TEMPLATE="${NALMS_HOME}/grafana/dashboards/alarm_logs_dashboard.json"
+
+# create dashboards
+export IFS=","
+for CONFIG_ITEM in $CONFIG_NAME; do
+    sed 's/$DATASOURCE_NAME/'"$CONFIG_ITEM/" $DASHBOARD_TEMPLATE > "${NALMS_GRAFANA_DASHBOARD_DIR}/${CONFIG_ITEM}.json"
+done
