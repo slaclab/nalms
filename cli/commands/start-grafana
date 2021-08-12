@@ -6,7 +6,7 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-grafana [--port grafana_port] [--config config_name]"
-  echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_CONFIGURATIONS, \$NALMS_ES_HOST, \$NALMS_ES_PORT"
+  echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_GRAFANA_DASHBOARD_DIR, \$NALMS_GRAFANA_DATASOURCE_FILE, \$NALMS_GRAFANA_CONFIG"
   exit 0
 }
 
@@ -17,9 +17,6 @@ do
         --port) 
           NALMS_GRAFANA_PORT=$2
             ;;
-        --config) 
-          NALMS_CONFIGURATIONS=$2
-            ;;
         "")
     esac
     shift
@@ -29,28 +26,26 @@ if [[ -z "$NALMS_GRAFANA_PORT" ]]; then
   echo "No port provided for Grafana."
   usage
 fi
-
-if [[ -z "$NALMS_CONFIGURATIONS" ]]; then
-  echo "No configurations provided to launch Grafana."
+if [[ -z "$NALMS_GRAFANA_DASHBOARD_DIR" ]]; then
+  echo "NALMS_GRAFANA_DASHBOARD_DIR not defined."
   usage
 fi
 
-if [[ -z "$NALMS_ES_HOST" ]]; then
-  echo "Elasticsearch host not defined."
+if [[ -z "$NALMS_GRAFANA_DATASOURCE_FILE" ]]; then
+  echo "NALMS_GRAFANA_DATASOURCE_FILE not defined."
   usage
 fi
 
-
-if [[ -z "$NALMS_ES_PORT" ]]; then
-  echo "Elasticsearch port not defined."
+if [[ -z "$NALMS_GRAFANA_CONFIG" ]]; then
+  echo "NALMS_GRAFANA_CONFIG not defined."
   usage
 fi
 
 docker run \
-    -p "$NALMS_GRAFANA_PORT:3000" \
-    -e ES_HOST=$NALMS_ES_HOST \
-    -e ES_PORT=$NALMS_ES_PORT \
-    -e CONFIG_NAME=$NALMS_CONFIGURATIONS \
+    -p "${NALMS_GRAFANA_PORT}:3000" \
+    -v "${NALMS_GRAFANA_DASHBOARD_DIR}:/var/lib/grafana/dashboards" \
+    -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
+    -v "${NALMS_GRAFANA_CONFIG}:/etc/grafana/config.ini" \
     --name nalms_grafana \
     -d jgarrahan/nalms-grafana:latest
 
