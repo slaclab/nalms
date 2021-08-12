@@ -121,14 +121,14 @@ docker run \
 ### Zookeeper
 
 #### Configuration
-At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable.
+At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable. The configuration file is mounted to the Zookeeper container at runtime. A description of the zookeeper configuration may be found [here](https://zookeeper.apache.org/doc/r3.5.9/zookeeperAdmin.html).
 
 #### Docker
 The following command will run Zookeeper accessible on the host machine at port 2181:
 
-```
-docker run -p "2181:2181" --name nalms_zookeeper -d jgarrahan/nalms-zookeeper
-```
+docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
+  -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
+  -d jgarrahan/nalms-zookeeper:latest
 
 ### Kafka
 
