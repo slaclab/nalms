@@ -5,7 +5,6 @@ The following PV tree will be used for the demo:
 
 ![Components](img/demo_structure.png)
 
-
 We represent this tree with the configuration file in `examples/demo/demo.xml`.
 
 ```yaml
@@ -82,13 +81,13 @@ Exit the tmux window using: `Ctr + b + d`
 Set up Kafka cluster (from repo root): 
 
 ```
-$ bash nalms start-zookeeper 
-$ bash nalms start-kafka-broker --broker 0
+$ nalms start-zookeeper 
+$ nalms start-kafka-broker --broker 0
 ```
 
 Start cruise-control:
 ```
-$ bash nalms start-cruise-control
+$ nalms start-cruise-control
 ```
 Navigate to [http://localhost:9090](http://localhost:9090) to view the Cruise Control interface and monitors of the Kafka cluster. 
 
@@ -111,7 +110,9 @@ Wait at least a minute before starting elasticsearch. The templates for the indi
 $ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
-Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. 
+
+
+
 
 Launch the Grafana instance:
 ```
@@ -120,11 +121,13 @@ $ nalms start-grafana --config Demo
 
 Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Enter user=admin, password=admin into the login. Select AlarmLogs from the available dashboards.
 
-
-Launch the Phoebus client:
+Provided that you've installed the Phoebus client using the [directions](install.md), set the environment variable NALMS_CLIENT_JAR to the client jar file. Then, launch the Phoebus client:
 ```
 $ nalms start-phoebus-client Demo
 ```
+
+Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. Navigate to `Applications > Alarm > Alarm Log`
+
 
 
 To inspect the Docker containers run:

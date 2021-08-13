@@ -43,8 +43,6 @@ $ docker pull jgarrahan/nalms-kafka:latest
 
 At present, we will build the client from the HEAD of the main branch of the Phoebus client hosted on Github.
 
-
-
 Requirements:
 * OpenJDK 11.0.2
 * Maven == 3.6.0
