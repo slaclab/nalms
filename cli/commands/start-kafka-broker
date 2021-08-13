@@ -6,7 +6,7 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-kafka-broker [--port kafka_port] [--broker broker_number]"
-  echo "Port and property file required, but may be set using the \$KAFKA_PROPERTIES or \$KAFKA_PORT environment variables."
+  echo "Port and property file required, but may be set using the \$NALMS_KAFKA_PROPERTIES or \$NALMS_KAFKA_PORT environment variables."
   echo "Requires setting \$NALMS_KAFKA_PROPERTIES and \$NALMS_DOCKER_KAFKA_VERSION"
   exit 0
 }
