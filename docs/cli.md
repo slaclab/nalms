@@ -26,38 +26,32 @@ In order to abstract the deployment process and interact with the Dockerized app
 | NALMS_ZOOKEEPER_CONFIG          | Path to Zookeeper configuration file                          |
 | NALMS_ES_CONFIG                 | Path to elasticsearch configuration file                      |
 
+For a multi-broker deployment, ports should be set on a per broker basis, divying the configuration script into separate scripts for each broker. 
+
 ## convert-alh
-
 Command converts ALH configuration to Phoebus XML representation.
-
 ```
 $ bash cli/nalms convert-alh alh_file output_filename config_name
 ```
 
 ## create-alarm-ioc
-
 Create the alarm ioc files for a given configuration.
-
 ```
 $ bash cli/nalms create-alarm-ioc configuration_file config_name output_directory
 ```
 
 ## delete-configuration
-
 Delete Kafka topics associated with a configuration.
-
 ```
 $ bash cli/nalms delete-configuration configuration_name
 ```
 
 ## generate-kafka-certs
-
 Generate certificates for Kafka trust store for configuration with SSL.
-
 ```
 $ bash cli/nalms generate-kafka-certs domain password
-
 ```
+
 ## launch-editor
 Launch the configuration editor.
 ```
@@ -84,7 +78,6 @@ $ bash cli/nalms start-alarm-server config_name config_file
 
 ## start-cruise-control
 Start Cruise Control. This will create an image named `nalms_cruise_control`.
-
 ```
 $ bash cli/nalms start-cruise-control
 ```
@@ -97,7 +90,6 @@ $ bash cli/nalms start-grafana
 
 ## start-kafka-broker
 Start a Kafak broker. Must indicate a broker number for broker identification. This will create an image named `nalms_kafka_$BROKER_NUMBER`.
-
 ```
 $ bash cli/nalms start-kafka-broker --broker_number broker_number
 ```
