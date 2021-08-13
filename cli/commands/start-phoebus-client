@@ -47,16 +47,16 @@ if [[ -z "$NALMS_CONFIG_NAME" ]]; then
 fi
 
 mkdir -p /tmp/nalms
-PROPERTY_FILE=/tmp/nalms/client_${NALMS_CONFIG_NAME}.properties
-cp $NALMS_HOME/phoebus-client/client.properties $PROPERTY_FILE
+PROPERTY_FILE="/tmp/nalms/client_${NALMS_CONFIG_NAME}.properties"
+cp "${NALMS_HOME}/phoebus-client/client.properties" $PROPERTY_FILE
 
 ES_INDEX=val=$(echo "$NALMS_CONFIG_NAME" | tr '[:upper:]' '[:lower:]')
 
-sed -i 's/$CONFIG_NAME/'"$NALMS_CONFIG_NAME/" $PROPERTY_FILE
-sed -i 's/$KAFKA_HOST/'"$NALMS_KAFKA_HOST/" $PROPERTY_FILE
-sed -i 's/$KAFKA_PORT/'"$NALMS_KAFKA_PORT/" $PROPERTY_FILE
-sed -i 's/$ES_HOST/'"$NALMS_ES_HOST/" $PROPERTY_FILE
-sed -i 's/$ES_PORT/'"$NALMS_ES_PORT/" $PROPERTY_FILE
-sed -i 's/$ES_INDEX/'"$ES_INDEX*/" $PROPERTY_FILE
+sed -i.bak 's/$CONFIG_NAME/'"$NALMS_CONFIG_NAME/" $PROPERTY_FILE
+sed -i.bak 's/$KAFKA_HOST/'"$NALMS_KAFKA_HOST/" $PROPERTY_FILE
+sed -i.bak 's/$KAFKA_PORT/'"$NALMS_KAFKA_PORT/" $PROPERTY_FILE
+sed -i.bak 's/$ES_HOST/'"$NALMS_ES_HOST/" $PROPERTY_FILE
+sed -i.bak 's/$ES_PORT/'"$NALMS_ES_PORT/" $PROPERTY_FILE
+sed -i.bak 's/$ES_INDEX/'"$ES_INDEX*/" $PROPERTY_FILE
 
 java -jar $NALMS_CLIENT_JAR -settings $PROPERTY_FILE

@@ -6,7 +6,7 @@
 usage() {
   cli_name=${0##*/}
   echo "Usage: nalms start-alarm-logger config_name config_file "
-  echo "Requires definition of \$ALARM_LOGGER_PROPERTIES and optional definition of"
+  echo "Requires definition of \$ALARM_LOGGER_PROPERTIES, \$NALMS_DOCKER_ALARM_LOGGER_VERSION and optional definition of"
   echo "\$NALMS_ES_HOST, \$NALMS_ES_PORT, \$NALMS_BOOTSTRAP_SERVERS"
   exit 0
 }
@@ -34,6 +34,12 @@ if [[ -z "$NALMS_ALARM_LOGGER_PROPERTIES" ]]; then
 fi
 
 
+if [[ -z "$NALMS_DOCKER_ALARM_LOGGER_VERSION" ]]; then
+  echo "NALMS_DOCKER_ALARM_LOGGER_VERSION not defined."
+  usage
+fi
+
+
 if [ "$1" == "-h" ]; then
   echo "Usage: deploy-configuration.sh [Configuration Name] [Configuration file] [Alarm logger properties file] [Logging configuration files]"
   exit 0
@@ -46,4 +52,4 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
   -v "${NALMS_ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
   --name nalms_logger_$CONFIG_NAME \
-  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d jgarrahan/nalms-phoebus-alarm-logger:$NALMS_DOCKER_ALARM_LOGGER_VERSION start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

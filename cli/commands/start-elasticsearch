@@ -34,6 +34,13 @@ if [[ -z "$NALMS_ES_CONFIG" ]]; then
 fi
 
 
+if [[ -z "$NALMS_DOCKER_ES_VERSION" ]]; then
+  echo "No version provided for Elasticsearch. Define \$NALMS_DOCKER_ES_VERSION"
+  usage
+fi
+
+
+
 docker run \
     -e node.name=node01 \
     -e cluster.name=es-cluster-7 \
@@ -44,4 +51,4 @@ docker run \
     -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
-    -d jgarrahan/nalms-elasticsearch:latest
+    -d jgarrahan/nalms-elasticsearch:$NALMS_DOCKER_ES_VERSION
