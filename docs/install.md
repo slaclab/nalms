@@ -78,6 +78,12 @@ Define $NALMS_CLIENT_JAR in appropriate environment file.
 ## Deploy
 After pulling the latest image, it is recommended to use the [CLI](cli.md) for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described [here](configuration.md).
 
+Modify `cli/nalms` for execution:
+
+```
+$ chmod +x cli/nalms
+```
+
 ## Configuration
 
 This sections includes an attempt to address configuration items, giving some insight to the service configuration within the Dockerized components and their Docker arguments.

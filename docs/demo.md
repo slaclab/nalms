@@ -57,7 +57,7 @@ If the service containers have already been deployed, you can access cruise cont
 
 
 ```
-$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/dev.env
+$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/demo.env
 $ nalms start-phoebus-client Demo
 ```
 
@@ -67,14 +67,14 @@ During this demo, we set up all services using the package CLI and the Docker im
 
 
 ```
-$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/dev.env
+$ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/demo.env
 ```
 
 Start the demo ioc:
 
 ```
 $ tmux new -s demo-ioc
-$ softIoc -d examples/demo/demo.db 
+$ softIoc -d ${NALMS_HOME}/examples/demo/demo.db 
 ```
 Exit the tmux window using: `Ctr + b + d`
 
@@ -110,25 +110,38 @@ Wait at least a minute before starting elasticsearch. The templates for the indi
 $ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
-export NALMS_GRAFANA_DATASOURCE_FILE=${DEMO_DIR}/config/datasource.yml
-export NALMS_GRAFANA_DASHBOARD_DIR=${DEMO_DIR}/config/dashboards
+Copy the Grafana datasource file:
+```
+$ cp $NALMS_GRAFANA_DATASOURCE_FILE .
+```
 
+Update environment variable to point to your copied file:
+
+```
+$ export NALMS_GRAFANA_DATASOURCE_FILE=$(pwd)/datasource.yml
+```
+
+Create a dashboard directory:
+```
+$ mkdir dashboards
+```
+
+Update environment variable to point to your directory:
+```
+$ export NALMS_GRAFANA_DASHBOARD_DIR=$(pwd)/dashboards
+```
 
 Add the Grafana datasource to the file:
 ```
 $ nalms add-grafana-datasource Demo
 ```
 
-This added the datasource to the file `examples/demo/config/datasource.yml`.
-
-Create the Grafana dashboard:
+This appended the datasource to the file `datasource.yml`. Now, create the Grafana dashboard:
 ```
 $ nalms build-grafana-dashboard Demo
 ```
 
-This created a dashboard for the Demo configuration in `examples/demo/config/dashboards`.
-
-Launch the Grafana instance:
+This created a dashboard for the Demo configuration in `examples/demo/config/dashboards`. Launch the Grafana instance:
 ```
 $ nalms start-grafana --config Demo
 ```
@@ -149,9 +162,6 @@ To inspect the Docker containers run:
 $ docker ps # to list container ids
 $ docker stats {CONTAINER_ID}
 ```
-
-
-
 
 
 ## Cleanup
