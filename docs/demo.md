@@ -110,16 +110,30 @@ Wait at least a minute before starting elasticsearch. The templates for the indi
 $ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
+export NALMS_GRAFANA_DATASOURCE_FILE=${DEMO_DIR}/config/datasource.yml
+export NALMS_GRAFANA_DASHBOARD_DIR=${DEMO_DIR}/config/dashboards
 
 
+Add the Grafana datasource to the file:
+```
+$ nalms add-grafana-datasource Demo
+```
 
+This added the datasource to the file `examples/demo/config/datasource.yml`.
+
+Create the Grafana dashboard:
+```
+$ nalms build-grafana-dashboard Demo
+```
+
+This created a dashboard for the Demo configuration in `examples/demo/config/dashboards`.
 
 Launch the Grafana instance:
 ```
 $ nalms start-grafana --config Demo
 ```
 
-Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Enter user=admin, password=admin into the login. Select AlarmLogs from the available dashboards.
+Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Select AlarmLogs from the available dashboards.
 
 Provided that you've installed the Phoebus client using the [directions](install.md), set the environment variable NALMS_CLIENT_JAR to the client jar file. Then, launch the Phoebus client:
 ```
