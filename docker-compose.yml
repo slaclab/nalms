@@ -97,7 +97,7 @@ services:
         ports:
             - "9200:9200"
         volumes:
-            - "./exampes/heart_of_gold/config/elasticsearch:/usr/share/elasticsearch/config"
+            - "./examples/heart_of_gold/config/elasticsearch:/usr/share/elasticsearch/config"
         environment:
             node.name: node01
             cluster.name: es-cluster-7
