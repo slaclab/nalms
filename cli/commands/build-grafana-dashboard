@@ -11,8 +11,8 @@ usage() {
   exit 0
 }
 
-if [[ -z "${NALMS_GRAFANA_DATASOURCE_DIR}" ]]; then
-  echo "\$NALMS_GRAFANA_DATASOURCE_DIR is not set."
+if [[ -z "${NALMS_GRAFANA_DASHBOARD_DIR}" ]]; then
+  echo "\$NALMS_GRAFANA_DASHBOARD_DIR is not set."
   exit 0
 fi
 
