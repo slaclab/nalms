@@ -32,5 +32,6 @@ DASHBOARD_TEMPLATE="${NALMS_HOME}/grafana/dashboards/alarm_logs_dashboard.json"
 # create dashboards
 export IFS=","
 for CONFIG_ITEM in $CONFIG_NAME; do
+    touch "${NALMS_GRAFANA_DASHBOARD_DIR}/${CONFIG_ITEM}.json"
     sed 's/$DATASOURCE_NAME/'"$CONFIG_ITEM/" $DASHBOARD_TEMPLATE > "${NALMS_GRAFANA_DASHBOARD_DIR}/${CONFIG_ITEM}.json"
 done
