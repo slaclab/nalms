@@ -19,7 +19,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": "$DATASOURCE_NAME",
+      "datasource": "Demo",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -147,11 +147,11 @@
           "name": "config"
         }
       ],
-      "columnFiltersEnabled": true,
+      "columnFiltersEnabled": false,
       "columnWidthHints": [],
       "columns": [],
       "compactRowsEnabled": false,
-      "datasource": "$DATASOURCE_NAME",
+      "datasource": "Demo",
       "datatablePagingType": "simple_numbers",
       "datatableTheme": "basic_theme",
       "emptyData": false,
@@ -331,7 +331,32 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "alarm",
+          "value": "alarm"
+        },
+        "datasource": "Demo",
+        "definition": "{\"find\": \"terms\", \"field\": \"_type\"}",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "event_type",
+        "options": [],
+        "query": "{\"find\": \"terms\", \"field\": \"_type\"}",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-7d",
@@ -339,7 +364,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "$DATASOURCE_NAME",
+  "title": "Demo",
   "uid": "ZDFkpxW7k",
   "version": 6
 }
