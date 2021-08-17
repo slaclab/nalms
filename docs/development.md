@@ -47,6 +47,8 @@ $ sudo docker container exec -it fdc6ce9ce655 /bin/bash
 
 At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on tagged releases to the main slaclab/master branch. This ought to be changed to use a designated SLAC account.
 
+Additionally, all images should be removed from this repository and moved into their own for convenient versioning.
+
 ## Ongoing projects
 
 An attempt has been made to document development needs using Github projects [here](https://github.com/slaclab/nalms/projects).
