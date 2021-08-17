@@ -93,7 +93,7 @@ services:
             EPICS_CA_REPEATER_PORT: 5065
             ALARM_SERVER_PROPERTIES: "/opt/nalms/config/alarm_server.properties"
     elasticsearch:
-        image: jgarrahan/nalms-elasticsearch:v0.4
+        image: jgarrahan/nalms-elasticsearch:v0.5
         ports:
             - "9200:9200"
         volumes:
