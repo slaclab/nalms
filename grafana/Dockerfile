@@ -1,11 +1,19 @@
-FROM grafana/grafana:7.5.10
+FROM node:12-alpine as build
+
+RUN cd /tmp && \
+    apk add git yarn && \
+    git clone --branch undefined-rendering https://github.com/jacquelinegarrahan/grafana-datatable-panel.git && \
+    cd grafana-datatable-panel && \
+    yarn install && \
+    yarn build
+
+FROM grafana/grafana:7.5.10 as runtime
 
 ADD ./provisioning/dashboards /etc/grafana/provisioning/dashboards
 USER root
+COPY --from=build /tmp/grafana-datatable-panel /var/lib/grafana/plugins/grafana-datatable-panel
 
-RUN mkdir /var/lib/grafana/dashboards && \
-    apk add jq curl &&\
-    grafana-cli plugins install briangann-datatable-panel
+RUN mkdir /var/lib/grafana/dashboards 
 
 ENV GF_AUTH_DISABLE_LOGIN_FORM "true"
 ENV GF_AUTH_ANONYMOUS_ENABLED "true"

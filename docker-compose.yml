@@ -108,7 +108,7 @@ services:
             KAFKA_HOST: kafka
             KAFKA_PORT: 9092
     grafana:
-        image: jgarrahan/nalms-grafana:v0.4
+        image: jgarrahan/nalms-grafana:v0.5
         ports:
             - '3000:3000'
         links:
@@ -136,7 +136,7 @@ services:
             ALARM_LOGGER_PROPERTIES: /opt/nalms/config/alarm_logger.properties
         volumes:
             - "./examples/heart_of_gold/heart_of_gold.xml:/tmp/nalms/heart_of_gold.xml"
-            - "./examples/heart_of_gold/config/logger.properties:/opt/nalms/config/alarm_logger.properties"
+            - "./examples/heart_of_gold/config/alarm_logger.properties:/opt/nalms/config/alarm_logger.properties"
         command: start-logger HeartOfGold /tmp/nalms/heart_of_gold.xml
     example-ioc:
         image: jgarrahan/nalms-example-ioc:v0.4
