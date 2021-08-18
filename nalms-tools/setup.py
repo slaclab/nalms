@@ -8,7 +8,7 @@ with open(path.join(cur_dir, "requirements.txt"), "r") as f:
     requirements = f.read().split()
 
 setup(
-    name="nalms-phoebus-services",
+    name="nalms-tools",
     author="SLAC National Accelerator Laboratory",
     author_email="jgarra@slac.stanford.edu",
     license="SLAC Open",
