@@ -551,7 +551,15 @@ class ALHFileParser:
                     if "Summary PV" in next_line:
                         summary_pvname = next_line.strip("Summary PV:").strip()
                         # track sevrpv
-                        self._items[self._current_target].sevrpv = summary_pvname
+                        # self._items[self._current_target].sevrpv = summary_pvname
+
+                        self._failures.append(
+                            {
+                                "Reason": "Not currently using Phoebus sevrpv feature.",
+                                "File": self._filepath,
+                                "Line": f"{next_line}",
+                            }
+                        )
 
                     next_split = next_line.split()
 
