@@ -64,3 +64,4 @@ $ docker container stop nalms_grafana
 $ docker container rm nalms_grafana
 $ nalms start-grafana
 ```
+You will now see the dashboard available at the Grafana instance at http://localhost:3000.
