@@ -45,11 +45,6 @@ Notice that `DEMO:PV1` has an enabling filter based on the value of `DEMO:PV2`. 
 
 This demo is intended for running on SLAC's RHEL7 dev server; however, this same demo can be executed on machines provided that an apropriate environment is sourced. NALMS uses named Docker containers and so this demo cannot be run if the existing demo containers are running. The commands below are run using the existing RHEL7 docker installation. Users must be added to the docker group in order to interact with the containers. 
 
-Additionally, given that $NALMS_HOME is defined (in afs: $PACKAGE_TOP/nalms/current), the command line tool `bash ${NALMS_HOME}/cli/nalms` may be used directly by modifying the path:
-```
-$ export PATH=$NALMS_HOME/cli:$PATH
-```
-
 For client use: $NALMS_CLIENT_JAR must be defined as well as $NALMS_HOME. The client launch script creates a templated configuration file for the client from a template provided in $NALMS_HOME. 
 
 ## If running...
@@ -110,28 +105,7 @@ Wait at least a minute before starting elasticsearch. The templates for the indi
 $ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
-Copy the Grafana datasource file:
-```
-$ cp $NALMS_GRAFANA_DATASOURCE_FILE .
-```
-
-Update environment variable to point to your copied file:
-
-```
-$ export NALMS_GRAFANA_DATASOURCE_FILE=$(pwd)/datasource.yml
-```
-
-Create a dashboard directory:
-```
-$ mkdir dashboards
-```
-
-Update environment variable to point to your directory:
-```
-$ export NALMS_GRAFANA_DASHBOARD_DIR=$(pwd)/dashboards
-```
-
-Add the Grafana datasource to the file:
+Now we'll add the configuration to be handled with Grafana. Add the Grafana datasource to the file:
 ```
 $ nalms add-grafana-datasource Demo
 ```
@@ -141,9 +115,9 @@ This appended the datasource to the file `datasource.yml`. Now, create the Grafa
 $ nalms build-grafana-dashboard Demo
 ```
 
-This created a dashboard for the Demo configuration in `examples/demo/config/dashboards`. Launch the Grafana instance:
+This created a dashboard for the Demo configuration in $NALMS_GRAFANA_DASHBOARD_DIR. Launch the Grafana instance:
 ```
-$ nalms start-grafana --config Demo
+$ nalms start-grafana
 ```
 
 Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Select AlarmLogs from the available dashboards.

@@ -11,6 +11,20 @@ A GitHub action workflow has been configured such that the docs are automaticall
 ## Docker images
 Significant simplifications might be made to these docker images (moving to more modern OS etc.); however, I've tried to replicate the RHEL 7 design requirement as closely as possible to demonstrate the installation outlined in the design document. 
 
+Newer versioned releases should be indicated to the nalms package by updates to version environment variables:
+
+```
+# versions
+export NALMS_DOCKER_ES_VERSION=v0.4
+export NALMS_DOCKER_GRAFANA_VERSION=v0.4
+export NALMS_DOCKER_ALARM_SERVER_VERSION=v0.4
+export NALMS_DOCKER_ALARM_LOGGER_VERSION=v0.4
+export NALMS_DOCKER_ZOOKEEPER_VERSION=v0.4
+export NALMS_DOCKER_CRUISE_CONTROL_VERSION=v0.4
+export NALMS_DOCKER_KAFKA_VERSION=v0.4
+```
+
+
 ### Useful commands:
 To see all running and stopped containers
 
