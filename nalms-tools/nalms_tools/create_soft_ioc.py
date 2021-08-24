@@ -43,11 +43,13 @@ def create_force_pvs(
 
     forcepvs = [group.get("name") for group in groups] + [pv.get("name") for pv in pvs]
 
+    force_pv_template_base = str(force_pv_template).split("/")[-1]
+
     # create substitutions file
-    output_filename = f"{output_directory}/{config_name}.template"
+    output_filename = f"{output_directory}/nalms_{config_name}.substitutions"
     with open(output_filename, "w") as f:
 
-        f.write(f"file {force_pv_template} {{")
+        f.write(f"file db/{force_pv_template_base} {{")
         f.write("   pattern")
         f.write("       {PVNAME} \n")
         for pv in forcepvs:
@@ -122,7 +124,7 @@ def create_summary_pvs(filename: str, output_directory: str, config_name: str) -
         lines += ['field(CALC, "0")\n', "}\n\n"]
 
     # create substitutions file
-    output_filename = f"{output_directory}/NALMS_{config_name}.db"
+    output_filename = f"{output_directory}/nalms_{config_name}.db"
     with open(output_filename, "w") as f:
         for line in lines:
             f.write(line)
@@ -155,7 +157,7 @@ def create_soft_ioc(
         f.write("iocInit \n")
 
     template_base = str(template_file).split("/")[-1]
-    copyfile(template_file, f"{output_directory}/{template_base}")
+    copyfile(template_file, f"{output_directory}/nalms_{template_base}")
 
     print(f"Created {templated_filename}, {summary_pv_filename}, and st.cmd.")
 
