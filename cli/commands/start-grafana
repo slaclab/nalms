@@ -5,7 +5,7 @@
 
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-grafana [--port grafana_port] [--config config_name]"
+  echo "Usage: nalms start-grafana [--port grafana_port]"
   echo "Requires definition of \$NALMS_GRAFANA_PORT, \$NALMS_GRAFANA_DASHBOARD_DIR, \$NALMS_GRAFANA_DATASOURCE_FILE, "
   echo "\$NALMS_DOCKER_ES_VERSION, \$NALMS_GRAFANA_CONFIG"
   exit 0
