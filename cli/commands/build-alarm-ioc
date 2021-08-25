@@ -38,6 +38,9 @@ else
   CONFIG_FILE="$4"
 fi
 
+
+# create alarm db file from nalms-tools script
+mkdir -p /tmp/nalms/$ALARM_IOC_NAME
 # use nalms python environment
 create-ioc-db $CONFIG_FILE /tmp/nalms/$ALARM_IOC_NAME $CONFIG_NAME
 
@@ -48,8 +51,7 @@ cd $ALARM_APP_NAME
 makeBaseApp.pl -t ioc $ALARM_APP_NAME
 makeBaseApp.pl -i -t ioc -a rhel6-x86_64 -p $ALARM_APP_NAME $ALARM_IOC_NAME
 
-# create alarm db file from nalms-tools script
-mkdir -p /tmp/nalms/$ALARM_IOC_NAME
+
 # save summary pvs and add to makefile
 SUMMARY_PV_FILE=nalms_${CONFIG_NAME}.db 
 mv /tmp/nalms/$ALARM_IOC_NAME/$SUMMARY_PV_FILE ${ALARM_APP_NAME}App/Db/$SUMMARY_PV_FILE
