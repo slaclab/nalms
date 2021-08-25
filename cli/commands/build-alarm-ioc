@@ -39,7 +39,7 @@ else
 fi
 
 # use nalms python environment
-create-soft-ioc $CONFIG_FILE /tmp/nalms/$ALARM_IOC_NAME $CONFIG_NAME
+create-ioc-db $CONFIG_FILE /tmp/nalms/$ALARM_IOC_NAME $CONFIG_NAME
 
 mkdir $ALARM_APP_NAME
 
