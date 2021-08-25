@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf8'?>
 <config name="Demo">
-    <component name="GROUP1">
+    <component name="DEMO:GROUP1">
         <pv name="DEMO:PV1">
             <enabled>true</enabled>
             <filter>DEMO:PV2 > 10</filter>
@@ -12,8 +12,8 @@
             <enabled>true</enabled>
         </pv>
     </component>
-    <component name="GROUP2">
-        <component name="GROUP3">
+    <component name="DEMO:GROUP2">
+        <component name="DEMO:GROUP3">
             <pv name="DEMO:PV4">
                 <enabled>true</enabled>
             </pv>
