@@ -36,7 +36,7 @@ Commands:
 
 case "$1" in
   start-alarm-server|d)
-    . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+    . "$CLI_WORKDIR/commands/start-alarm-server" "$2" "$3" "$4" "$5" 
     ;;
   start-alarm-logger|d)
     . "$CLI_WORKDIR/commands/start-alarm-logger" "$2" "$3" 

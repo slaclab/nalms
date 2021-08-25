@@ -65,6 +65,7 @@ During this demo, we set up all services using the package CLI and the Docker im
 $ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/demo.env
 ```
 
+### Demo IOC
 Start the demo ioc:
 
 ```
@@ -73,6 +74,24 @@ $ softIoc -d ${NALMS_HOME}/examples/demo/demo.db
 ```
 Exit the tmux window using: `Ctr + b + d`
 
+
+### Alarm IOC
+
+For integration with edm/pydm displays etc., we can use the nalms cli to generate an alarm ioc for a given configuration. In this demo, we will use application name `nalmsDemo`, IOC name `demo`.
+```
+$ source $EPICS_SETUP/epicsenv-7.0.3.1-1.0.bash
+$ nalms build-alarm-ioc nalmsDemo demo Demo ${NALMS_HOME}/examples/demo/demo.xml
+$ cd nalmsDemo
+$ make
+$ cd iocBoot/iocdemo
+$ tmux new -s demoAlarmIOC # run in a new window
+$ ../../bin/rhel7-x86_64/nalmsDemo st.cmd
+$ dbl
+```
+
+Exit the tmux window using: `Ctr + b + d`
+
+### Kafka Cluster
 Set up Kafka cluster (from repo root): 
 
 ```
@@ -80,6 +99,7 @@ $ nalms start-zookeeper
 $ nalms start-kafka-broker --broker 0
 ```
 
+### Cruise Control
 Start cruise-control:
 ```
 $ nalms start-cruise-control
@@ -87,24 +107,27 @@ $ nalms start-cruise-control
 Navigate to [http://localhost:9090](http://localhost:9090) to view the Cruise Control interface and monitors of the Kafka cluster. 
 
 
+### Phoebus Alarm Server 
 Start the Phoebus alarm server: (Note: launch requires the absolute path of the configuration file for docker volume mount)
 
 
 ```
-$ nalms start-alarm-server Demo ${NALMS_HOME}/examples/demo/demo.xml
+$ nalms start-alarm-server Demo ${NALMS_HOME}/examples/demo/demo.xml --alarmioc true
 ```
 
-
+### Elasticsearch
 Next, start the Elasticsearch service: 
 ```
 $ nalms start-elasticsearch
 ```
 
-Wait at least a minute before starting elasticsearch. The templates for the indices must be created before starting. Start the Phoebus alarm logger:
+### Phoebus Alarm Logger
+Wait at least a minute before starting the Phoebus alarm logger. The templates for the indices must be created before starting. Start the Phoebus alarm logger:
 ```
 $ nalms start-alarm-logger Demo ${NALMS_HOME}/examples/demo/demo.xml
 ```
 
+### Grafana
 Now we'll add the configuration to be handled with Grafana. Add the Grafana datasource to the file:
 ```
 $ nalms add-grafana-datasource Demo
@@ -122,7 +145,8 @@ $ nalms start-grafana
 
 Launch firefox and navigate to [http://localhost:3000](http://localhost:3000). Select AlarmLogs from the available dashboards.
 
-Provided that you've installed the Phoebus client using the [directions](install.md), set the environment variable NALMS_CLIENT_JAR to the client jar file. Then, launch the Phoebus client:
+### Phoebus Client
+Launch the Phoebus client
 ```
 $ nalms start-phoebus-client Demo
 ```
@@ -130,13 +154,12 @@ $ nalms start-phoebus-client Demo
 Navigate to `Applications > Alarm > Alarm Tree` to view the process variable values. Navigate to `Applications > Alarm > Alarm Log`
 
 
-
+### Inspect
 To inspect the Docker containers run:
 ```
 $ docker ps # to list container ids
 $ docker stats {CONTAINER_ID}
 ```
-
 
 ## Cleanup
 
@@ -157,4 +180,18 @@ You can access and exit the demo ioc by attaching to the tmux session:
 ```
 $ tmux attach -t demo-ioc
 ```
-Exiting the softIOC, and `Ctrl + b + d`.
+Exiting:
+```
+$ > exit
+$ exit
+```
+And the alarm ioc:
+
+```
+$ tmux attach -t demoAlarmIoc
+```
+Exiting:
+```
+$ > exit
+$ exit
+```

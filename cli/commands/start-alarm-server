@@ -4,13 +4,14 @@
 # Run phoebus-alarm-server image for given configuration
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-alarm-server config_name config_file"
+  echo "Usage: nalms start-alarm-server config_name config_file [--alarmioc true/false]"
   exit 0
 }
 
 if [[ "$1" == "-h" ]]; then
   usage
 fi
+
 
 if [[ -z "$1" ]]; then
   usage
@@ -23,7 +24,7 @@ if [[ -z "$2" ]]; then
 else
   CONFIG_FILE="$2"
 fi
-
+echo "here"
 
 if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
   echo "No Kafka bootstrap provided."
@@ -40,10 +41,28 @@ if [[ -z "$NALMS_DOCKER_ALARM_SERVER_VERSION" ]]; then
   usage
 fi
 
+if [[ -z "$ALARM_IOC" || ! "$ALARM_IOC" = true ]]; then
+  ALARM_IOC="false"
+fi
+
+
+# parse optional items
+while test $# -gt 0
+do
+    case "$1" in
+        --alarmioc) 
+          ALARM_IOC=$2
+            ;;
+        "")
+    esac
+    shift
+done
+
+
 docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   --name nalms_server_$CONFIG_NAME \
   -v "${NALMS_ALARM_SERVER_PROPERTIES}:/opt/nalms/config/alarm_server.properties" \
-  -e ALARM_IOC=false \
+  -e ALARM_IOC=$ALARM_IOC \
   -e KAFKA_BOOTSTRAP="${NALMS_KAFKA_BOOTSTRAP}" \
   -e EPICS_CA_ADDR_LIST="${EPICS_CA_ADDR_LIST}" \
   -e EPICS_CA_SERVER_PORT="${EPICS_CA_SERVER_PORT}" \
