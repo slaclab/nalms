@@ -79,7 +79,7 @@ def create_summary_pvs(filename: str, output_directory: str, config_name: str) -
     groups = root.findall(".//component")
     for group in groups:
         name = group.get("name")
-        lines.append(f"record(calc, {config_name}:{name}:STATSUMY) {{\n")
+        lines.append(f"record(calc, {name}:STATSUMY) {{\n")
         lines += ['field(DESC, "Summary PV")\n', 'field(SCAN, "1 second")\n']
 
         child_idx = 0
@@ -87,7 +87,7 @@ def create_summary_pvs(filename: str, output_directory: str, config_name: str) -
             child_name = child.get("name")
             if child.tag == "component":
                 lines.append(
-                    f'field(INP{ALPHABET[child_idx]}, "{config_name}:{child_name}:STATSUMY.SEVR NPP MS")\n'
+                    f'field(INP{ALPHABET[child_idx]}, "{child_name}:STATSUMY.SEVR NPP MS")\n'
                 )
 
             elif child.tag == "pv":
