@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-#
+#!/bin/sh
 # Author: Jacqueline Garrahan
 # Create Kafka certification files
 #

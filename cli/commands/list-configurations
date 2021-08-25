@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Author: Jacqueline Garrahan
 #
 # List active configurations tracked with a zookeeper host.
