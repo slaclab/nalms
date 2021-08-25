@@ -6,7 +6,7 @@
 # Source the appropriate epics setup before running
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms build-alarm-ioc app_name ioc_name config_name config_file"
+  echo "Usage: nalms build-alarm-ioc app_name ioc_name config_name config_file target_architecture"
   exit 0
 }
 
@@ -15,27 +15,38 @@ if [[ "$1" == "-h" ]]; then
 fi
 
 if [[ -z "$1" ]]; then
+  echo "Alarm app name not provided."
   usage
 else
   ALARM_APP_NAME="$1"
 fi
 
 if [[ -z "$2" ]]; then
+  echo "Alarm ioc name not provided."
   usage
 else
   ALARM_IOC_NAME="$2"
 fi
 
 if [[ -z "$3" ]]; then
+  echo "Configuration name not provided."
   usage
 else
   CONFIG_NAME="$3"
 fi
 
 if [[ -z "$4" ]]; then
+  echo "Configuration file not provided."
   usage
 else
   CONFIG_FILE="$4"
+fi
+
+if [[ -z "$5" ]]; then
+  echo "Target architecture not provided."
+  usage
+else
+  TARGET_ARCHITECTURE="$5"
 fi
 
 
@@ -49,7 +60,7 @@ mkdir $ALARM_APP_NAME
 cd $ALARM_APP_NAME
  
 makeBaseApp.pl -t ioc $ALARM_APP_NAME
-makeBaseApp.pl -i -t ioc -a rhel6-x86_64 -p $ALARM_APP_NAME $ALARM_IOC_NAME
+makeBaseApp.pl -i -t ioc -a $TARGET_ARCHITECTURE -p $ALARM_APP_NAME $ALARM_IOC_NAME
 
 
 # save summary pvs and add to makefile

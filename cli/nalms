@@ -84,7 +84,7 @@ case "$1" in
     . "$CLI_WORKDIR/commands/launch-editor"
     ;;
   build-alarm-ioc|d)
-    . "$CLI_WORKDIR/commands/build-alarm-ioc" "$2" "$3" "$4" "$5"
+    . "$CLI_WORKDIR/commands/build-alarm-ioc" "$2" "$3" "$4" "$5" "$6"
     ;;
   *)
     cli_help
