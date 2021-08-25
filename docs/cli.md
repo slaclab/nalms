@@ -117,3 +117,9 @@ Build a Grafana dashboard for a configuration
 ```
 $ bash cli/nalms build-grafana-dashboard config_name
 ```
+
+## build-alarm-ioc
+Build alarm ioc files
+```
+$ bash cli/nalms build-alarm-ioc app_name ioc_name config_name config_file target_architecture
+```
