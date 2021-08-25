@@ -80,7 +80,7 @@ Exit the tmux window using: `Ctr + b + d`
 For integration with edm/pydm displays etc., we can use the nalms cli to generate an alarm ioc for a given configuration. In this demo, we will use application name `nalmsDemo`, IOC name `demo`.
 ```
 $ source $EPICS_SETUP/epicsenv-7.0.3.1-1.0.bash
-$ nalms build-alarm-ioc nalmsDemo demo Demo ${NALMS_HOME}/examples/demo/demo.xml
+$ nalms build-alarm-ioc nalmsDemo demo Demo ${NALMS_HOME}/examples/demo/demo.xml rhel7-x86_64
 $ cd nalmsDemo
 $ make
 $ cd iocBoot/iocdemo

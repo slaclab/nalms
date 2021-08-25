@@ -24,7 +24,6 @@ if [[ -z "$2" ]]; then
 else
   CONFIG_FILE="$2"
 fi
-echo "here"
 
 if [[ -z "$NALMS_KAFKA_BOOTSTRAP" ]]; then
   echo "No Kafka bootstrap provided."

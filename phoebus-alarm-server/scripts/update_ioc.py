@@ -60,14 +60,6 @@ def monitor(config_name:str, kafka_bootstrap:str, retry_count:int=10):
                         else:
                             epics.caput(f"{pv}FP", 0)
 
-                    elif "state:" in message.key:
-                        print(f"writing alarm {pv}ACK")
-                        if val.get("severity"):
-                            if "ACK" in val.get("severity"):
-                                epics.caput(f"{pv}ACK", 1)
-
-                            else:
-                                epics.caput(f"{pv}ACK", 0)
                     assert 1 == 5
 
                 except KeyboardInterrupt:
