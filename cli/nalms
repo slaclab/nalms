@@ -28,6 +28,7 @@ Commands:
   launch-editor
   generate-kafka-certs domain password
   convert-alh alh_file output_filename config_name
+  build-alarm-ioc app_name ioc_name config_name config_file
   *         Help
 "
   exit 0
@@ -81,6 +82,9 @@ case "$1" in
     ;;
   launch-editor|d)
     . "$CLI_WORKDIR/commands/launch-editor"
+    ;;
+  build-alarm-ioc|d)
+    . "$CLI_WORKDIR/commands/build-alarm-ioc" "$2" "$3" "$4" "$5"
     ;;
   *)
     cli_help
