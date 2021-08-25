@@ -14,7 +14,7 @@ import string
 from importlib_resources import files
 from shutil import copyfile
 
-TEMPLATE_FILE = files("nalms_tools.files").joinpath("force_pv.template")
+TEMPLATE_FILE = files("nalms_tools.files").joinpath("nalms_force_pv.template")
 ALPHABET = string.ascii_uppercase
 
 
