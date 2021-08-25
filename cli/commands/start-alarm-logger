@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-#
+#!/bin/bash
 # Author: Jacqueline Garrahan
 # Run phoebus-alarm-logger image for given configuration
 #

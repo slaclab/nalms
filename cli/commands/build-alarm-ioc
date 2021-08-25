@@ -1,34 +1,72 @@
 #!/bin/bash
-ALARM_APP_NAME=$1
-SOFT_IOC_NAME=$2
-CONFIGURATION_FILE=$4
-CONFIG_NAME=$3
- 
+#
+# Author: Jacqueline Garrahan
+# Creates alarm ioc given a configurationfile
+# Requires nalms-tools to be installed into active python environment
+# Source the appropriate epics setup before running
+usage() {
+  cli_name=${0##*/}
+  echo "Usage: nalms build-alarm-ioc app_name ioc_name config_name config_file"
+  exit 0
+}
+
+if [[ "$1" == "-h" ]]; then
+  usage
+fi
+
+if [[ -z "$1" ]]; then
+  usage
+else
+  ALARM_APP_NAME="$1"
+fi
+
+if [[ -z "$2" ]]; then
+  usage
+else
+  ALARM_IOC_NAME="$2"
+fi
+
+if [[ -z "$3" ]]; then
+  usage
+else
+  CONFIG_NAME="$3"
+fi
+
+if [[ -z "$4" ]]; then
+  usage
+else
+  CONFIG_FILE="$4"
+fi
+
+# use nalms python environment
+create-ioc-db $CONFIG_FILE /tmp/nalms/$ALARM_IOC_NAME $CONFIG_NAME
+
 mkdir $ALARM_APP_NAME
 
 cd $ALARM_APP_NAME
  
 makeBaseApp.pl -t ioc $ALARM_APP_NAME
-makeBaseApp.pl -i -t ioc -a rhel6-x86_64 -p $ALARM_APP_NAME $SOFT_IOC_NAME
+makeBaseApp.pl -i -t ioc -a rhel6-x86_64 -p $ALARM_APP_NAME $ALARM_IOC_NAME
 
 # create alarm db file from nalms-tools script
-mkdir /tmp/nalms/$SOFT_IOC_NAME
-create-soft-ioc $CONFIGURATION_FILE /tmp/nalms/$SOFT_IOC_NAME $CONFIG_NAME
-
+mkdir -p /tmp/nalms/$ALARM_IOC_NAME
 # save summary pvs and add to makefile
 SUMMARY_PV_FILE=nalms_${CONFIG_NAME}.db 
-mv /tmp/nalms/$SOFT_IOC_NAME/$SUMMARY_PV_FILE $ALARM_APP_NAME/Db/$SUMMARY_PV_FILE
-echo "DB += ${SUMMARY_PV_FILE}" >> $ALARM_APP_NAME/Db/Makefile
+mv /tmp/nalms/$ALARM_IOC_NAME/$SUMMARY_PV_FILE ${ALARM_APP_NAME}App/Db/$SUMMARY_PV_FILE
+sed -i '10 i DB += '"$SUMMARY_PV_FILE" ${ALARM_APP_NAME}App/Db/Makefile
 
 # save substitutions and add to makefile
 SUBSTITUTIONS_FILE=nalms_${CONFIG_NAME}.substitutions 
-mv /tmp/nalms/$SOFT_IOC_NAME/$SUBSTITUTIONS_FILE $ALARM_APP_NAME/Db/$SUBSTITUTIONS_FILE
-echo "DB += ${SUBSTITUTIONS_FILE}" >> $ALARM_APP_NAME/Db/Makefile
+mv /tmp/nalms/$ALARM_IOC_NAME/$SUBSTITUTIONS_FILE ${ALARM_APP_NAME}App/Db/$SUBSTITUTIONS_FILE
+sed -i '11 i DB += '"$SUBSTITUTIONS_FILE" ${ALARM_APP_NAME}App/Db/Makefile
 
 # save force pv template
-TEMPLATE_FILE=force_pv.template 
-mv /tmp/nalms/$SOFT_IOC_NAME/$TEMPLATE_FILE $ALARM_APP_NAME/Db/$TEMPLATE_FILE
-echo "DB += ${TEMPLATE_FILE}" >> $ALARM_APP_NAME/Db/Makefile
+TEMPLATE_FILE=nalms_force_pv.template 
+mv /tmp/nalms/$ALARM_IOC_NAME/$TEMPLATE_FILE ${ALARM_APP_NAME}App/Db/$TEMPLATE_FILE
+sed -i '12 i DB += '"$TEMPLATE_FILE" ${ALARM_APP_NAME}App/Db/Makefile
 
-sed '14 i dbLoadRecords("db/${SUMMARY_PV_FILE}"' ioc$SOFT_IOC_NAME
-sed '14 i dbLoadTemplate("db/${SUBSTITUTIONS_FILE}"' ioc$SOFT_IOC_NAME
+# drop the pre-built record...
+sed -i '/dbLoadRecords/d' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
+# add new records
+sed -i '13 i dbLoadRecords("../../db/'"$SUMMARY_PV_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
+sed -i '13 i dbLoadTemplate("../../db/'"$SUBSTITUTIONS_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd

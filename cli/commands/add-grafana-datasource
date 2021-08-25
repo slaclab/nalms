@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Author: Jacqueline Garrahan
 # Create datasource directory for a Kafka configuration

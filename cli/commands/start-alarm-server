@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Author: Jacqueline Garrahan
 # Run phoebus-alarm-server image for given configuration

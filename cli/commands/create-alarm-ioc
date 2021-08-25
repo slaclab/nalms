@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Author: Jacqueline Garrahan
 # SLAC specific, for creation of the alarm ioc files for a given configuration

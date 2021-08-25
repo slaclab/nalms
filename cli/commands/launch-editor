@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-#
+#!/bin/bash
 # Author: Jacqueline Garrahan
 # Launch the configuration editor
 # Requires nalms-tools to be installed into active python environment

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # Author: Jacqueline Garrahan
 # Creates NALMS configuration file for a top level ALH file (recurses)
