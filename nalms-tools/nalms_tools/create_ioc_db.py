@@ -49,7 +49,7 @@ def create_force_pvs(
     output_filename = f"{output_directory}/nalms_{config_name}.substitutions"
     with open(output_filename, "w") as f:
 
-        f.write(f"file ../../db/{force_pv_template_base} {{")
+        f.write(f"file db/{force_pv_template_base} {{")
         f.write("   pattern")
         f.write("       {PVNAME} \n")
         for pv in forcepvs:

@@ -81,5 +81,5 @@ sed -i '12 i DB += '"$TEMPLATE_FILE" ${ALARM_APP_NAME}App/Db/Makefile
 # drop the pre-built record...
 sed -i '/dbLoadRecords/d' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
 # add new records
-sed -i '13 i dbLoadRecords("../../db/'"$SUMMARY_PV_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
-sed -i '13 i dbLoadTemplate("../../db/'"$SUBSTITUTIONS_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
+sed -i '13 i dbLoadRecords("db/'"$SUMMARY_PV_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
+sed -i '13 i dbLoadTemplate("db/'"$SUBSTITUTIONS_FILE"'")' iocBoot/ioc$ALARM_IOC_NAME/st.cmd
