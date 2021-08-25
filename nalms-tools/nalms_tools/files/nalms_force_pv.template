@@ -30,14 +30,3 @@ field(DISV, 1)
 field(DISS, "NO_ALARM")
 field(CALC, 0)
 }
-
-record(bi, "$(PVNAME)ACK") {
-field(DESC, "NALMS ACK PV")
-field(PINI, "YES")
-field(VAL, 0)
-field(ZNAM, "On")
-field(ONAM, "Off")
-field(ZSV, "NO_ALARM")
-field(OSV, "MINOR")
-info(autosaveFields, "VAL DESC")
-}
