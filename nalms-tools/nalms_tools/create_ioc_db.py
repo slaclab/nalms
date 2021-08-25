@@ -157,7 +157,7 @@ def create_soft_ioc(
         f.write("iocInit \n")
 
     template_base = str(template_file).split("/")[-1]
-    copyfile(template_file, f"{output_directory}/nalms_{template_base}")
+    copyfile(template_file, f"{output_directory}/{template_base}")
 
     print(f"Created {templated_filename}, {summary_pv_filename}, and st.cmd.")
 
