@@ -19,7 +19,6 @@ Commands:
   start-kafka-broker [--properties property_file] [--port kafka_port] [--broker_number number]
   start-phoebus-client config_name
   start-grafana [--port grafana_port]
-  create-alarm-ioc configuration_file config_name output_directory
   convert-alh alh_file output_filename config_name
   delete-configurations configuration_name
   add-grafana-datasource config_names
@@ -58,9 +57,6 @@ case "$1" in
     ;;
   start-grafana|d)
     . "$CLI_WORKDIR/commands/start-grafana" "$2" "$3" "$4" "$5"
-    ;;
-  create-alarm-ioc|d)
-    . "$CLI_WORKDIR/commands/create-alarm-ioc" "$2" "$3" "$4" 
     ;;
   convert-alh|d)
     . "$CLI_WORKDIR/commands/convert-alh" "$2" "$3" "$4" 

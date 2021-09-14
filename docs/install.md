@@ -51,29 +51,29 @@ Requirements:
 
 ### Installation: 
 1. Set `$JAVA_HOME`, `$MAVEN_HOME`, and `$NALMS_HOME`. Then update the path:
-```
-$ export PATH=$JAVA_HOME/bin:$PATH
-$ export PATH=$MAVEN_HOME/bin:$PATH
-```
-Note: In afs, JAVA_HOME=${PACKAGE_TOP}/java/jdk-11.0.2, MAVEN_HOME=${PACKAGE_TOP}/maven/3.6.0, and NALMS_TOP=${PACKAGE_TOP}/nalms/current.
+  ```
+  $ export PATH=$JAVA_HOME/bin:$PATH
+  $ export PATH=$MAVEN_HOME/bin:$PATH
+  ```
+  Note: In afs, JAVA_HOME=${PACKAGE_TOP}/java/jdk-11.0.2, MAVEN_HOME=${PACKAGE_TOP}/maven/3.6.0, and NALMS_TOP=${PACKAGE_TOP}/nalms/current.
 
 3. `cd` into installation directory
 4. Get Phoebus repository
-```
-$ git clone https://github.com/ControlSystemStudio/phoebus.git
-$ cd phoebus 
-```
+  ```
+  $ git clone https://github.com/ControlSystemStudio/phoebus.git
+  $ cd phoebus 
+  ```
 5. Now replace the existing product pom file with that packaged by NALMS:
-``` 
-$ rm phoebus-product/pom.xml
-$ mv $NALMS_HOME/phoebus-client/pom.xml phoebus-product/pom.xml 
-```
+  ``` 
+  $ rm phoebus-product/pom.xml
+  $ mv $NALMS_HOME/phoebus-client/pom.xml phoebus-product/pom.xml 
+  ```
 6. Install the Phoebus client:
-```
-$ mvn install -pl phoebus-product -am
-```
+  ```
+  $ mvn install -pl phoebus-product -am
+  ```
 
-Define $NALMS_CLIENT_JAR in appropriate environment file.
+7. Define $NALMS_CLIENT_JAR in appropriate environment file.
 
 ## Deploy
 After pulling the latest image, it is recommended to use the [CLI](cli.md) for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described [here](configuration.md).

@@ -62,6 +62,7 @@ During this demo, we set up all services using the package CLI and the Docker im
 
 
 ```
+$ source /afs/slac/g/lcls/tools/script/ENVS64.bash
 $ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/demo.env
 ```
 
