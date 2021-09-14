@@ -89,7 +89,7 @@ org.apache.kafka.level = SEVERE
 
 
 ## Grafana template
-In order to use the Grafana dashboard with a scaling number of configurations, a json template is located in `grafana/dashboards/alarm_logs_dashboard.json`. The script `grafana/scripts/start-grafana.sh` performs an interpolation of template strings in order to create the appropriate datasources and dashboards.
+In order to use the Grafana dashboard with a scaling number of configurations, a json template is located in `grafana/dashboards/alarm_logs_dashboard.json`. 
 
 For further development of the dashboard, the template must be changed using a local Grafana instance. Steps for updating are:
 * Copy json representation

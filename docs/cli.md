@@ -34,11 +34,6 @@ Command converts ALH configuration to Phoebus XML representation.
 $ bash cli/nalms convert-alh alh_file output_filename config_name
 ```
 
-## create-alarm-ioc
-Create the alarm ioc files for a given configuration.
-```
-$ bash cli/nalms create-alarm-ioc configuration_file config_name output_directory
-```
 
 ## delete-configuration
 Delete Kafka topics associated with a configuration.
