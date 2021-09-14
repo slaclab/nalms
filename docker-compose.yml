@@ -21,7 +21,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/heart_of_gold/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -43,7 +43,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka1:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19093
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/heart_of_gold/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
@@ -65,7 +65,7 @@ services:
             KAFKA_LISTENERS: PLAINTEXT://kafka2:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19094
             ZOOKEEPER_CONNECT: zookeeper:2181
         volumes:
-            - "./examples/demo/config/server.properties:/opt/kafka/server.properties"
+            - "./examples/heart_of_gold/config/server.properties:/opt/kafka/server.properties"
         links:
             - zookeeper
         deploy:
