@@ -52,6 +52,7 @@ If the service containers have already been deployed, you can access cruise cont
 
 
 ```
+$ source /afs/slac/g/lcls/tools/script/ENVS64.bash
 $ source ${PACKAGE_TOP}/nalms/setup/aird-b50-srv01/demo.env
 $ nalms start-phoebus-client Demo
 ```
