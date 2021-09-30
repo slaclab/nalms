@@ -15,13 +15,13 @@ Newer versioned releases should be indicated to the nalms package by updates to 
 
 ```
 # versions
-export NALMS_DOCKER_ES_VERSION=v0.6
-export NALMS_DOCKER_GRAFANA_VERSION=v0.6
-export NALMS_DOCKER_ALARM_SERVER_VERSION=v0.6
-export NALMS_DOCKER_ALARM_LOGGER_VERSION=v0.6
-export NALMS_DOCKER_ZOOKEEPER_VERSION=v0.6
-export NALMS_DOCKER_CRUISE_CONTROL_VERSION=v0.6
-export NALMS_DOCKER_KAFKA_VERSION=v0.6
+export NALMS_DOCKER_ES_VERSION=v0.8
+export NALMS_DOCKER_GRAFANA_VERSION=v0.8
+export NALMS_DOCKER_ALARM_SERVER_VERSION=v0.8
+export NALMS_DOCKER_ALARM_LOGGER_VERSION=v0.8
+export NALMS_DOCKER_ZOOKEEPER_VERSION=v0.8
+export NALMS_DOCKER_CRUISE_CONTROL_VERSION=v0.8
+export NALMS_DOCKER_KAFKA_VERSION=v0.8
 ```
 
 
@@ -94,4 +94,4 @@ In order to use the Grafana dashboard with a scaling number of configurations, a
 For further development of the dashboard, the template must be changed using a local Grafana instance. Steps for updating are:
 * Copy json representation
 * Remove id from the json representation
-* Replace datasource and configuration name entries from json representation
+* Replace datasource name entries from json representation with environment var placeholder $DATASOURCE_NAME 
