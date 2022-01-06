@@ -1,5 +1,5 @@
 # Use the elasticsearch image (centos7)
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.16@sha256:37994c16cea5a3c89195e77c63967f2910747bef18b272c3229da40afdc68f2c
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.8.22@sha256:abb31b525b19f5b0e47c71a8db54dbf3860c58c7e15a572d2919f6bad53e947e
 
 COPY scripts/init_es.sh /opt/nalms/
 COPY scripts/create_alarm_template.sh /opt/nalms/
