@@ -45,7 +45,7 @@ docker run \
     -e node.name=node01 \
     -e cluster.name=es-cluster-7 \
     -e discovery.type=single-node \
-    -e ES_JAVA_OPTS="-Xms128m -Xmx128m" \
+    -e ES_JAVA_OPTS="-Xms2g -Xmx2g" \
     -e ES_HOST=localhost \
     -e ES_PORT=9200 \
     -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
