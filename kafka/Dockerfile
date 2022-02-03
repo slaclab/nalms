@@ -12,10 +12,10 @@ RUN  yum install -y wget ${JAVA_BASE}-devel-${JAVA_VERSION} git && \
     cd cruise-control && \
     git checkout migrate_to_kafka_2_5 && \
     ./gradlew jar :cruise-control:jar && \
-    wget https://downloads.apache.org/kafka/2.7.1/kafka_2.13-2.7.1.tgz -O /tmp/kafka_2.13-2.7.1.tgz && \
-    tar xvfz /tmp/kafka_2.13-2.7.1.tgz -C /opt && \
-    rm /tmp/kafka_2.13-2.7.1.tgz && \
-    ln -s /opt/kafka_2.13-2.7.1 ${KAFKA_HOME} && \
+    wget https://downloads.apache.org/kafka/2.8.1/kafka_2.13-2.8.1.tgz -O /tmp/kafka_2.13-2.8.1.tgz && \
+    tar xvfz /tmp/kafka_2.13-2.8.1.tgz -C /opt && \
+    rm /tmp/kafka_2.13-2.8.1.tgz && \
+    ln -s /opt/kafka_2.13-2.8.1 ${KAFKA_HOME} && \
     cp /tmp/cruise-control/cruise-control-metrics-reporter/build/libs/* ${KAFKA_HOME}/libs/ && \
     rm -r /tmp/*  
 
