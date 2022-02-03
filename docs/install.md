@@ -9,7 +9,7 @@ The current NALMS iteration consists of the following Dockerhub hosted container
 * Zookeeper 3.5.9
 
 ### jgarrahan/nalms-kafka
-* Kafka 2.7.0 configured with cruise-control metrics reporter 
+* Kafka 2.8.1 configured with cruise-control metrics reporter
 * SSL configurable (see [networking](networking.md))
 
 ### jgarrahan/nalms-phoebus-alarm-server

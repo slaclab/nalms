@@ -50,10 +50,10 @@ RUN yum install -y wget ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ && \
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs && \
     pip3 install -r /opt/nalms/requirements.txt && \
-    wget https://downloads.apache.org/kafka/2.7.1/kafka_2.13-2.7.1.tgz -O /tmp/kafka_2.13-2.7.1.tgz && \
-    tar xvfz /tmp/kafka_2.13-2.7.1.tgz -C /opt && \
-    rm /tmp/kafka_2.13-2.7.1.tgz && \
-    ln -s /opt/kafka_2.13-2.7.1.tgz ${KAFKA_HOME} && \
+    wget https://downloads.apache.org/kafka/2.8.1/kafka_2.13-2.8.1.tgz -O /tmp/kafka_2.13-2.8.1.tgz && \
+    tar xvfz /tmp/kafka_2.13-2.8.1.tgz -C /opt && \
+    rm /tmp/kafka_2.13-2.8.1.tgz && \
+    ln -s /opt/kafka_2.13-2.8.1.tgz ${KAFKA_HOME} && \
     rm -r /tmp/* 
 
 COPY --from=build /opt/phoebus-build /opt/phoebus
