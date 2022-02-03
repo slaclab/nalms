@@ -1,11 +1,9 @@
 #!/bin/sh
 
-
 # sleep while elasticsearch starts
 if [[ ! -z "$1" ]]; then
   sleep $1
 fi
-
 
 if [[ -z "$ES_HOST" ]]; then
   echo "ES_HOST is not set."
@@ -17,6 +15,29 @@ if [[ -z "$ES_PORT" ]]; then
   exit 0
 fi
 
+# Add a pipeline to be used in the templates for setting the create datetime of all documents
+curl -X PUT http://${ES_HOST}:${ES_PORT}/_ingest/pipeline/add_created_date -H 'Content-Type: application/json' -d'
+{
+  "description": "Add the insertion date in the timezone of the box this is being run in",
+  "processors": [
+    {
+      "script": {
+        "source": "ctx.timestamp = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\").format(new Date());"
+      }
+    }
+  ]
+}
+'
+
+curl -X PUT http://${ES_HOST}:${ES_PORT}/_all/_settings?pretty -H 'Content-Type: application/json' -d'
+{
+  "index": {
+    "default_pipeline": "add_created_date"
+  }
+}
+'
+
+
 # The mapping names used in here need to match those used in the ElasticClientHelper:
 # "alarm", ""alarm_cmd", "alarm_config"
 
@@ -24,6 +45,9 @@ fi
 curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_state_template -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_state*"],
+  "settings": {
+    "index.default_pipeline": "add_created_date"
+  },
   "mappings" : {  
     "alarm" : {
         "properties" : {
