@@ -307,7 +307,7 @@
           "options": {
             "include": {
               "names": [
-                "message_time",
+                "timestamp",
                 "_type",
                 "config",
                 "current_message",
@@ -320,6 +320,23 @@
                 "value"
               ]
             }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "timestamp": 0,
+              "_type": 1,
+              "config": 2,
+              "current_message": 3,
+              "current_severity": 4,
+              "latch": 5,
+              "pv": 6,
+              "value": 7
+            },
+            "renameByName": {}
           }
         }
       ],
