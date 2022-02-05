@@ -29,6 +29,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
 
 COPY --from=build ${KAFKA_HOME} ${KAFKA_HOME}
+COPY config/log4j.properties /opt/kafka/config/
 COPY scripts/start-kafka.sh /opt/kafka/start-kafka.sh
 
 RUN yum install -y ${JAVA_BASE}-${JAVA_VERSION} openssl && \
