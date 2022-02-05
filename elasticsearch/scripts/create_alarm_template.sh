@@ -29,15 +29,6 @@ curl -X PUT http://${ES_HOST}:${ES_PORT}/_ingest/pipeline/add_created_date -H 'C
 }
 '
 
-curl -X PUT http://${ES_HOST}:${ES_PORT}/_all/_settings?pretty -H 'Content-Type: application/json' -d'
-{
-  "index": {
-    "default_pipeline": "add_created_date"
-  }
-}
-'
-
-
 # The mapping names used in here need to match those used in the ElasticClientHelper:
 # "alarm", ""alarm_cmd", "alarm_config"
 
