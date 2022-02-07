@@ -20,7 +20,7 @@ The current NALMS iteration consists of the following Dockerhub hosted container
 * Phoebus alarm logger (built from HEAD of main branch)
 
 ### tidacs/nalms-elasticsearch
-* Elasticsearch service (6.8.16)
+* Elasticsearch service (6.8.22)
 * Script for templating of Alarm indices
 
 ### tidacs/nalms-grafana
