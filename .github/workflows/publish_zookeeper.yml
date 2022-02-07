@@ -26,5 +26,5 @@ jobs:
         with:
           context: ./zookeeper
           push: true
-          tags: jgarrahan/nalms-zookeeper:${{ github.event.release.tag_name }}, jgarrahan/nalms-zookeeper:latest
+          tags: tidacs/nalms-zookeeper:${{ github.event.release.tag_name }}, tidacs/nalms-zookeeper:latest
 

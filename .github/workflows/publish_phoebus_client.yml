@@ -26,5 +26,5 @@ jobs:
         with:
           context: ./phoebus-client
           push: true
-          tags: jgarrahan/nalms-phoebus-client:${{ github.event.release.tag_name }}, jgarrahan/nalms-phoebus-client:latest
+          tags: tidacs/nalms-phoebus-client:${{ github.event.release.tag_name }}, tidacs/nalms-phoebus-client:latest
 

@@ -52,4 +52,4 @@ docker run \
     -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
-    -d jgarrahan/nalms-elasticsearch:$NALMS_DOCKER_ES_VERSION
+    -d tidacs/nalms-elasticsearch:$NALMS_DOCKER_ES_VERSION

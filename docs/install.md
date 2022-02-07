@@ -5,38 +5,38 @@ The NALMS system has been written for deployment as a set of Docker images, allo
 The current NALMS iteration consists of the following Dockerhub hosted containers:
 
 
-### jgarrahan/nalms-zookeeper
+### tidacs/nalms-zookeeper
 * Zookeeper 3.5.9
 
-### jgarrahan/nalms-kafka
+### tidacs/nalms-kafka
 * Kafka 2.8.1 configured with cruise-control metrics reporter
 * SSL configurable (see [networking](networking.md))
 
-### jgarrahan/nalms-phoebus-alarm-server
+### tidacs/nalms-phoebus-alarm-server
 * Phoebus alarm server (built from HEAD of main branch)
 * Python script for monitoring Kafka topics updating [alarm IOC](epics_integration.md) with bypasses and acknowledgments
 
-### jgarrahan/nalms-phoebus-alarm-logger
+### tidacs/nalms-phoebus-alarm-logger
 * Phoebus alarm logger (built from HEAD of main branch)
 
-### jgarrahan/nalms-elasticsearch
-* Elasticsearch service (6.8.16)
+### tidacs/nalms-elasticsearch
+* Elasticsearch service (6.8.22)
 * Script for templating of Alarm indices
 
-### jgarrahan/nalms-grafana
+### tidacs/nalms-grafana
 * Grafana service (7.5.3)
 * Template Grafana dashboard for any configuration
 * Can be launched with multiple configurations as a comma separated list
 * Automatic generation of elasticsearch datasources based on network configs and configuration names
 
-### jgarrahan/nalms-cruise-control
+### tidacs/nalms-cruise-control
 * LinkendIn's Cruise Control monitor for Kafka clusters (built from HEAD of branch migrate_to_kafka_2_5, which is compatible with Kafka 2.7.0) 
 * Cruise Control web UI
 
 ## Download Images
 Images may be downloaded from Dockerhub on a machine with Docker installed using the command (nalms-kafka here for example):
 ```
-$ docker pull jgarrahan/nalms-kafka:latest
+$ docker pull tidacs/nalms-kafka:latest
 ```
 
 ## Client installation
@@ -122,7 +122,7 @@ $ docker run \
     -v "${NALMS_ES_CONFIG}:/usr/share/elasticsearch/config" \
     -p "$NALMS_ES_PORT:9200" \
     --name nalms_elasticsearch \
-    -d jgarrahan/nalms-elasticsearch:latest
+    -d tidacs/nalms-elasticsearch:latest
 ```
 
 ### Zookeeper
@@ -136,7 +136,7 @@ The following command will run Zookeeper accessible on the host machine at port 
 ```
 $ docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
   -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
-  -d jgarrahan/nalms-zookeeper:latest
+  -d tidacs/nalms-zookeeper:latest
 ```
 
 ### Kafka
@@ -173,7 +173,7 @@ $ docker run -m 8g  \
   -v "/full/path/to/examples/demo/config/server.properties:/opt/kafka/server.properties" \
   -p "19092:19092" \
   --name nalms_kafka_0 \
-  -d jgarrahan/nalms-kafka:latest
+  -d tidacs/nalms-kafka:latest
 ```
 
 Instructions on configuring the Docker image with SSL are given in [networking](networking.md).
@@ -219,7 +219,7 @@ $ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e EPICS_PVA_SERVER_PORT="${EPICS_PVA_SERVER_PORT}" \
   -e EPICS_PVA_REPEATER_PORT="${EPICS_PVA_REPEATER_PORT}" \
   -e ALARM_SERVER_PROPERTIES="/opt/nalms/config/alarm_server.properties" \
-  -d -t jgarrahan/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d -t tidacs/nalms-phoebus-alarm-server:latest start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
@@ -252,7 +252,7 @@ $ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
   -v "${ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
   --name nalms_logger_$CONFIG_NAME \
-  -d jgarrahan/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d tidacs/nalms-phoebus-alarm-logger:latest start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
 ```
 The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.
 
@@ -285,7 +285,7 @@ $ docker run \
     -e ES_HOST=$NALMS_ES_HOST \
     -e ES_PORT=$NALMS_ES_PORT \
     --name nalms_grafana \
-    -d jgarrahan/nalms-grafana:latest
+    -d tidacs/nalms-grafana:latest
 ```
 
 The datasource file must be mounted to `/etc/grafana/provisioning/datasources/all.yml`, the dashboard directory must be mounted to `/var/lib/grafana/dashboards`, and the configuration must be mounted to `/etc/grafana/provisioning/datasources/all.yml`. The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.
@@ -294,7 +294,7 @@ The datasource file must be mounted to `/etc/grafana/provisioning/datasources/al
 
 #### Configuration
 
-The `cruise-control/cruisecontrol.properties` file dictates the behavior of the cruise control server, allowing definition of relevant thresholds and networking nodes. The `jgarrahan/nalms-cruise-control` image performs interpolation on this file in order to pass the relevant environment variables. 
+The `cruise-control/cruisecontrol.properties` file dictates the behavior of the cruise control server, allowing definition of relevant thresholds and networking nodes. The `tidacs/nalms-cruise-control` image performs interpolation on this file in order to pass the relevant environment variables. 
 
 See wiki:
 https://github.com/linkedin/cruise-control/wiki
@@ -312,7 +312,7 @@ $ docker run \
     -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
     -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
-    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:latest
+    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d tidacs/nalms-cruise-control:latest
 ```
 
 The Cruise Control UI is then available in browser at localhost:9090.

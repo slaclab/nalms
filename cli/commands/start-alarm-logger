@@ -51,4 +51,4 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
   -v "${NALMS_ALARM_LOGGER_PROPERTIES}:/opt/nalms/config/alarm_logger.properties" \
   --name nalms_logger_$CONFIG_NAME \
-  -d jgarrahan/nalms-phoebus-alarm-logger:$NALMS_DOCKER_ALARM_LOGGER_VERSION start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d tidacs/nalms-phoebus-alarm-logger:$NALMS_DOCKER_ALARM_LOGGER_VERSION start-logger $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

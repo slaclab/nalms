@@ -70,4 +70,4 @@ docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
   -e EPICS_PVA_SERVER_PORT="${EPICS_PVA_SERVER_PORT}" \
   -e EPICS_PVA_REPEATER_PORT="${EPICS_PVA_REPEATER_PORT}" \
   -e ALARM_SERVER_PROPERTIES="/opt/nalms/config/alarm_server.properties" \
-  -d -t jgarrahan/nalms-phoebus-alarm-server:$NALMS_DOCKER_ALARM_SERVER_VERSION start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml
+  -d -t tidacs/nalms-phoebus-alarm-server:$NALMS_DOCKER_ALARM_SERVER_VERSION start-server $CONFIG_NAME /tmp/nalms/$CONFIG_NAME.xml

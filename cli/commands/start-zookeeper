@@ -42,4 +42,4 @@ fi
 
 docker run -p "${NALMS_ZOOKEEPER_PORT}:2181" -e ZOOKEEPER_CONFIG=/tmp/zoo.cfg \
   -v "${NALMS_ZOOKEEPER_CONFIG}:/tmp/zoo.cfg" --name nalms_zookeeper \
-  -d jgarrahan/nalms-zookeeper:$NALMS_DOCKER_ZOOKEEPER_VERSION
+  -d tidacs/nalms-zookeeper:$NALMS_DOCKER_ZOOKEEPER_VERSION

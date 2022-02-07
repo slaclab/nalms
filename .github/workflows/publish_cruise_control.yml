@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./cruise-control
           push: true
-          tags: jgarrahan/nalms-cruise-control:${{ github.event.release.tag_name }}, jgarrahan/nalms-cruise-control:latest
+          tags: tidacs/nalms-cruise-control:${{ github.event.release.tag_name }}, tidacs/nalms-cruise-control:latest

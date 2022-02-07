@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./examples/heart_of_gold
           push: true
-          tags: jgarrahan/nalms-example-ioc:${{ github.event.release.tag_name }}, jgarrahan/nalms-example-ioc:latest
+          tags: tidacs/nalms-example-ioc:${{ github.event.release.tag_name }}, tidacs/nalms-example-ioc:latest

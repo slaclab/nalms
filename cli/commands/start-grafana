@@ -53,5 +53,5 @@ docker run \
     -v "${NALMS_GRAFANA_DATASOURCE_FILE}:/etc/grafana/provisioning/datasources/all.yml" \
     -v "${NALMS_GRAFANA_CONFIG}:/etc/grafana/config.ini" \
     --name nalms_grafana \
-    -d jgarrahan/nalms-grafana:$NALMS_DOCKER_ES_VERSION
+    -d tidacs/nalms-grafana:$NALMS_DOCKER_ES_VERSION
 
