@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./grafana
           push: true
-          tags: jgarrahan/nalms-grafana:${{ github.event.release.tag_name }}, jgarrahan/nalms-grafana:latest
+          tags: tidacs/nalms-grafana:${{ github.event.release.tag_name }}, tidacs/nalms-grafana:latest

@@ -15,13 +15,13 @@ Newer versioned releases should be indicated to the nalms package by updates to 
 
 ```
 # versions
-export NALMS_DOCKER_ES_VERSION=v0.9
-export NALMS_DOCKER_GRAFANA_VERSION=v0.9
-export NALMS_DOCKER_ALARM_SERVER_VERSION=v0.9
-export NALMS_DOCKER_ALARM_LOGGER_VERSION=v0.9
-export NALMS_DOCKER_ZOOKEEPER_VERSION=v0.9
-export NALMS_DOCKER_CRUISE_CONTROL_VERSION=v0.9
-export NALMS_DOCKER_KAFKA_VERSION=v0.9
+export NALMS_DOCKER_ES_VERSION=v1.0
+export NALMS_DOCKER_GRAFANA_VERSION=v1.0
+export NALMS_DOCKER_ALARM_SERVER_VERSION=v1.0
+export NALMS_DOCKER_ALARM_LOGGER_VERSION=v1.0
+export NALMS_DOCKER_ZOOKEEPER_VERSION=v1.0
+export NALMS_DOCKER_CRUISE_CONTROL_VERSION=v1.0
+export NALMS_DOCKER_KAFKA_VERSION=v1.0
 ```
 
 
@@ -59,9 +59,9 @@ $ sudo docker container exec -it fdc6ce9ce655 /bin/bash
 
 ## DockerHub deployment
 
-At this current iteration, all Dockerhub images are hosted on my (Jacqueline Garrahan) personal account (jgarrahan). A Github action has been defined for the automatic build of images on tagged releases to the main slaclab/master branch. This ought to be changed to use a designated SLAC account.
+All Dockerhub images are hosted on the TID Advanced Controls Systems account (tidacs). A Github action has been defined for the automatic build of images on tagged releases to the main slaclab/master branch.
 
-Additionally, all images should be removed from this repository and moved into their own for convenient versioning.
+All images should be eventually removed from this repository and moved into their own for convenient versioning.
 
 ## Ongoing projects
 

@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./elasticsearch
           push: true
-          tags: jgarrahan/nalms-elasticsearch:${{ github.event.release.tag_name }}, jgarrahan/nalms-elasticsearch:latest
+          tags: tidacs/nalms-elasticsearch:${{ github.event.release.tag_name }}, tidacs/nalms-elasticsearch:latest

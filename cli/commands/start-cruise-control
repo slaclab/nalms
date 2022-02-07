@@ -40,4 +40,4 @@ docker run \
     -e CRUISE_CONTROL_PROPERTIES="/opt/cruise-control/config/cruisecontrol.properties" \
     -v "${NALMS_CRUISE_CONTROL_PROPERTIES}:/opt/cruise-control/config/cruisecontrol.properties" \
     --name nalms_cruise_control \
-    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d jgarrahan/nalms-cruise-control:$NALMS_DOCKER_CRUISE_CONTROL_VERSION
+    -p "$NALMS_CRUISE_CONTROL_PORT:9090" -d tidacs/nalms-cruise-control:$NALMS_DOCKER_CRUISE_CONTROL_VERSION

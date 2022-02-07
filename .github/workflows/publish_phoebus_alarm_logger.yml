@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./phoebus-alarm-logger
           push: true
-          tags: jgarrahan/nalms-phoebus-alarm-logger:${{ github.event.release.tag_name }}, jgarrahan/nalms-phoebus-alarm-logger:latest
+          tags: tidacs/nalms-phoebus-alarm-logger:${{ github.event.release.tag_name }}, tidacs/nalms-phoebus-alarm-logger:latest
