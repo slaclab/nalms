@@ -1,4 +1,4 @@
-# Next ALarM Sytem
+# Next ALarM System
 
 NALMS is an alarm system application designed for availability, integrability, and extensibility. The NALMS development was driven by SLAC's efforts to replace the Alarm Handler, due for deprecation as a Motif-based application, and to introduce process improvements addressing hierarchy implementation overhead, limited operator engagement, and operator display integration.
 
