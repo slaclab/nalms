@@ -23,7 +23,7 @@ do
         --port) 
           NALMS_KAFKA_PORT=$2
             ;;
-        --port) 
+        --broker)
           BROKER_NUMBER=$2
             ;;
         "")
