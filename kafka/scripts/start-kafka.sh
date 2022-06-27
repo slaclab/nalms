@@ -55,7 +55,7 @@ if [[ "$USE_SSL" = true ]]; then
     # start ssl server
     ./opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
         --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS} \
-        --override zookeeper.connect=${ZOOKEEPER_CONNECT} --override boker.id=${BROKER_ID} \
+        --override zookeeper.connect=${ZOOKEEPER_CONNECT} --override broker.id=${BROKER_ID} \
         --override ssl.keystore.password=${KEYSTORE_PASSWORD} \
         --override ssl.truststore.password=${TRUSTSTORE_PASSWORD} \
         --override ssl.key.password=${KEY_PASSWORD}
@@ -63,5 +63,5 @@ else
     # start server
     ./opt/kafka/bin/kafka-server-start.sh /opt/kafka/server.properties --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
         --override listener.security.protocol.map=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP} --override listeners=${KAFKA_LISTENERS} \
-        --override zookeeper.connect=${ZOOKEEPER_CONNECT} --override boker.id=${BROKER_ID} 
+        --override zookeeper.connect=${ZOOKEEPER_CONNECT} --override broker.id=${BROKER_ID}
 fi
