@@ -33,7 +33,7 @@ curl -X PUT http://${ES_HOST}:${ES_PORT}/_ingest/pipeline/add_created_date -H 'C
 # "alarm", ""alarm_cmd", "alarm_config"
 
 # Create the elastic template with the correct mapping for alarm state messages.
-curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_state_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_state_template?include_type_name=true -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_state*"],
   "settings": {
@@ -97,7 +97,7 @@ curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_state_template -H 'Cont
 '
 
 # Create the elastic template with the correct mapping for alarm command messages.
-curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_cmd_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_cmd_template?include_type_name=true -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_cmd*"],
   "mappings" : {  
@@ -129,7 +129,7 @@ curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_cmd_template -H 'Conten
 '
 
 # Create the elastic template with the correct mapping for alarm config messages.
-curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_config_template -H 'Content-Type: application/json' -d'
+curl -XPUT http://${ES_HOST}:${ES_PORT}/_template/alarms_config_template?include_type_name=true -H 'Content-Type: application/json' -d'
 {
   "index_patterns":["*_alarms_config*"],
   "mappings" : {  
