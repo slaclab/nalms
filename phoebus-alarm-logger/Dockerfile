@@ -1,14 +1,14 @@
-FROM centos:7 as build
+FROM debian:latest as build
 
-ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
-RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
+RUN apt-get update && \
+    apt-get install -y git maven openjdk-11-jdk && \
     cd /tmp && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
@@ -16,22 +16,22 @@ RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     mkdir /opt/phoebus-build && \
     mv /tmp/phoebus/services/alarm-logger/target/service-alarm-logger-*.jar /opt/phoebus-build/service-alarm-logger.jar && \
     rm -r /tmp/phoebus && \
-    yum remove -y ${JAVA_BASE}-devel-${JAVA_VERSION} maven git
+    apt-get remove -y openjdk-11-jdk maven git
 
 
-FROM centos:7 as runtime
+FROM debian:latest as runtime
 
 COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
 USER root
 
-ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # general
-RUN yum install -y ${JAVA_BASE}-${JAVA_VERSION} \
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jre curl iputils-ping && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     cd /opt/nalms && \
