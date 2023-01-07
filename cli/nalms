@@ -12,7 +12,7 @@ NALMS CLI
 Usage: $cli_name [command]
 Commands:
   start-alarm-server config_name config_file
-  start-alarm-logger config_name config_file 
+  start-alarm-logger config_name
   start-alarm-ioc config_name config_file
   start-cruise-control
   start-elasticsearch [--port elasticsearch]

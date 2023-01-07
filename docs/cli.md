@@ -60,9 +60,9 @@ $ bash cli/nalms list-configurations
 ```
 
 ## start-alarm-logger
-Start the alarm logger for a given configuration name and configuration file. Configuration name must match that defined in the configuration file. This will create an image named `nalms-logger-${CONFIG_NAME}`.
+Start the alarm logger for a given configuration name. This will create an image named `nalms-logger-${CONFIG_NAME}`.
 ```
-$ bash cli/nalms start-alarm-logger config_name config_file
+$ bash cli/nalms start-alarm-logger config_name
 ```
 
 ## start-alarm-server
