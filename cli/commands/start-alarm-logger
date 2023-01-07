@@ -4,7 +4,7 @@
 #
 usage() {
   cli_name=${0##*/}
-  echo "Usage: nalms start-alarm-logger config_name config_file "
+  echo "Usage: nalms start-alarm-logger config_name "
   echo "Requires definition of \$ALARM_LOGGER_PROPERTIES, \$NALMS_DOCKER_ALARM_LOGGER_VERSION and optional definition of"
   echo "\$NALMS_ES_HOST, \$NALMS_ES_PORT, \$NALMS_BOOTSTRAP_SERVERS"
   exit 0
@@ -20,13 +20,6 @@ else
   CONFIG_NAME="$1"
 fi
 
-if [[ -z "$2" ]]; then
-  usage
-else
-  CONFIG_FILE="$2"
-fi
-
-
 if [[ -z "$NALMS_ALARM_LOGGER_PROPERTIES" ]]; then
   echo "Property file not provided."
   usage
@@ -40,12 +33,11 @@ fi
 
 
 if [ "$1" == "-h" ]; then
-  echo "Usage: deploy-configuration.sh [Configuration Name] [Configuration file] [Alarm logger properties file] [Logging configuration files]"
+  echo "Usage: deploy-configuration.sh [Configuration Name] [Alarm logger properties file] [Logging configuration files]"
   exit 0
 fi
 
-docker run -v $CONFIG_FILE:/tmp/nalms/$CONFIG_NAME.xml \
-  -e ES_HOST="${NALMS_ES_HOST}" \
+docker run -e ES_HOST="${NALMS_ES_HOST}" \
   -e ES_PORT="${NALMS_ES_PORT}" \
   -e BOOTSTRAP_SERVERS="${NALMS_KAFKA_BOOTSTRAP}" \
   -e ALARM_LOGGER_PROPERTIES="/opt/nalms/config/alarm_logger.properties" \
