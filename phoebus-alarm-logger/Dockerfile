@@ -10,7 +10,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y git maven openjdk-11-jdk && \
     cd /tmp && \
-    git clone https://github.com/ControlSystemStudio/phoebus.git && \
+    git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
     mvn install -pl services/alarm-logger -am -DskipTests && \
     mkdir /opt/phoebus-build && \
