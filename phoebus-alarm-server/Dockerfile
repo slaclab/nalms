@@ -1,14 +1,14 @@
-FROM centos:7 as build
+FROM debian:latest as build
 
-ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
-RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
+RUN apt-get update && \
+    apt-get install -y git maven openjdk-11-jdk && \
     cd /opt && \
     git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
@@ -17,10 +17,10 @@ RUN yum install -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION} && \
     mv /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus-build/service-alarm-server.jar && \
     mv /opt/phoebus/services/alarm-server/target/lib /opt/phoebus-build/lib && \
     rm -r /opt/phoebus && \
-    yum remove -y git maven ${JAVA_BASE}-devel-${JAVA_VERSION}
+    apt-get remove -y openjdk-11-jdk maven git
 
 
-FROM centos:7 as runtime
+FROM debian:latest as runtime
 
 COPY cli /opt/nalms/cli
 COPY requirements.txt /opt/nalms/requirements.txt
@@ -29,31 +29,26 @@ COPY logging.properties /opt/nalms/config/logging.properties
 
 USER root
 
-ENV JAVA_VERSION 11.0.12.0.7-0.el7_9.x86_64
 ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/${JAVA_BASE}-${JAVA_VERSION}
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
-
-RUN  yum update -y && \
-    yum install -y epel-release && \
-    yum install -y python36 && \
-    yum install -y python36-setuptools && \
-    easy_install-3.6 pip
+ENV BUNDLED_KAFKA_VERSION 2.13-3.3.2
 
 
 # general
-RUN yum install -y wget ${JAVA_BASE}-${JAVA_VERSION} readline libsdc++ && \
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     chmod +x /opt/nalms/cli/cli &&\
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs && \
     pip3 install -r /opt/nalms/requirements.txt && \
-    wget https://downloads.apache.org/kafka/2.8.2/kafka_2.13-2.8.2.tgz -O /tmp/kafka_2.13-2.8.2.tgz && \
-    tar xvfz /tmp/kafka_2.13-2.8.2.tgz -C /opt && \
-    rm /tmp/kafka_2.13-2.8.2.tgz && \
-    ln -s /opt/kafka_2.13-2.8.2.tgz ${KAFKA_HOME} && \
+    wget https://downloads.apache.org/kafka/3.3.2/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
+    tar xvfz /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz -C /opt && \
+    rm /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
+    ln -s /opt/kafka_${BUNDLED_KAFKA_VERSION} ${KAFKA_HOME} && \
     rm -r /tmp/* 
 
 COPY --from=build /opt/phoebus-build /opt/phoebus
