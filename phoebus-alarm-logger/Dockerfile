@@ -19,7 +19,7 @@ RUN apt-get update && \
     apt-get remove -y openjdk-11-jdk maven git
 
 
-FROM debian:bullseye-slim as build
+FROM debian:bullseye-slim as runtime
 
 COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
