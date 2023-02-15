@@ -1,4 +1,4 @@
-FROM debian:latest as build
+FROM debian:bullseye-slim as build
 
 ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
@@ -20,7 +20,7 @@ RUN apt-get update && \
     apt-get remove -y openjdk-11-jdk maven git
 
 
-FROM debian:latest as runtime
+FROM debian:bullseye-slim as build
 
 COPY cli /opt/nalms/cli
 COPY requirements.txt /opt/nalms/requirements.txt
@@ -38,7 +38,7 @@ ENV BUNDLED_KAFKA_VERSION 2.13-3.3.2
 
 # general
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip && \
+    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip nano && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     chmod +x /opt/nalms/cli/cli &&\
