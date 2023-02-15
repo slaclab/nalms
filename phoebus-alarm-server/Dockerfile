@@ -38,7 +38,7 @@ ENV BUNDLED_KAFKA_VERSION 2.13-3.3.2
 
 # general
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip nano && \
+    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     chmod +x /opt/nalms/cli/cli &&\
