@@ -1,4 +1,4 @@
-FROM debian:latest as build
+FROM debian:bullseye-slim as build
 
 ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
@@ -19,7 +19,7 @@ RUN apt-get update && \
     apt-get remove -y openjdk-11-jdk maven git
 
 
-FROM debian:latest as runtime
+FROM debian:bullseye-slim as build
 
 COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
