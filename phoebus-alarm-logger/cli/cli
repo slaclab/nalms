@@ -18,7 +18,7 @@ Commands:
 
 case "$1" in
   start-logger|d)
-    . "$CLI_WORKDIR/commands/start-logger" "$2" "$3" | tee -ia "$CLI_WORKDIR/start-logger_${2}.log"
+    . "$CLI_WORKDIR/commands/start-logger" "$2" | tee -ia "$CLI_WORKDIR/start-logger_${2}.log"
     ;;
   *)
     cli_help
