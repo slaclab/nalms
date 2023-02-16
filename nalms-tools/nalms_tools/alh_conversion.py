@@ -107,11 +107,7 @@ class AlarmNode:
             child (str): Name of the child node 
 
         """
-        if child in self.node_children:
-            logger.warning(f"DUPLICATE CHILD FOR GROUP {self.name}: {child}")
-
-        else:
-            self.node_children.append(child)
+        self.node_children.append(child)
 
     def remove_child(self, child: str) -> None:
         """ Remove a child from the node. 
