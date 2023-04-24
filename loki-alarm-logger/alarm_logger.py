@@ -52,7 +52,7 @@ class AlarmLogger():
                     self.current_alarms[message.key] = message.value['severity']
                 if 'time' in message.value:
                     message.value['time'] = str(datetime.fromtimestamp(message.value['time']['seconds']))
-                logging.info(f'{message.value}')
+                logging.info(f'{json.dumps(message.value)}')
 
 
 def main():
