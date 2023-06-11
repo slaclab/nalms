@@ -49,4 +49,4 @@ sed -i 's/$ES_PORT/'"$ES_PORT/" /tmp/logger.properties
 sed -i 's/$BOOTSTRAP_SERVERS/'"$BOOTSTRAP_SERVERS/" /tmp/logger.properties
 
 
-java -jar $ALARM_LOGGER_JAR -properties /tmp/logger.properties -topics $CONFIG_NAME -noshell
+java -jar $ALARM_LOGGER_JAR -properties /tmp/logger.properties -logging $LOGGING_CONFIG_FILE -topics $CONFIG_NAME -noshell
