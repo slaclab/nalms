@@ -35,7 +35,7 @@ ENV JAVA_BASE java-11-openjdk
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
-ENV BUNDLED_KAFKA_VERSION 2.13-3.3.2
+ENV BUNDLED_KAFKA_VERSION 2.13-3.8.0
 
 
 # general
@@ -47,7 +47,7 @@ RUN apt-get update && \
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs && \
     pip3 install -r /opt/nalms/requirements.txt && \
-    wget https://downloads.apache.org/kafka/3.3.2/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
+    wget https://downloads.apache.org/kafka/3.8.0/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
     tar xvfz /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz -C /opt && \
     rm /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
     ln -s /opt/kafka_${BUNDLED_KAFKA_VERSION} ${KAFKA_HOME} && \
