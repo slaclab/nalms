@@ -1,14 +1,14 @@
-FROM debian:bullseye-slim as build
+FROM debian:bookworm-slim as build
 
-ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_BASE java-17-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
 RUN apt-get update && \
-    apt-get install -y git maven openjdk-11-jdk && \
+    apt-get install -y git maven openjdk-17-jdk && \
     cd /opt && \
     git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
@@ -19,7 +19,7 @@ RUN apt-get update && \
     mv /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus-build/service-alarm-server.jar && \
     mv /opt/phoebus/services/alarm-server/target/lib /opt/phoebus-build/lib && \
     rm -r /opt/phoebus && \
-    apt-get remove -y openjdk-11-jdk maven git
+    apt-get remove -y openjdk-17-jdk maven git
 
 
 FROM debian:bullseye-slim as runtime
@@ -31,16 +31,16 @@ COPY logging.properties /opt/nalms/config/logging.properties
 
 USER root
 
-ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_BASE java-17-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
-ENV BUNDLED_KAFKA_VERSION 2.13-3.8.0
+ENV BUNDLED_KAFKA_VERSION 2.13-3.9.0
 
 
 # general
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jre curl iputils-ping wget python3-pip && \
+    apt-get install -y openjdk-17-jre curl iputils-ping wget python3-pip && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     chmod +x /opt/nalms/cli/cli &&\
