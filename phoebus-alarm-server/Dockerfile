@@ -13,7 +13,7 @@ RUN apt-get update && \
     git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
     git fetch --tags && \
-    git checkout tags/v4.7.3-1.0.0 && \
+    git checkout tags/v4.7.3-1.1.0 && \
     mvn install -pl services/alarm-server -am -DskipTests && \
     mkdir /opt/phoebus-build && \
     mv /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus-build/service-alarm-server.jar && \
@@ -22,7 +22,7 @@ RUN apt-get update && \
     apt-get remove -y openjdk-17-jdk maven git
 
 
-FROM debian:bullseye-slim as runtime
+FROM debian:bookworm-slim as runtime
 
 COPY cli /opt/nalms/cli
 COPY requirements.txt /opt/nalms/requirements.txt
@@ -46,7 +46,7 @@ RUN apt-get update && \
     chmod +x /opt/nalms/cli/cli &&\
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs && \
-    pip3 install -r /opt/nalms/requirements.txt && \
+    pip3 install --break-system-packages -r /opt/nalms/requirements.txt && \
     wget https://downloads.apache.org/kafka/3.9.0/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
     tar xvfz /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz -C /opt && \
     rm /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
