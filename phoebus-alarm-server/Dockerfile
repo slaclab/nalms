@@ -13,7 +13,7 @@ RUN apt-get update && \
     git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
     git fetch --tags && \
-    git checkout tags/v4.7.3-1.3.0 && \
+    git checkout tags/v4.7.3-1.4.0 && \
     mvn install -pl services/alarm-server -am -DskipTests && \
     mkdir /opt/phoebus-build && \
     mv /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus-build/service-alarm-server.jar && \
