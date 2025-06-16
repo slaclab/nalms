@@ -13,7 +13,7 @@ RUN apt-get update && \
     git clone https://github.com/jbellister-slac/phoebus.git && \
     cd phoebus && \
     git fetch --tags && \
-    git checkout tags/v4.7.3-1.4.0 && \
+    git checkout tags/v5.0.0-1.0.0 && \
     mvn install -pl services/alarm-server -am -DskipTests && \
     mkdir /opt/phoebus-build && \
     mv /opt/phoebus/services/alarm-server/target/service-alarm-server-*.jar /opt/phoebus-build/service-alarm-server.jar && \
@@ -35,7 +35,7 @@ ENV JAVA_BASE java-17-openjdk
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV KAFKA_HOME=/opt/kafka
-ENV BUNDLED_KAFKA_VERSION 2.13-3.9.0
+ENV BUNDLED_KAFKA_VERSION 2.13-4.0.0
 
 
 # general
@@ -47,7 +47,7 @@ RUN apt-get update && \
     mkdir /var/log/nalms && \
     mkdir /var/log/nalms/logs && \
     pip3 install --break-system-packages -r /opt/nalms/requirements.txt && \
-    wget https://downloads.apache.org/kafka/3.9.0/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
+    wget https://downloads.apache.org/kafka/4.0.0/kafka_${BUNDLED_KAFKA_VERSION}.tgz -O /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
     tar xvfz /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz -C /opt && \
     rm /tmp/kafka_${BUNDLED_KAFKA_VERSION}.tgz && \
     ln -s /opt/kafka_${BUNDLED_KAFKA_VERSION} ${KAFKA_HOME} && \
