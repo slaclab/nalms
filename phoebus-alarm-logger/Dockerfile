@@ -1,39 +1,39 @@
-FROM debian:bullseye-slim as build
+FROM debian:bookworm-slim as build
 
-ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_BASE java-17-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 USER root
 
 # install phoebus
 RUN apt-get update && \
-    apt-get install -y git maven openjdk-11-jdk && \
+    apt-get install -y git maven openjdk-17-jdk && \
     cd /tmp && \
     git clone https://github.com/ControlSystemStudio/phoebus.git && \
     cd phoebus && \
     git fetch --tags && \
-    git checkout tags/v4.7.2 && \
+    git checkout tags/v5.0.0 && \
     mvn install -pl services/alarm-logger -am -DskipTests && \
     mkdir /opt/phoebus-build && \
     mv /tmp/phoebus/services/alarm-logger/target/service-alarm-logger-*.jar /opt/phoebus-build/service-alarm-logger.jar && \
     rm -r /tmp/phoebus && \
-    apt-get remove -y openjdk-11-jdk maven git
+    apt-get remove -y openjdk-17-jdk maven git
 
 
-FROM debian:bullseye-slim as runtime
+FROM debian:bookworm-slim as runtime
 
 COPY logging.properties /opt/nalms/config/logging.properties
 COPY cli /opt/nalms/cli
 USER root
 
-ENV JAVA_BASE java-11-openjdk
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_BASE java-17-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # general
 RUN apt-get update && \
-    apt-get install -y openjdk-11-jre curl iputils-ping && \
+    apt-get install -y openjdk-17-jdk curl iputils-ping && \
     mkdir /tmp/nalms && \
     mkdir /opt/phoebus && \
     cd /opt/nalms && \
