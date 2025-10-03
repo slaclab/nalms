@@ -1,0 +1,1408 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../legacy/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>Installation - NALMS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="NALMS" class="md-header__button md-logo" aria-label="NALMS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NALMS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/slaclab/nalms/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="NALMS" class="md-nav__button md-logo" aria-label="NALMS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    NALMS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/slaclab/nalms/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Next ALarM Sytem
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Installation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Installation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-zookeeper" class="md-nav__link">
+    tidacs/nalms-zookeeper
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-kafka" class="md-nav__link">
+    tidacs/nalms-kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-phoebus-alarm-server" class="md-nav__link">
+    tidacs/nalms-phoebus-alarm-server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-phoebus-alarm-logger" class="md-nav__link">
+    tidacs/nalms-phoebus-alarm-logger
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-elasticsearch" class="md-nav__link">
+    tidacs/nalms-elasticsearch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-grafana" class="md-nav__link">
+    tidacs/nalms-grafana
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-cruise-control" class="md-nav__link">
+    tidacs/nalms-cruise-control
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-images" class="md-nav__link">
+    Download Images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-installation" class="md-nav__link">
+    Client installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Client installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installation_1" class="md-nav__link">
+    Installation:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    Deploy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    Elasticsearch
+  </a>
+  
+    <nav class="md-nav" aria-label="Elasticsearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_1" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper" class="md-nav__link">
+    Zookeeper
+  </a>
+  
+    <nav class="md-nav" aria-label="Zookeeper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_2" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_1" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka" class="md-nav__link">
+    Kafka
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_3" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_2" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-alarm-server" class="md-nav__link">
+    Phoebus Alarm Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Alarm Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_4" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_3" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-alarm-logger" class="md-nav__link">
+    Phoebus Alarm Logger
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Alarm Logger">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_5" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_4" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-client" class="md-nav__link">
+    Phoebus Client
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Client">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_6" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grafana" class="md-nav__link">
+    Grafana
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_7" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_5" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cruise-control" class="md-nav__link">
+    Cruise Control
+  </a>
+  
+    <nav class="md-nav" aria-label="Cruise Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_8" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_6" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../legacy/" class="md-nav__link">
+        Legacy
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Components
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Components
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/" class="md-nav__link">
+        Components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kafka/" class="md-nav__link">
+        Kafka
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phoebus/" class="md-nav__link">
+        Phoebus Alarm Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../epics_integration/" class="md-nav__link">
+        EPICS Integration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        Development
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../networking/" class="md-nav__link">
+        Networking
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        Demo
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        CLI
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-zookeeper" class="md-nav__link">
+    tidacs/nalms-zookeeper
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-kafka" class="md-nav__link">
+    tidacs/nalms-kafka
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-phoebus-alarm-server" class="md-nav__link">
+    tidacs/nalms-phoebus-alarm-server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-phoebus-alarm-logger" class="md-nav__link">
+    tidacs/nalms-phoebus-alarm-logger
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-elasticsearch" class="md-nav__link">
+    tidacs/nalms-elasticsearch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-grafana" class="md-nav__link">
+    tidacs/nalms-grafana
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tidacsnalms-cruise-control" class="md-nav__link">
+    tidacs/nalms-cruise-control
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#download-images" class="md-nav__link">
+    Download Images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-installation" class="md-nav__link">
+    Client installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Client installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#installation_1" class="md-nav__link">
+    Installation:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    Deploy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elasticsearch" class="md-nav__link">
+    Elasticsearch
+  </a>
+  
+    <nav class="md-nav" aria-label="Elasticsearch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_1" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zookeeper" class="md-nav__link">
+    Zookeeper
+  </a>
+  
+    <nav class="md-nav" aria-label="Zookeeper">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_2" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_1" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kafka" class="md-nav__link">
+    Kafka
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_3" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_2" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-alarm-server" class="md-nav__link">
+    Phoebus Alarm Server
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Alarm Server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_4" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_3" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-alarm-logger" class="md-nav__link">
+    Phoebus Alarm Logger
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Alarm Logger">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_5" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_4" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phoebus-client" class="md-nav__link">
+    Phoebus Client
+  </a>
+  
+    <nav class="md-nav" aria-label="Phoebus Client">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_6" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grafana" class="md-nav__link">
+    Grafana
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_7" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_5" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cruise-control" class="md-nav__link">
+    Cruise Control
+  </a>
+  
+    <nav class="md-nav" aria-label="Cruise Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration_8" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker_6" class="md-nav__link">
+    Docker
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="installation">Installation</h1>
+<p>The NALMS system has been written for deployment as a set of Docker images, allowing for the distribution of services across network hosts configurable via environment variables and mounted volumes. In the case that containers aren't favorable, the Dockerfiles inside this repository should serve as a guide for these deployments and component source materials should be consulted for installation details.</p>
+<p>The current NALMS iteration consists of the following Dockerhub hosted containers:</p>
+<h3 id="tidacsnalms-zookeeper">tidacs/nalms-zookeeper</h3>
+<ul>
+<li>Zookeeper 3.5.9</li>
+</ul>
+<h3 id="tidacsnalms-kafka">tidacs/nalms-kafka</h3>
+<ul>
+<li>Kafka 2.8.1 configured with cruise-control metrics reporter</li>
+<li>SSL configurable (see <a href="../networking/">networking</a>)</li>
+</ul>
+<h3 id="tidacsnalms-phoebus-alarm-server">tidacs/nalms-phoebus-alarm-server</h3>
+<ul>
+<li>Phoebus alarm server (built from HEAD of main branch)</li>
+<li>Python script for monitoring Kafka topics updating <a href="../epics_integration/">alarm IOC</a> with bypasses and acknowledgments</li>
+</ul>
+<h3 id="tidacsnalms-phoebus-alarm-logger">tidacs/nalms-phoebus-alarm-logger</h3>
+<ul>
+<li>Phoebus alarm logger (built from HEAD of main branch)</li>
+</ul>
+<h3 id="tidacsnalms-elasticsearch">tidacs/nalms-elasticsearch</h3>
+<ul>
+<li>Elasticsearch service (6.8.22)</li>
+<li>Script for templating of Alarm indices</li>
+</ul>
+<h3 id="tidacsnalms-grafana">tidacs/nalms-grafana</h3>
+<ul>
+<li>Grafana service (7.5.3)</li>
+<li>Template Grafana dashboard for any configuration</li>
+<li>Can be launched with multiple configurations as a comma separated list</li>
+<li>Automatic generation of elasticsearch datasources based on network configs and configuration names</li>
+</ul>
+<h3 id="tidacsnalms-cruise-control">tidacs/nalms-cruise-control</h3>
+<ul>
+<li>LinkendIn's Cruise Control monitor for Kafka clusters (built from HEAD of branch migrate_to_kafka_2_5, which is compatible with Kafka 2.7.0) </li>
+<li>Cruise Control web UI</li>
+</ul>
+<h2 id="download-images">Download Images</h2>
+<p>Images may be downloaded from Dockerhub on a machine with Docker installed using the command (nalms-kafka here for example):</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>pull<span class="w"> </span>tidacs/nalms-kafka:latest
+</code></pre></div>
+
+<h2 id="client-installation">Client installation</h2>
+<p>At present, we will build the client from the HEAD of the main branch of the Phoebus client hosted on Github.</p>
+<p>Requirements:</p>
+<ul>
+<li>OpenJDK == 11.0.2</li>
+<li>Maven == 3.6.0</li>
+<li>Git &gt;= 1.8 (likely compatable with lower, but only tested as low as 1.8.3)</li>
+</ul>
+<h3 id="installation_1">Installation:</h3>
+<ol>
+<li>
+<p>Set <code>$JAVA_HOME</code>, <code>$MAVEN_HOME</code>, and <code>$NALMS_HOME</code>. Then update the path:
+  <code>$ export PATH=$JAVA_HOME/bin:$PATH
+  $ export PATH=$MAVEN_HOME/bin:$PATH</code>
+  Note: In afs, JAVA_HOME=${PACKAGE_TOP}/java/jdk-11.0.2, MAVEN_HOME=${PACKAGE_TOP}/maven/3.6.0, and NALMS_TOP=${PACKAGE_TOP}/nalms/current.</p>
+</li>
+<li>
+<p><code>cd</code> into installation directory</p>
+</li>
+<li>Get Phoebus repository
+  <code>$ git clone https://github.com/ControlSystemStudio/phoebus.git
+  $ cd phoebus</code></li>
+<li>Now replace the existing product pom file with that packaged by NALMS:
+  <code>$ rm phoebus-product/pom.xml
+  $ mv $NALMS_HOME/phoebus-client/pom.xml phoebus-product/pom.xml</code></li>
+<li>
+<p>Install the Phoebus client:
+  <code>$ mvn install -pl phoebus-product -am</code></p>
+</li>
+<li>
+<p>Define $NALMS_CLIENT_JAR in appropriate environment file.</p>
+</li>
+</ol>
+<h2 id="deploy">Deploy</h2>
+<p>After pulling the latest image, it is recommended to use the <a href="../cli/">CLI</a> for launching of each image as checks for necessary environment variables are built in to the interface. A full description of each image configuration is described <a href="../configuration/">here</a>.</p>
+<p>Modify <code>cli/nalms</code> for execution:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>cli/nalms
+</code></pre></div>
+
+<h2 id="configuration">Configuration</h2>
+<p>This sections includes an attempt to address configuration items, giving some insight to the service configuration within the Dockerized components and their Docker arguments.</p>
+<p>An attempt has been made to sufficiently abstract scripts for deployments based on environment variables and a full descriptions of a complete environment for deployment is giving in the <a href="../cli/">CLI</a> documentation.</p>
+<p>Below, each component is outline with respect to Docker configuration variables and configuration file structure. For a full resource of available configurations, the source documentation will be linked. </p>
+<h3 id="elasticsearch">Elasticsearch</h3>
+<h4 id="configuration_1">Configuration</h4>
+<p>The Elasticsearch configuration consists of three main files:</p>
+<ul>
+<li>elasticsearch.yml for configuring Elasticsearch</li>
+<li>jvm.options for configuring Elasticsearch JVM settings</li>
+<li>log4j2.properties for configuring Elasticsearch logging</li>
+</ul>
+<p>A reference for elasticsearch configuration files can be found <a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.8/settings.html">here</a>.</p>
+<p>In order for the Elasticsearch fields to be properly formatted, a template matching the topic scheme must be posted to the server. These may be versioned and are automatically applied to newly created indices. The initial script for templating NALMS topics is hosted in <code>elasticsearch/scripts/create_alarm_template.sh</code>. This template has been taken from the Phoebus source <a href="https://github.com/ControlSystemStudio/phoebus/blob/master/app/alarm/examples/create_alarm_topics.sh">examples</a>.</p>
+<h4 id="docker">Docker</h4>
+<p>The elasticsearch node may be configured using an exposed port, node specific variables, and Kafka networking variables. Because this is a single node deployment,  <code>single-node</code> deployment is used. Java options may be specifified using the <code>ES_JAVA_OPTS</code> variable. The Elasticsearch docker image also creates the appropriate elasticsearch template for the configuration messages. The configuration files must be mounted to <code>/usr/share/elasticsearch/config</code>.</p>
+<p>The following Docker run command will lauch an Elasticsearch node reachable on host machine port 9200.</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span>node.name<span class="o">=</span>node01<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span>cluster.name<span class="o">=</span>es-cluster-7<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span>discovery.type<span class="o">=</span>single-node<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ES_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xms128m -Xmx128m&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ES_HOST</span><span class="o">=</span>localhost<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ES_PORT</span><span class="o">=</span><span class="m">9200</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ES_CONFIG</span><span class="si">}</span><span class="s2">:/usr/share/elasticsearch/config&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NALMS_ES_PORT</span><span class="s2">:9200&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>nalms_elasticsearch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>tidacs/nalms-elasticsearch:latest
+</code></pre></div>
+
+<h3 id="zookeeper">Zookeeper</h3>
+<h4 id="configuration_2">Configuration</h4>
+<p>At present, Zookeeper is launched using the default settings. For more sophisticated deployments, a configuration with mounted configuration files would be preferable. The configuration file is mounted to the Zookeeper container at runtime. A description of the zookeeper configuration may be found <a href="https://zookeeper.apache.org/doc/r3.5.9/zookeeperAdmin.html">here</a>.</p>
+<h4 id="docker_1">Docker</h4>
+<p>The following command will run Zookeeper accessible on the host machine at port 2181:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ZOOKEEPER_PORT</span><span class="si">}</span><span class="s2">:2181&quot;</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">ZOOKEEPER_CONFIG</span><span class="o">=</span>/tmp/zoo.cfg<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ZOOKEEPER_CONFIG</span><span class="si">}</span><span class="s2">:/tmp/zoo.cfg&quot;</span><span class="w"> </span>--name<span class="w"> </span>nalms_zookeeper<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>tidacs/nalms-zookeeper:latest
+</code></pre></div>
+
+<h3 id="kafka">Kafka</h3>
+<h4 id="configuration_3">Configuration</h4>
+<p>This file is used to configure general properties of a Kafka broker including replication settings and communications protocols. Listeners are defined with respect to configured protocols and binding ports. Advertised listeners are configured with respect to configured protocol and exposed ports. </p>
+<p>The <code>replication.factor</code> must be appropriately modified based off of the number of nodes in the deployment. A single broker deployment would require <code>replication.factor</code> set to 1. A cluster deployment can accomodate a larger replication factor across the cluster and this file must be modified for the purpose. </p>
+<p>Networking configurations for SSL/TLS configuration settings are described <a href="../networking/">here</a>.</p>
+<p>Also defined in this file is the reference to the zookeeper docker image resource:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">zookeeper</span>.<span class="k">connect</span><span class="o">=</span><span class="nv">zookeeper</span>:<span class="mi">2181</span>
+</code></pre></div>
+
+<p>Certain configurations options may be defined on the topic level. In <code>phoebus-alarm-server/cli/commands/create-kafka-indices</code>, state topics are created with partitions and replications dependent on the cluster settings. After initial creation, the Talk and Command topics are modified to use the deletion cleanup policy with set retention time. At present, the Talk command unused. The create-kafka-indices command is automatically executed during alarm server docker image startup.</p>
+<p>There are many other settings pertaining to the optimization of the cluster and must be determined by traffic demands. A full catalog of available configurations may be found in the documentation, <a href="https://kafka.apache.org/documentation/">here</a>.</p>
+<h4 id="docker_2">Docker</h4>
+<p>The Kafka broker images require the definition of Kafka networking variables, <code>KAFKA_ADVERTISED_LISTENERS</code>, <code>KAFKA_LISTENER_SECURITY_PROTOCOL_MAP</code>, <code>KAFKA_LISTENERS</code>, <code>ZOOKEEPER_CONNECT</code> and must be provided a numeric broker ID. The image must be provisioned with an 8g memory allocation. Additional optimizations may be performed using the Docker image <a href="https://docs.docker.com/config/containers/resource_constraints/">configurations</a>. A configuration file must be mounted to <code>/opt/kafka/server.properties</code> for the image, with properly formatted networking and replication numbers. An example server configuration is given in <code>examples/demo/config/server.properties</code>.</p>
+<p>An example run command for the Kafka docker image is given below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-m<span class="w"> </span>8g<span class="w">  </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">KAFKA_ADVERTISED_LISTENERS</span><span class="o">=</span>PLAINTEXT://<span class="si">${</span><span class="nv">HOST_IP</span><span class="si">}</span>:9092,CONNECTIONS_FROM_HOST://<span class="si">${</span><span class="nv">HOST_IP</span><span class="si">}</span>:19092<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">KAFKA_LISTENER_SECURITY_PROTOCOL_MAP</span><span class="o">=</span>PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">KAFKA_LISTENERS</span><span class="o">=</span>PLAINTEXT://<span class="si">${</span><span class="nv">HOST_IP</span><span class="si">}</span>:9092,CONNECTIONS_FROM_HOST://0.0.0.0:19092<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ZOOKEEPER_CONNECT</span><span class="o">=</span><span class="si">${</span><span class="nv">HOST_IP</span><span class="si">}</span>:2182<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">BROKER_ID</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;/full/path/to/examples/demo/config/server.properties:/opt/kafka/server.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="s2">&quot;19092:19092&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>nalms_kafka_0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>tidacs/nalms-kafka:latest
+</code></pre></div>
+
+<p>Instructions on configuring the Docker image with SSL are given in <a href="../networking/">networking</a>.</p>
+<h3 id="phoebus-alarm-server">Phoebus Alarm Server</h3>
+<h4 id="configuration_4">Configuration</h4>
+<p>The Phoebus alarm server configuration properties file defines the EPICS configuration and Elasticsearch host configuration. A full preference list can be found in the CS-Studio <a href="https://control-system-studio.readthedocs.io/en/latest/preference_properties.html">documentation</a>.</p>
+<p>Of particular importance are the EPICS, Kakfa, and Elasticsearch properties. The Alarm Server requires:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Channel access settings</span>
+<span class="na">org.phoebus.pv.ca/addr_list</span><span class="o">=</span><span class="s">localhost:5064</span>
+<span class="na">org.phoebus.pv.ca/server_port</span><span class="o">=</span><span class="s">5064</span>
+<span class="na">org.phoebus.pv.ca/repeater_port</span><span class="o">=</span><span class="s">5065</span>
+<span class="na">org.phoebus.pv.ca/auto_addr_list</span><span class="o">=</span><span class="s">no</span>
+
+<span class="c1"># pvAccess settings</span>
+
+<span class="c1"># Kafka</span>
+<span class="na">org.phoebus.applications.alarm/server</span><span class="o">=</span><span class="s">kafka:19092</span>
+</code></pre></div>
+
+<h3 id="docker_3">Docker</h3>
+<p>The Phoebus alarm server requires mounting of the configuration file with the Docker volume option and the definition of environment variables indicating Kafka networking address, whether the alarm IOC is to be used, and the EPICS configuration settings to access the alarm and variable iocs.  The image supports the substitution of networking variables ($KAFKA_BOOTSTRAP and EPICS variables). Alternatively, these can be defined directly in the configuration file.</p>
+<p>The Docker run command for the packaged example is given below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="nv">$CONFIG_FILE</span>:/tmp/nalms/<span class="nv">$CONFIG_NAME</span>.xml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>nalms_server_<span class="nv">$CONFIG_NAME</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ALARM_SERVER_PROPERTIES</span><span class="si">}</span><span class="s2">:/opt/nalms/config/alarm_server.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ALARM_IOC</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">KAFKA_BOOTSTRAP</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_KAFKA_BOOTSTRAP</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_CA_ADDR_LIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_CA_ADDR_LIST</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_CA_SERVER_PORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_CA_SERVER_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_CA_REPEATER_PORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_CA_REPEATER_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_PVA_ADDR_LIST</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_PVA_ADDR_LIST</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_PVA_SERVER_PORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_PVA_SERVER_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">EPICS_PVA_REPEATER_PORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">EPICS_PVA_REPEATER_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ALARM_SERVER_PROPERTIES</span><span class="o">=</span><span class="s2">&quot;/opt/nalms/config/alarm_server.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>-t<span class="w"> </span>tidacs/nalms-phoebus-alarm-server:latest<span class="w"> </span>start-server<span class="w"> </span><span class="nv">$CONFIG_NAME</span><span class="w"> </span>/tmp/nalms/<span class="nv">$CONFIG_NAME</span>.xml
+</code></pre></div>
+
+<p>The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.</p>
+<h3 id="phoebus-alarm-logger">Phoebus Alarm Logger</h3>
+<h4 id="configuration_5">Configuration</h4>
+<p>The alarm logger properties file requires the definition of Elasticsearch and Kafka networking environment variables. The templated file used by the image is hosted at <code>phoebus-alarm-logger/logger.properties</code>.  </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># location of elastic node/s</span>
+<span class="na">es_host</span><span class="o">=</span><span class="s">localhost</span>
+<span class="na">es_port</span><span class="o">=</span><span class="s">9200</span>
+
+<span class="c1"># Kafka server location</span>
+<span class="na">bootstrap.servers</span><span class="o">=</span><span class="s">localhost:9092</span>
+</code></pre></div>
+
+<p>Additionally, logging for the logger is configurable and defined in <code>phoebus-alarm-server/logger.properties</code>.  </p>
+<h4 id="docker_4">Docker</h4>
+<p>The Phoebus alarm logger requires the mounting of the configuration file with the Docker volume option. The image supports the interpolation of networking variables $NALMS_ES_HOST, $NALMS_ES_PORT, and $NALMS_KAFKA_BOOTSTRAP in this file. The Docker run command for the packaged example is given below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="nv">$CONFIG_FILE</span>:/tmp/nalms/<span class="nv">$CONFIG_NAME</span>.xml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ES_HOST</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ES_HOST</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ES_PORT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ES_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">BOOTSTRAP_SERVERS</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_KAFKA_BOOTSTRAP</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">ALARM_LOGGER_PROPERTIES</span><span class="o">=</span><span class="s2">&quot;/opt/nalms/config/alarm_logger.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">ALARM_LOGGER_PROPERTIES</span><span class="si">}</span><span class="s2">:/opt/nalms/config/alarm_logger.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--name<span class="w"> </span>nalms_logger_<span class="nv">$CONFIG_NAME</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>tidacs/nalms-phoebus-alarm-logger:latest<span class="w"> </span>start-logger<span class="w"> </span><span class="nv">$CONFIG_NAME</span><span class="w"> </span>/tmp/nalms/<span class="nv">$CONFIG_NAME</span>.xml
+</code></pre></div>
+
+<p>The configuration file must be mounted to `/tmp/nalms/${CONFIG_NAME}, for internal identification.</p>
+<h3 id="phoebus-client">Phoebus Client</h3>
+<h4 id="configuration_6">Configuration</h4>
+<p>Like the alarm server and logger, the client also accepts a properties file that defines networking: <a href="https://control-system-studio.readthedocs.io/en/latest/preference_properties.html">here</a>.</p>
+<h3 id="grafana">Grafana</h3>
+<h4 id="configuration_7">Configuration</h4>
+<p>Grafana datasources and dashboards may be programatically provisioned as outlined <a href="https://grafana.com/docs/grafana/latest/administration/provisioning/">here</a>. Elasticsearch datasources define an index and networking variables. </p>
+<p>General Grafana configuration is described <a href="https://grafana.com/docs/grafana/v7.5/administration/configuration/">here</a>.</p>
+<p>The dashboard template is hosted at <code>grafana/dashboards/alarm_logs_dashboard.json</code> and a configuration dashboard can be created using the <code>cli/nalms build-grafana-dashboard config-name</code> command. The datasource may be added to an existing datasource file using the  <code>cli/nalms add-grafana-datasource config-name</code> command or manually created.</p>
+<h4 id="docker_5">Docker</h4>
+<p>The Grafana image requires mounting of the dashboards, datasource file, and configuration file. The Docker run command for the packaged example is given below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_GRAFANA_PORT</span><span class="si">}</span><span class="s2">:3000&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_GRAFANA_DASHBOARD_DIR</span><span class="si">}</span><span class="s2">:/var/lib/grafana/dashboards&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_GRAFANA_DATASOURCE_FILE</span><span class="si">}</span><span class="s2">:/etc/grafana/provisioning/datasources/all.yml&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_GRAFANA_CONFIG</span><span class="si">}</span><span class="s2">:/etc/grafana/config.ini&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ES_HOST</span><span class="o">=</span><span class="nv">$NALMS_ES_HOST</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ES_PORT</span><span class="o">=</span><span class="nv">$NALMS_ES_PORT</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>nalms_grafana<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>tidacs/nalms-grafana:latest
+</code></pre></div>
+
+<p>The datasource file must be mounted to <code>/etc/grafana/provisioning/datasources/all.yml</code>, the dashboard directory must be mounted to <code>/var/lib/grafana/dashboards</code>, and the configuration must be mounted to <code>/etc/grafana/provisioning/datasources/all.yml</code>. The Grafana dashboards are then reachable at localhost:${NALMS_GRAFANA_PORT} in browser.</p>
+<h3 id="cruise-control">Cruise Control</h3>
+<h4 id="configuration_8">Configuration</h4>
+<p>The <code>cruise-control/cruisecontrol.properties</code> file dictates the behavior of the cruise control server, allowing definition of relevant thresholds and networking nodes. The <code>tidacs/nalms-cruise-control</code> image performs interpolation on this file in order to pass the relevant environment variables. </p>
+<p>See wiki:
+https://github.com/linkedin/cruise-control/wiki
+https://github.com/linkedin/cruise-control-ui/wiki/Single-Kafka-Cluster</p>
+<h4 id="docker_6">Docker</h4>
+<p>In order to run this image, you must mount a cruisecontrol.properties to a path specified with the $CRUISE_CONTROL_PROPERTIES env variable. The image will perform interpolation on properties files with $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT as placeholders and defined $BOOTSTRAP_SERVERS or $ZOOKEEPER_CONNECT environment variables. The Docker run command for the packaged example is given below:</p>
+<div class="codehilite"><pre><span></span><code>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">BOOTSTRAP_SERVERS</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_KAFKA_BOOTSTRAP</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">ZOOKEEPER_CONNECT</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_ZOOKEEPER_HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">NALMS_ZOOKEEPER_PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span><span class="nv">CRUISE_CONTROL_PROPERTIES</span><span class="o">=</span><span class="s2">&quot;/opt/cruise-control/config/cruisecontrol.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">NALMS_CRUISE_CONTROL_PROPERTIES</span><span class="si">}</span><span class="s2">:/opt/cruise-control/config/cruisecontrol.properties&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span>nalms_cruise_control<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NALMS_CRUISE_CONTROL_PORT</span><span class="s2">:9090&quot;</span><span class="w"> </span>-d<span class="w"> </span>tidacs/nalms-cruise-control:latest
+</code></pre></div>
+
+<p>The Cruise Control UI is then available in browser at localhost:9090.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
