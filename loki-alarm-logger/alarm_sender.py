@@ -49,7 +49,9 @@ class AlarmSender:
             try:
                 key = message.key
                 if key.startswith('config'):
-                    continue  # Config messages are just alarm tree structure, not actual alarms
+                    pv = message.key.split('/')[-1]
+                    description = message.value.get('description', '')
+                    self.descriptions[pv] = description
                 elif message.value is not None and len(message.value) > 1:
                     message.value['pv_name'] = message.key.split('/')[-1]
                     if 'severity' in message.value:
