@@ -35,7 +35,7 @@ spec:
           image: tidacs/nalms-loki-alarm-sender:v1.0
           args:
             - --topics
-            - CRYO,CRYOCommand
+            - CRYO
             - --bootstrap-servers
             - nalms-kafka-bootstrap:9092
           env:
