@@ -1,0 +1,11 @@
+FROM alpine:3.17
+
+RUN apk add --no-cache bash tzdata python3 py3-pip
+
+ENV TZ=America/Los_Angeles
+
+RUN pip3 install kafka-python requests
+
+COPY alarm_sender.py /alarm_sender.py
+
+ENTRYPOINT ["python3", "/alarm_sender.py"]
