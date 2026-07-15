@@ -70,7 +70,7 @@ class AlarmSender:
                             print(f'Rejecting message due to no timestamp: {message.value}')
                             continue
 
-                        if (message.value['severity'] != 'OK' and message.value['current_severity'] != 'OK' and 'ACK' not in message.value['severity']):
+                         if message.value['severity'] != 'OK' and message.value['current_severity'] != 'OK' and message.value['severity'] != 'UNDEFINED' and message.value['current_severity'] != 'UNDEFINED' and 'ACK' not in message.value['severity'] and message.value['severity'] != 'INVALID' and message.value['current_severity'] != 'INVALID':
                             # If this script was recently restarted, don't send out repeat alarms
                             # (Could also just not read from start of queue, but works better for the k8s use case)
                             one_minute_ago = datetime.now() - timedelta(minutes=1)
